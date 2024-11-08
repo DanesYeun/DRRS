@@ -8,7 +8,7 @@
         </div>
         <div class="flex-fill p-md-5 d-flex">
             <div class="border rounded bg-white shadow p-3 mx-md-5 flex-fill">
-                <form method="post" action="" class="needs-validation" novalidate>
+                <form method="post" action="{{ route('login') }}" class="needs-validation" novalidate>
                     @csrf
                     
                     <x-floating-input type="text" name="username" label="Username"/>
