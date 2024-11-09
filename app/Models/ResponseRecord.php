@@ -21,6 +21,7 @@ class ResponseRecord extends Model
         'patientAge',
         'patientAddress',
         'patientCase',
+        'patientGender',
         'responders',
         'actionTaken',
         'remarks'
