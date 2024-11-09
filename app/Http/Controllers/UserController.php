@@ -92,8 +92,8 @@ class UserController extends Controller
          return redirect()->route('users')->with('success', 'User updated successfully');
      }
 
-    // Delete a user
-    public function delete($id)
+    // disabled user acct
+    public function disable($id)
     {
         $user = User::find($id);
 
@@ -101,8 +101,10 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'User doesn\'t exist');
         }
 
-        $user->delete();
+        $user->update([
+            'status' => 2,
+        ]);
 
-        return redirect()->route('users')->with('success', 'User deleted successfully');
+        return redirect()->route('users')->with('success', 'User account successfully disabled.');
     }
 }

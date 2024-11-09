@@ -22,7 +22,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users-details/{id}', 'details')->name('details');
     Route::post('/add-user', 'store')->name('add-user');
     Route::post('/edit-user/{id}', 'edit')->name('edit-user');
-    Route::post('/delete-user/{id}', 'delete')->name('delete-user');
+    Route::post('/disable-user/{id}', 'disable')->name('disable-user-account');
 });
 
 Route::controller(ResponseRecordController::class)->group(function () {
