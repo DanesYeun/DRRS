@@ -4,14 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>DRRS</title>
 
         <!-- Fonts -->
         <!-- Noto Sans -->
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
 
         <!-- Styles / Scripts -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <!-- Bootstrap CSS -->
         <link href="{{ asset('bootstrap-5.3.3-dist/css/bootstrap.css') }}" rel="stylesheet">
 
@@ -23,18 +22,28 @@
 
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50 p-0 d-flex overflow-hidden flex-column" style="height: 100vh;">
-        <header>
-            <x-header/>
-        </header>
+        @auth
+            <header>
+                <x-header/>
+            </header>
+        @endauth
 
         <div class="d-flex flex-grow-1 overflow-hidden">
-            <x-sidebar/>
+            @auth
+                <x-sidebar/>
+            @endauth
+            
             <!-- stage -->
             <div class="w-100 h-100 overflow-auto text-center p-2 bg-light border border-danger">
             @yield('content')
             </div>
         </div>
 
+        @auth
+            <footer>
+                <x-bottom-nav/>
+            </footer>
+        @endauth
         
         <!-- Include Bootstrap JS and dependencies -->
         <script src="{{ asset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') }}"></script>
