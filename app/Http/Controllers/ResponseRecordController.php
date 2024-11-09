@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cases;
+use App\Models\Gender;
 use Illuminate\Http\Request;
 use App\Models\ResponseRecord;
 use Illuminate\Support\Facades\Storage;
@@ -13,29 +15,36 @@ class ResponseRecordController extends Controller
     {
         $responseRecords = ResponseRecord::all();
 
-        return view('response_records.index', compact('responseRecords'));
+        return view('pages.responseRecords.view', compact('responseRecords'));
     }
   
     public function create()
     {
-        return view('response_records.create');
+        $locations = [
+            ['id' => 1, 'name' => 'location 1'],
+            ['id' => 2, 'name' => 'location 2'],
+        ];
+        $cases = map_options(Cases::class, 'id', 'description');
+        $genders = map_options(Gender::class, 'id', 'description');
+
+        return view('pages.responseRecords.add', compact('locations', 'cases', 'genders'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'date' => 'required|date',
-            'time' => 'required|string|max:50',
+            'time' => 'nullable|string|max:50',
             'incidentFrom' => 'required|string|max:50',
-            'takenTo' => 'required|string|max:50',
-            'callerOrReporter' => 'required|string|max:50',
+            'takenTo' => 'nullable|string|max:50',
+            'callerOrReporter' => 'nullable|integer|max:50',
             'patientName' => 'required|string|max:50',
-            'patientAge' => 'required|integer',
-            'patientAddress' => 'required|string|max:50',
+            'patientAge' => 'nullable|integer',
+            'patientAddress' => 'nullable|string|max:50',
             'patientCase' => 'required|string|max:50',
             'patientGender' => 'required|string|max:50',
             'responders' => 'required|string|max:50',
-            'actionTaken' => 'required|string|max:50',
+            'actionTaken' => 'nullable|string|max:50',
             'remarks' => 'nullable|string|max:50',
         ]);
 
@@ -48,7 +57,15 @@ class ResponseRecordController extends Controller
     public function edit($id)
     {
         $record = ResponseRecord::findOrFail($id);
-        return view('response_records.edit', compact('record'));
+
+        $locations = [
+            ['id' => 1, 'name' => 'location 1'],
+            ['id' => 2, 'name' => 'location 2'],
+        ];
+        $cases = map_options(Cases::class, 'id', 'description');
+        $genders = map_options(Gender::class, 'id', 'description');
+
+        return view('pages.responseRecords.edit', compact('record', 'locations', 'cases', 'genders'));
     }
 
     //update record

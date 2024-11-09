@@ -33,5 +33,9 @@ class ResponseRecord extends Model
 
     protected $keyType = 'int';
 
-    public $timestamps = true;
+    public $timestamps = false;
+public function case()
+    {
+        return $this->belongsTo(Cases::class, 'patientCase', 'id');
+    }
 }
