@@ -8,6 +8,21 @@ use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\AdminDashBoardController;
 use App\Http\Controllers\PatientCareController;
 
+Route::get('/map', function () {
+
+    return view('pages.hazardMap.view');
+})->name('hazardMap');
+
+Route::get('/', function () {
+
+    return view('pages.landingPage.view');
+})->name('landingPage');
+
+Route::get('/home', function () {
+
+    return view('pages.home.homepage');
+})->name('home');
+
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'index');
     Route::post('/user-login', 'login')->name('login');

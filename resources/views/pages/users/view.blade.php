@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex flex-column m-md-2">
         <h3 class="text-start mx-2 text-primary">Manage Users</h3>
-        <x-table label="Users" :datas="$users"/>
+        <x-users-table label="Users" :datas="$users"/>
 
         <a href="{{ route('show.addUser') }}" class="btn btn-success mx-2"><i class="bi bi-person-fill-add p-2"></i> Add User</a>
     </div>

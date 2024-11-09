@@ -1,4 +1,4 @@
-@props(['label', 'datas'])
+@props(['label', 'datas' => null])
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
         <h5 class="p-1">{{ $label }}</h5>
@@ -17,12 +17,12 @@
         <tbody id="tableBody">
             @foreach($datas as $data)
                 <tr>
-                    <td class="p-3">{{ $data->id }}</td>
+                    <td class="p-3 rounded-start">{{ $data->id }}</td>
                     <td class="p-3">{{ $data->firstname }} {{ $data->lastname }}</td>
                     <td class="p-3">{{ $data->emailaddress }}</td>
-                    <td class="p-3">{{ $data->status ? 'Active' : 'Inactive' }}</td>
-                    <td class="p-3">
-                        <a class="btn btn-sm btn-primary" href="{{ route('details', ['id' => $data->id]) }}">Edit</a>
+                    <td class="p-3 "><small class="rounded-pill bg-success py-1 px-3 text-white">{{ $data->status ? 'Active' : '' }}</small></td>
+                    <td class="p-3 rounded-end">
+                        <a class="btn btn-sm btn-warning text-white" href="{{ route('details', ['id' => $data->id]) }}">Edit</a>
                         <form action="{{ route('disable-user-account', ['id' => $data->id]) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-danger">Disable</button>
