@@ -1,0 +1,22 @@
+<?php
+
+// app/Helpers/Helper.php
+if (! function_exists('map_options')) {
+    /**
+     * Helper function to map the model options.
+     *
+     * @param string $model
+     * @param string $idField
+     * @param string $nameField
+     * @return \Illuminate\Support\Collection
+     */
+    function map_options($model, $idField, $nameField)
+    {
+        return $model::all()->map(function($item) use ($idField, $nameField) {
+            return [
+                'id' => $item->$idField,
+                'name' => $item->$nameField
+            ];
+        });
+    }
+}

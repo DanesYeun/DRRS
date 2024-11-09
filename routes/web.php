@@ -8,17 +8,17 @@ use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\AdminDashBoardController;
 use App\Http\Controllers\PatientCareController;
 
-Route::get('/home', function () {
-    return view('pages.responseRecords.addResponse');
-})->name('home');
-
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'index');
     Route::post('/user-login', 'login')->name('login');
+
+    
+    Route::post('/logout', 'logout')->name('logout');
 });
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'show')->name('users');
+    Route::get('/add-user', 'show_addUser')->name('show.addUser');
     Route::get('/users-details/{id}', 'details')->name('details');
     Route::post('/add-user', 'store')->name('add-user');
     Route::post('/edit-user/{id}', 'edit')->name('edit-user');

@@ -32,7 +32,7 @@ class LoginController extends Controller
             // Redirect based on the user's role
             switch ($user->role) {
                 case 1:
-                    return redirect()->intended('dashboard1');
+                    return  redirect()->intended(default: route('home'));
                 case 2:
                     return redirect()->intended('dashboard2');
                 case 3:
@@ -46,5 +46,10 @@ class LoginController extends Controller
     }
 
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->intended(route('landingPage'));
+    }
 }
 
