@@ -7,6 +7,4 @@
 @endsection
 
 @section('js')
-    <!-- Import password toggle js -->
-    <script src="{{ asset('js/togglePassword.js') }}"></script>
 @endsection

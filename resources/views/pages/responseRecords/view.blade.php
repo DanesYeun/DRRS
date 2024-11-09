@@ -10,5 +10,4 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('js/togglePassword.js') }}"></script>
 @endsection
