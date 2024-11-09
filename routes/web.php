@@ -5,17 +5,17 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResponseRecordController;
 use App\Http\Controllers\IncidentReportController;
+use App\Http\Controllers\AdminDashBoardController;
+use App\Http\Controllers\PatientCareController;
 
 Route::get('/home', function () {
     return view('pages.responseRecords.addResponse');
 })->name('home');
 
-
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'index');
     Route::post('/user-login', 'login')->name('login');
 });
-
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'show')->name('users');
@@ -36,9 +36,21 @@ Route::controller(ResponseRecordController::class)->group(function () {
 });
 
 Route::controller(IncidentReportController::class)->group(function () {
-    Route::delete('/incident-reports/{id}', 'delete')->name('delete-incident-report');
+    Route::post('/incident-reports/{id}', 'delete')->name('delete-incident-report');
     Route::get('/incident-reports', 'showAllReports')->name('validate-incident-report');
     Route::get('/incident-report/{id}', 'showReport')->name('create-response');
 });
+
+Route::controller(PatientCareController::class)->group(function () {
+    Route::get('/patient-care', 'index')->name('patient_care.index');
+    Route::post('/patient-care', 'store')->name('patient_care.store');
+    Route::get('/patient-care/{id}', 'show')->name('patient_care.show');
+});
+
+Route::controller(AdminDashBoardController::class)->group(function () {
+    Route::get('/admin-dashboard', 'index');
+});
+
+
 
 
