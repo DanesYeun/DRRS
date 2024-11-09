@@ -36,7 +36,7 @@ class LoginController extends Controller
 
             switch ($role) {
                 case 1: 
-                    return redirect()->route('admin.dashboard');
+                    return redirect()->route('home');
                     break;
                 case 2:
                     return redirect()->route('responder.dashboard');
@@ -50,10 +50,12 @@ class LoginController extends Controller
             }
         }
 
-        return response()->json([
-            'error' => true,
-            'message' => $verify_user['message']
-        ]);
+        // return response()->json([
+        //     'error' => true,
+        //     'message' => $verify_user['message']
+        // ]);
+
+        return redirect()->back()->with('error', $verify_user['message']);
 
     }
 
