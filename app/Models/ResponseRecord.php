@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ResponseRecord extends Model
+{
+    use HasFactory;
+
+    protected $primaryKey = 'responseID';
+
+    protected $fillable = [
+        'date',
+        'time',
+        'incidentFrom',
+        'takenTo',
+        'callerOrReporter',
+        'patientName',
+        'patientAge',
+        'patientAddress',
+        'patientCase',
+        'responders',
+        'actionTaken',
+        'remarks'
+    ];
+
+    public $incrementing = true;
+
+    protected $table = 'response_record';
+
+    protected $keyType = 'int';
+
+    public $timestamps = true;
+}
