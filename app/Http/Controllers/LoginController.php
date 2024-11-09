@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-
-use App\Users;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -15,76 +13,38 @@ class LoginController extends Controller
         return view('pages.auth.login');
     }
 
-    public function login (Request $request) {
+    public function login(Request $request)
+    {
+        
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-        $required = ['username', 'password'];
+     
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
 
-        foreach ($required as $field) {
-            if (!$request->has($field)) {
-                return response()->json([
-                    'error' => $field . ' field is required.'
-                ], 422);
-            }
-        }
-        $verify_user = $this->verify($request); 
+            $user = Auth::user();
 
-        if(!$verify_user['error']){
-            
-            session(['user_data'=> $verify_user['data']]);
-            
-            $role = $verify_user['data']->role;
+            // Store user data in session
+            session(['user_data' => $user]);
 
-            switch ($role) {
-                case 1: 
-                    return redirect()->route('admin.dashboard');
-                    break;
+            // Redirect based on the user's role
+            switch ($user->role) {
+                case 1:
+                    return redirect()->intended('dashboard1');
                 case 2:
-                    return redirect()->route('responder.dashboard');
-                    break;
+                    return redirect()->intended('dashboard2');
                 case 3:
-                    return redirect()->route('secretary.dashboard');
-                    break;
-
+                    return redirect()->intended('dashboard3');
                 default:
                     return redirect()->back()->with('error', 'Role doesn\'t exist');
             }
         }
 
-        return response()->json([
-            'error' => true,
-            'message' => $verify_user['message']
-        ]);
-
+        return redirect()->back()->with('error', 'Invalid credentials');
     }
 
-    private function verify ($request) {
 
-        $password = $request->password;
-
-        $user_data = Users::select("firstname", "lastname", "username", "password", "emailaddress", "role", "status")
-                    ->where("username", $request->username)
-                    ->first();
-
-        if($user_data->status == 1) {
-
-            if (Hash::check($password, $user_data->password)) {
-                return [
-                    'error' => false,
-                    'data' => json_decode($user_data),
-                ];
-            }
-
-        }else if($user_data->status == 2){
-            return [
-                'error' => true,
-                'message' => '407: Your account has been deleted!'
-            ];
-        }
-
-        return [
-            'error' => true,
-            'message' => '407: This account does not exist!'
-        ];
-
-    }
 }
+
