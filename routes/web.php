@@ -6,9 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResponseRecordController;
 use App\Http\Controllers\IncidentReportController;
 
-Route::get('/', function () {
-    return view('pages.users.view');
-});;
+Route::get('/home', function () {
+    return view('pages.responseRecords.addResponse');
+})->name('home');
 
 
 Route::controller(LoginController::class)->group(function () {
