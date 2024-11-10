@@ -19,7 +19,7 @@
             </a>
         </li>
         <li class="nav-item py-1">
-            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
+            <a class="nav-link" href="{{ route('map') }}">         
                 <i class="bi {{ Route::currentRouteName() == 'map' ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
                 Hazard Map
             </a>

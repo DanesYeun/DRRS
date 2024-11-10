@@ -3,8 +3,13 @@
 @section('content')
     <div class="d-flex flex-column m-md-2">
         <h3 class="text-start mx-2 text-primary">Hazard Map</h3>
+        <div class="text-start px-3">
+            <a href="{{ route('hazard_map.create') }}" class="btn btn-success col-12 col-md-2 my-1"> Add Hazard</a>
+            <a href="{{ route('shelter.create') }}" class="btn btn-secondary col-12 col-md-2 my-1"> Add Shelter</a>
+            <a href="{{ route('hazards-shelters') }}" class="btn btn-warning text-white col-12 col-md-4 my-1"> View Hazards and Shelter</a>
+        </div>
         <div class="mx-2 mb-3 p-2">
-            <div id="hazard-map" class="border border-success" style="width: 100%; height: 500px;"></div>
+            <div id="hazard-map" class="border border-success mb-2" style="width: 100%; height: 500px;"></div>
         </div>
     </div>
 @endsection
@@ -12,17 +17,23 @@
 @section('js')
     <script src="{{ asset('js/togglePassword.js') }}"></script>
 
+    <!-- leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-    <script>
-        // Initialize the map
-        var map = L.map('hazard-map').setView([10.000, 125.000], 13); // Set coordinates and zoom level
+    <!-- leaflet draw -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    <script src="{{ asset('js/hazard-map.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // pass json data 
+            var hazardData = @json($hazards); 
+            var shelterData = @json($shelters);
+            
+            initializeHazardMap(hazardData, shelterData, 'hazard-map');
+        });
     </script>
 @endsection

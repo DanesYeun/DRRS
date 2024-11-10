@@ -9,7 +9,7 @@
         <div class="flex-fill p-md-5 d-flex">
             <div class="border rounded bg-white shadow p-3 mx-md-5 flex-fill">
                 
-                 <!-- Display success or error message -->
+                <!-- Display success or error message -->
                 @if(session('error'))
                     <x-alert response="error"/>
                 @endif
