@@ -2,7 +2,13 @@
 
 @section('content')
     <div class="d-flex flex-column m-md-2">
-        <h3 class="text-start mx-2 text-primary">Hazard Map</h3>
+        <div class="d-flex flex-row justify-content-between">
+            <h3 class="text-start mx-2 text-primary">Add Shelter</h3>
+            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('map') }}">
+                <i class="bi bi-backspace-fill p-2"></i>
+                Back
+            </a>
+        </div>
         <div class="mx-2 mb-3 p-2">
             <div id="hazard-map" class="border border-success mb-2" style="width: 100%; height: 300px;" ></div>
 

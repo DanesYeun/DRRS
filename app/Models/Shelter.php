@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shelter extends Model
 {
+    protected $primaryKey = 'shelterID';
     protected $fillable = [
         'shelterName',
         'shelterCoordinates',

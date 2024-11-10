@@ -17,11 +17,15 @@
             @foreach($datas as $data)
                 <tr>
                     <td class="p-3 rounded-start">{{ $data->hazardName }}</td>
-                    <td class="p-3">{{ $data->hazard_status->description}} </td>
+                    <td class="p-3">
+                        <small class="rounded-pill px-3 text-white {{ $data->hazardStatus == 1 ? 'bg-success' : 'bg-danger'}}">
+                            {{ $data->hazard_status->description }}
+                        </small> 
+                    </td>
                     <td class="p-3">{{ $data->created_at->diffForHumans() }}</td>
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="#">Edit</a>
-                        <form action="#" method="POST" style="display: inline;">
+                        <a class="btn btn-sm btn-warning text-white" href="{{ route('hazard_map.edit', ['id' => $data->hazardID]) }}">Edit</a>
+                        <form action="{{ route('hazard_map.disable', ['id' => $data->hazardID]) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-danger">Disable</button>
                         </form>

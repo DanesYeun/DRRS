@@ -1,8 +1,7 @@
 function initializeHazardMap(hazardData, shelterData, mapContainerId) {
     // Initialize the map
     var map = L.map(mapContainerId).setView([10.728, 123.826], 16); // Set coordinates and zoom level
-
-    // Add OpenStreetMap tiles
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
     }).addTo(map);

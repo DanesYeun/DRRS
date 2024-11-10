@@ -10,7 +10,7 @@ class HazardMapController extends Controller
 {
     public function index()
     {
-        $hazards = Hazard::all();
+        $hazards = Hazard::where('hazardStatus', 1)->get();
         $shelters = Shelter::all();
 
         return view('pages.hazardMap.view', compact('hazards', 'shelters'));
@@ -34,13 +34,54 @@ class HazardMapController extends Controller
         $zone = Hazard::create([
             'hazardName' => $request->hazardName,
             'hazardStatus' => 1,
-            'coordinates' => json_encode($request->coordinates),
+            'coordinates' => $request->coordinates,
         ]);
 
         return redirect()->intended(route('map'));   
     }
 
-    public function shelterIndex()
+    public function edit($id)
+    {
+        $hazard = Hazard::findOrFail($id);
+
+        if($hazard)
+        {
+            return view('pages.hazardMap.editHazard', compact('hazard'));
+        }
+
+        return redirect()->back()->with('error', 'Hazard doesn\'t exist');
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate incoming data
+        $validation = $request->validate([
+            'hazardName' => 'required|string|max:255',
+            'coordinates' => 'required|string|min:1',
+        ]);
+
+        $hazard = Hazard::findOrFail($id);
+        $hazard->update($request->all());
+
+        return redirect()->route('hazards-shelters');
+    }
+
+    public function updateHazardStatus(Request $request, $id)
+    {
+        $hazard = Hazard::findOrFail($id);
+
+        if(!$hazard)
+        {   
+            return redirect()->back()->with('error', 'Hazard doesn\'t exist');
+        }
+
+        $hazard->update([
+            'hazardStatus' => 2,
+        ]);
+
+        return redirect()->route('hazards-shelters')->with('success','Hazard status is set to inactive!');
+    }
+    public function shelterCreate()
     {
         return view('pages.hazardMap.add-shelter');
     }
@@ -54,17 +95,33 @@ class HazardMapController extends Controller
         ]);
  
         // Create the danger zone
-        $zone = Shelter::create([
+        $shelter = Shelter::create([
             'shelterName' => $request->shelterName,
-            'shelterCoordinates' => json_encode($request->shelterCoordinates),
+            'shelterCoordinates' => $request->shelterCoordinates,
         ]);
 
         return redirect()->intended(route('map'));   
     }
 
+    public function shelterDelete($id)
+    {
+        $shelter = Shelter::findOrFail($id);
+
+        if(!$shelter)
+        {
+            return redirect()->back()->with('error', 'Shelter does not exist');
+        }
+
+        $shelter->delete();
+        
+        return redirect()->back()->with('success', 'Shelter has been removed!.');
+    }
+
     public function view()
     {
         $hazards = Hazard::all();
-        return view('pages.hazardMap.viewSheltersHazards', compact('hazards'));
+        $shelters = Shelter::all();
+
+        return view('pages.hazardMap.viewSheltersHazards', compact('hazards', 'shelters'));
     }
 }
