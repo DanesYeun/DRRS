@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HazardMapController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
@@ -8,10 +9,6 @@ use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\AdminDashBoardController;
 use App\Http\Controllers\PatientCareController;
 
-Route::get('/map', function () {
-
-    return view('pages.hazardMap.view');
-})->name('hazardMap');
 
 Route::get('/', function () {
 
@@ -60,6 +57,15 @@ Route::controller(PatientCareController::class)->group(function () {
     Route::get('/patient-care', 'index')->name('patient_care.index');
     Route::post('/patient-care', 'store')->name('patient_care.store');
     Route::get('/patient-care/{id}', 'show')->name('patient_care.show');
+});
+
+Route::controller(HazardMapController::class)->group(function() {
+    Route::get('/hazard-map', 'index')->name('map');
+    Route::get('/hazard-map/create', 'create')->name('hazard_map.create');
+    Route::post('/hazard-map/create', 'store')->name('hazard_map.store');
+    Route::get('/shelter/create', 'shelterIndex')->name('shelter.create');
+    Route::post('/shelter/create', 'shelterStore')->name('shelter.store');
+    Route::get('/hazards-shelters', 'view')->name('hazards-shelters');
 });
 
 Route::controller(AdminDashBoardController::class)->group(function () {
