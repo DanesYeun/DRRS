@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hazard extends Model
 {
+    protected $primaryKey = 'hazardID';
     protected $fillable = [
         'hazardName',
         'hazardStatus',

@@ -63,8 +63,12 @@ Route::controller(HazardMapController::class)->group(function() {
     Route::get('/hazard-map', 'index')->name('map');
     Route::get('/hazard-map/create', 'create')->name('hazard_map.create');
     Route::post('/hazard-map/create', 'store')->name('hazard_map.store');
-    Route::get('/shelter/create', 'shelterIndex')->name('shelter.create');
+    Route::get('/hazard-map/{id}', 'edit')->name('hazard_map.edit');
+    Route::post('/hazard-map/{id}/update', 'update')->name('hazard_map.update');
+    Route::post('/disable-hazard/{id}', 'updateHazardStatus')->name('hazard_map.disable');
+    Route::get('/shelter/create', 'shelterCreate')->name('shelter.create');
     Route::post('/shelter/create', 'shelterStore')->name('shelter.store');
+    Route::post('/shelter/{id}/delete', 'shelterDelete')->name('shelter.delete');
     Route::get('/hazards-shelters', 'view')->name('hazards-shelters');
 });
 
