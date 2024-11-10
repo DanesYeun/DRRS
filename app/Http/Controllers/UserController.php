@@ -75,7 +75,7 @@ class UserController extends Controller
          $user = User::find($id);
  
          if (!$user) {
-             return redirect()->back()->with('error', 'User doesn\'t exist');
+            return redirect()->back()->with('error', 'User doesn\'t exist');
          }
  
          $request->validate([
