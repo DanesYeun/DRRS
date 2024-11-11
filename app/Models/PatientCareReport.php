@@ -24,6 +24,13 @@ class PatientCare extends Model
         'significantOtherOrPersonToBeContacted',
         'contactNumber',
         'incidentPlace',
-        'incidentTime'
+        'incidentTime',
+        'vitalSign_BP',
+        'vitalSign_TEMP',
+        'vitalSign_HR',
+        'vitalSign_SPo2',
+        'vitalSign_RR',
+        'date'
+
     ];
 }
