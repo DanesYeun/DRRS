@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HazardMapController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
@@ -10,15 +12,13 @@ use App\Http\Controllers\AdminDashBoardController;
 use App\Http\Controllers\PatientCareController;
 
 
-Route::get('/', function () {
+Route::controller(LandingPageController::class)->group(function() {
+    Route::get('/', 'index')->name('landingPage');
+});
 
-    return view('pages.landingPage.view');
-})->name('landingPage');
-
-Route::get('/home', function () {
-
-    return view('pages.home.homepage');
-})->name('home');
+Route::controller(HomeController::class)->group(function() {
+    Route::get('/home', 'index')->name('home');
+});
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'index');
