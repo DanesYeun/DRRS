@@ -21,11 +21,12 @@ class PatientCareController extends Controller
             'patientAddress' => 'required|string|max:50',
             'patientAge' => 'required|integer',
             'patientGender' => 'required|string|max:50',
-            'patientCase' => 'required|string|max:50',
+            'patientCase' => 'required|integer',
             'significantOtherOrPersonToBeContacted' => 'required|string|max:50',
             'contactNumber' => 'required|string|max:50',
             'incidentPlace' => 'required|string|max:50',
             'incidentTime' => 'required|string|max:50',
+            'date' => 'required|date'
         ]);
 
         PatientCare::create($request->all());
