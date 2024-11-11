@@ -3,13 +3,14 @@
 use App\Http\Controllers\HazardMapController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\LogoutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResponseRecordController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\AdminDashBoardController;
-use App\Http\Controllers\PatientCareController;
+use App\Http\Controllers\PatientCareReportController;
 
 
 Route::controller(LandingPageController::class)->group(function() {
@@ -21,10 +22,11 @@ Route::controller(HomeController::class)->group(function() {
 });
 
 Route::controller(LoginController::class)->group(function () {
-    Route::get('/login', 'index');
+    Route::get('/login', 'index')->name('loginPage');
     Route::post('/user-login', 'login')->name('login');
+});
 
-    
+Route::controller(LogoutController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
 });
 
@@ -53,7 +55,7 @@ Route::controller(IncidentReportController::class)->group(function () {
     Route::get('/incident-report/{id}', 'showReport')->name('create-response');
 });
 
-Route::controller(PatientCareController::class)->group(function () {
+Route::controller(PatientCareReportController::class)->group(function () {
     Route::get('/patient-care', 'index')->name('patient_care.index');
     Route::post('/patient-care', 'store')->name('patient_care.store');
     Route::get('/patient-care/{id}', 'show')->name('patient_care.show');
