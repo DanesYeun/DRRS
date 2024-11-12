@@ -44,12 +44,5 @@ class LoginController extends Controller
 
         return redirect()->back()->with('error', 'Invalid credentials');
     }
-
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        return redirect()->intended(route('landingPage'));
-    }
 }
 

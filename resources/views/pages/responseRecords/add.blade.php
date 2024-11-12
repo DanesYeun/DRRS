@@ -6,7 +6,10 @@
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('response_records.store') }}" class="needs-validation" novalidate>
                 @csrf
+                
                 <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
+                    <h4 class="py-2 text-primary text-start">Response Details</h4>
+
                     <x-input name="date" label="Date" type="date"/>
                     <x-input name="time" label="Time" type="time"/>
 

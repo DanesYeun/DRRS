@@ -1,10 +1,16 @@
 <div class="m-0 p-0">
    <nav id="navbar-example2" class="navbar navbar-light bg-white px-3 align-items-center">
         <div class="container-fluid">
-            <a class="navbar-brand text-primary d-flex align-items-center border" style="width: 300px;" href="/">
-                <img src="{{ asset(env('COOP_ICON')) }}" alt="LOGO" width="50" height="50">
+            <a class="navbar-brand text-primary d-flex align-items-center" style="width: 300px;" href="/">
+                <!-- <img src="{{ asset(env('COOP_ICON')) }}" alt="LOGO" width="50" height="50"> -->
+                <span>DRRS <span class="d-none d-sm-inline">: Disaster Response & Recovery System</span></span>
             </a>
-            <span>{{ Auth::user()->Fname. ' ' .Auth::user()->Lname }}</span>
+
+            @guest
+                <a class="btn btn-outline-primary d-flex align-items-center" href="{{ route('loginPage') }}">
+                    Login
+                </a>
+            @endguest
         </div>
    </nav>
 </div>  

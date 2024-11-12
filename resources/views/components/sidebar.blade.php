@@ -14,8 +14,14 @@
         </li>
         <li class="nav-item py-1">
             <a class="nav-link" href="{{ route('response_records.index') }}">         
-                <i class="bi {{ Route::currentRouteName() == 'responseRecords' ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
+                <i class="bi {{ Route::currentRouteName() == 'response_records.index' ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
                 Response Records
+            </a>
+        </li>
+        <li class="nav-item py-1">
+            <a class="nav-link" href="{{ route('patient_care.index') }}">         
+                <i class="bi bi-clipboard2-pulse fs-5 p-2"></i>
+                Patient Care Reports
             </a>
         </li>
         <li class="nav-item py-1">
@@ -25,7 +31,7 @@
             </a>
         </li>
         <li class="nav-item py-1">
-            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
+            <a class="nav-link" href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
                 <i class="bi bi-door-closed p-2"></i> 
                 Logout
             </a>
