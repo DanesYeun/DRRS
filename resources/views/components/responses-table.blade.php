@@ -17,7 +17,10 @@
         <tbody id="tableBody">
             @foreach($datas as $data)
                 <tr>
-                    <td class="p-3 rounded-start">{{ $data->date }}</td>
+                    <td class="p-3 rounded-start">
+                        <!-- Carbon is used since date's data type is not 'timestamp' -->
+                        {{ \Carbon\Carbon::parse($data->date)->format('M d, Y') }}
+                    </td>
                     <td class="p-3">{{ $data->patientName }}</td>
                     <td class="p-3">{{ $data->case->description }}</td>
                     <td class="p-3 ">{{ $data->responders }}</td>

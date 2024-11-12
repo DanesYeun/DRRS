@@ -18,6 +18,6 @@ class LogoutController extends Controller
         // generate the session token to protect against session fixation attacks
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Successfully logged out.');
+        return redirect()->route('loginPage')->with('success', 'Successfully logged out.');
     }
 }

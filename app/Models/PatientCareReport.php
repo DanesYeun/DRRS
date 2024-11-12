@@ -5,32 +5,72 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PatientCare extends Model
+class PatientCareReport extends Model
 {
     use HasFactory;
 
-    protected $table = 'patient_care_report'; 
+    protected $table = 'patient_care_reports'; 
 
     protected $primaryKey = 'patientCareID';
 
-    public $timestamps = false;
 
     protected $fillable = [
         'patientName',
         'patientAddress',
         'patientAge',
         'patientGender',
-        'patientCase',
-        'significantOtherOrPersonToBeContacted',
-        'contactNumber',
+        'case',
+        'others',
+        'recordedBy',
+        'recievedBy',
+        'time',
         'incidentPlace',
-        'incidentTime',
-        'vitalSign_BP',
-        'vitalSign_TEMP',
-        'vitalSign_HR',
-        'vitalSign_SPo2',
-        'vitalSign_RR',
-        'date'
-
+        'contactNumber',
+        'patientContactPerson'
     ];
+
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class, 'patientGender');
+    }
+
+    public function patientCareCase()
+    {
+        return $this->belongsTo(PatientCareCase::class, 'case');
+    }
+
+    public function consiousnessLevel()
+    {
+        return $this->hasOne(ConsiousnessLevel::class, 'patientCareID');
+    }
+
+    public function sampleHistory()
+    {
+        return $this->hasOne(SampleHistory::class, 'patientCareID');
+    }
+
+    public function painAssessment()
+    {
+        return $this->hasOne(PainAssessment::class, 'patientCareID');
+    }
+
+    public function injuryDtl()
+    {
+        return $this->hasOne(InjuryDtl::class, 'patientCareID');
+    }
+
+    public function dcapbtls()
+    {
+        return $this->hasOne(DCAPBLTS::class, 'patientCareID');
+    }
+
+    public function spotStroke()
+    {
+        return $this->hasOne(SpotStroke::class, 'patientCareID');
+    }
+
+    public function vitals()
+    {
+        return $this->hasOne(Vitals::class, 'patientCareID');
+    }
 }

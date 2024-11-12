@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GenderSeeder::class);
         $this->call(CaseSeeder::class);
         $this->call(HazardStatusSeeder::class);
+        $this->call(PatientCareCasesSeeder::class);
+        $this->call(VehicularAccidentTypeSeeder::class);
     }
 }

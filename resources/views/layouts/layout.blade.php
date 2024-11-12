@@ -14,6 +14,9 @@
         <!-- Bootstrap CSS -->
         <link href="{{ asset('bootstrap-5.3.3-dist/css/bootstrap.css') }}" rel="stylesheet">
 
+        <!-- custom accordion css -->
+        <link rel="stylesheet" href="{{ asset('css/accordion.css') }}">
+        
         <!-- JQuery CDN -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -22,12 +25,11 @@
 
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50 p-0 d-flex overflow-hidden flex-column" style="height: 100vh;">
-        @auth
+        @if( Route::currentRouteName() != 'loginPage')
             <header>
                 <x-header/>
             </header>
-        @endauth
-            
+        @endif
 
         <div class="d-flex flex-grow-1 overflow-hidden">
             @auth
@@ -48,10 +50,6 @@
 
         <!-- Include Bootstrap JS and dependencies -->
         <script src="{{ asset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') }}"></script>
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-        
         @yield('js')
     </body>
 </html>
