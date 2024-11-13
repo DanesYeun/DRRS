@@ -19,4 +19,9 @@ if (! function_exists('map_options')) {
             ];
         });
     }
+
+    function create_collection(array $items)
+    {
+        return collect($items)->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
+    }
 }

@@ -29,17 +29,8 @@ class LoginController extends Controller
             // Store user data in session
             session(['user_data' => $user]);
 
-            // Redirect based on the user's role
-            switch ($user->role) {
-                case 1:
-                    return  redirect()->intended(default: route('home'));
-                case 2:
-                    return redirect()->intended('dashboard2');
-                case 3:
-                    return redirect()->intended('dashboard3');
-                default:
-                    return redirect()->back()->with('error', 'Role doesn\'t exist');
-            }
+            // redirect to homepage after login
+            return  redirect()->intended(default: route('home'));
         }
 
         return redirect()->back()->with('error', 'Invalid credentials');

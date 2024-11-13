@@ -25,6 +25,7 @@ class PatientCareReport extends Model
         'recievedBy',
         'time',
         'incidentPlace',
+        'incidentDate',
         'contactNumber',
         'patientContactPerson'
     ];
@@ -39,22 +40,22 @@ class PatientCareReport extends Model
         return $this->belongsTo(PatientCareCase::class, 'case');
     }
 
-    public function consiousnessLevel()
+    public function consciousness_lvl()
     {
-        return $this->hasOne(ConsiousnessLevel::class, 'patientCareID');
+        return $this->hasOne(ConsciousnessLevel::class, 'patientCareID');
     }
 
-    public function sampleHistory()
+    public function sample_history()
     {
         return $this->hasOne(SampleHistory::class, 'patientCareID');
     }
 
-    public function painAssessment()
+    public function pain_assessment()
     {
         return $this->hasOne(PainAssessment::class, 'patientCareID');
     }
 
-    public function injuryDtl()
+    public function injury_dtl()
     {
         return $this->hasOne(InjuryDtl::class, 'patientCareID');
     }
@@ -66,11 +67,16 @@ class PatientCareReport extends Model
 
     public function spotStroke()
     {
-        return $this->hasOne(SpotStroke::class, 'patientCareID');
+        return $this->hasOne(SpotStroke::class, 'patientCareID', 'patientCareID');
     }
-
     public function vitals()
     {
         return $this->hasOne(Vitals::class, 'patientCareID');
     }
+
+    public function recorded_by()
+    {
+        return $this->belongsTo(User::class, 'recordedBy', 'id');
+    }
+
 }

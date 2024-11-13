@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ConsiousnessLevel;
+use App\Models\ConsciousnessLevel;
 use App\Models\DCAPBLTS;
 use App\Models\Gender;
 use App\Models\InjuryDtl;
@@ -24,30 +24,28 @@ class PatientCareReportController extends Controller
     {
         $cases = map_options(PatientCareCase::class, 'id', 'description');
         $genders = map_options(Gender::class, 'id', 'description');
-        $alertnessData = collect(['A', 'V', 'P', 'U'])->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
-
-        $painAssessmentData = collect(['O', 'P', 'Q', 'R', 'S', 'T'])->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
-
-        $sample = collect(['S', 'A', 'M', 'P', 'L', 'E'])->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
-
+        
+        $alertnessData = create_collection(['A', 'V', 'P', 'U']);
+        $painAssessmentData = create_collection(['O', 'P', 'Q', 'R', 'S', 'T']);
+        $sample = create_collection(['S', 'A', 'M', 'P', 'L', 'E']);
+        $dcapbtls = create_collection(['D', 'C', 'A', 'P', 'B', 'T', 'L', 'S']);
+        $spotStroke = create_collection(['B', 'F', 'A', 'S', 'T']);
+        $vitals = create_collection(['BP', 'TEMP', 'HR', 'SPo2', 'RR']);
+        
         $injuryTypes = [
             ['id' => 1, 'name' => 'Vehicular', 'subdata' => map_options(VehicularAccidentTypes::class, 'id', 'description')],
-            ['id' => 2, 'name' => 'Fall'],
-            ['id' => 3, 'name' => 'Cut'],
-            ['id' => 4, 'name' => 'Broken'],
-            ['id' => 5, 'name' => 'Drowning'], 
-            ['id' => 6, 'name' => 'Electrecuted'],
-            ['id' => 7, 'name' => 'Suicide'], 
-            ['id' => 8, 'name' => 'Burns'] 
+            ['id' => 2, 'name' => 'Fall'], ['id' => 3, 'name' => 'Cut'],
+            ['id' => 4, 'name' => 'Broken'], ['id' => 5, 'name' => 'Drowning'], 
+            ['id' => 6, 'name' => 'Electrecuted'], ['id' => 7, 'name' => 'Suicide'], 
+            ['id' => 8, 'name' => 'Burns']
         ];
 
-        $dcapbtls = collect(['D', 'C', 'A', 'P', 'B', 'T', 'L', 'S'])->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
+        $patientCareReports = PatientCareReport::all();
 
-        $spotStroke = collect(['B', 'F', 'A', 'S', 'T'])->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
-
-        $vitals = collect(['BP', 'TEMP', 'HR', 'SPo2', 'RR'])->map(fn($item, $key) => ['id' => $key + 1, 'name' => $item]);
-
-        return view('pages.patientCareReports.view', compact('cases', 'alertnessData', 'sample', 'painAssessmentData', 'dcapbtls', 'injuryTypes', 'spotStroke', 'vitals', 'genders'));
+        return view('pages.patientCareReports.view', compact(
+            'cases', 'alertnessData', 'sample', 'painAssessmentData', 'dcapbtls', 'injuryTypes', 
+            'spotStroke', 'vitals', 'genders', 'patientCareReports'
+        ));
     }
 
     public function store(Request $request)
@@ -94,7 +92,8 @@ class PatientCareReportController extends Controller
                 'patientContactPerson' => $request->patientContactPerson,
                 'contactNumber' => $request->contactNumber,
                 'incidentPlace' => $request->incidentPlace,
-                'time' => $request->time,
+                'incidentDate' => $request->incidentDate,
+                'time' => $request->incidentTime,
                 'case' => $request->case,
                 'others' => $request->others,
                 'recordedBy' => auth()->user()->id,
@@ -108,7 +107,7 @@ class PatientCareReportController extends Controller
                 'U' => isset($request->alertness['U']) ? 1 : 0,
             ];
         
-            ConsiousnessLevel::create([
+            ConsciousnessLevel::create([
                 'patientCareID' => $patientCareReport->patientCareID,
                 'A' => $alertnessData['A'],
                 'V' => $alertnessData['V'],
@@ -273,7 +272,38 @@ class PatientCareReportController extends Controller
 
     public function show($id)
     {
-        $patientCare = PatientCare::findOrFail($id);
-        return view('patient_care.show', compact('patientCare'));
+        $patientCare = PatientCareReport::findOrFail($id);
+        $consciousnessData = $patientCare->consciousness_lvl;
+        $sampleData = $patientCare->sample_history;
+        $painAssessmentData = $patientCare->pain_assessment;
+        $injuryTypeData = $patientCare->injury_dtl;
+        // dd($injuryTypeData);
+
+        $cases = map_options(PatientCareCase::class, 'id', 'description');
+        $genders = map_options(Gender::class, 'id', 'description');
+
+        $alertnessFields = create_collection(['A', 'V', 'P', 'U']);
+        $sampleFields = create_collection(['S', 'A', 'M', 'P', 'L', 'E']);
+        $painAssessmentFields = create_collection(['O', 'P', 'Q', 'R', 'S', 'T']);
+
+        $injuryTypeFields = [
+            ['id' => 1, 'name' => 'Vehicular', 'subdata' => map_options(VehicularAccidentTypes::class, 'id', 'description')],
+            ['id' => 2, 'name' => 'Fall'], ['id' => 3, 'name' => 'Cut'],
+            ['id' => 4, 'name' => 'Broken'], ['id' => 5, 'name' => 'Drowning'], 
+            ['id' => 6, 'name' => 'Electrecuted'], ['id' => 7, 'name' => 'Suicide'], 
+            ['id' => 8, 'name' => 'Burns']
+        ];
+        $consciousnessStatus = [
+            'A' => $consciousnessData->A ?? 0,
+            'V' => $consciousnessData->V ?? 0,
+            'P' => $consciousnessData->P ?? 0,
+            'U' => $consciousnessData->U ?? 0,
+        ];
+
+        $patientCareReports = PatientCareReport::all();
+
+        return view('pages.patientCareReports.view-details', compact(
+            'consciousnessStatus', 'patientCareReports', 'cases', 'genders', 'patientCare', 'alertnessFields', 'sampleFields', 'sampleData', 'painAssessmentData', 'painAssessmentFields', 'injuryTypeFields', 'injuryTypeData'
+        ));
     }
 }

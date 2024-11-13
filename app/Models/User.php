@@ -51,4 +51,9 @@ class User extends Authenticatable
     }
 
     public $timestamps = true;
+
+    public function role_relation()
+    {
+        return $this->belongsTo(Role::class, 'role', 'role_id');
+    }
 }
