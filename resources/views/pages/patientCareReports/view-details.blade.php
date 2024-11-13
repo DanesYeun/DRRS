@@ -1,0 +1,55 @@
+@extends('layouts.layout')
+
+@section('content')
+    <div class="d-flex flex-column m-md-2">
+        <div class="d-flex flex-row justify-content-between">
+            <h3 class="text-start mx-2 text-primary">Patient Care Report</h3>
+            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('patient_care.index') }}">
+                <i class="bi bi-backspace-fill p-2"></i>
+                Back
+            </a>
+        </div>
+
+        <!-- Display success or error message -->
+        <x-alert response="error"/>
+        <form method="post" action="{{ route('patient_care.store') }}" class="needs-validation" novalidate>
+            @csrf
+            <div class="container bg-white rounded py-2 row">
+                <h4 class="py-2 text-primary text-start">Patient Care Report Details</h4>      
+                <x-input name="patientName" value="{{ $patientCare->patientName }}" label="Patient Name" type="text" mdSize="12" readOnly="true"/>
+
+                <x-input name="patientAge" value="{{ $patientCare->patientAge }}" label="Age" type="text" mdSize="2" readOnly="true"/>
+                <x-select name="patientGender" value="{{ $patientCare->patientGender }}" label="Gender" :options="$genders" readOnly="true" sizeMd="4"/>
+                <x-input name="patientAddress" value="{{ $patientCare->patientAddress }}" label="Patient Address" type="text" mdSize="6" readOnly="true"/> 
+
+                <x-input name="patientContactPerson" value="{{ $patientCare->patientContactPerson }}" label="Contact Person" type="text" mdSize="6" readOnly="true"/>
+                <x-input name="contactNumber" value="{{ $patientCare->contactNumber }}" label="Contact Number" type="number" mdSize="6" readOnly="true"/>
+                        
+                <x-input name="incidentPlace" value="{{ $patientCare->incidentPlace }}" label="Place of Incident" type="text" mdSize="6" required="true" readOnly="true"/>
+                <x-input name="incidentDate" value="{{ $patientCare->incidentDate }}" label="Date of Incident" type="date" mdSize="4" required="true" readOnly="true"/>
+                <x-input name="incidentTime" value="{{ $patientCare->incidentTime }}" label="Time of Incident" type="time" mdSize="2" readOnly="true"/>
+
+                <x-select name="case" value="{{ $patientCare->case }}" label="Case" :options="$cases" required="true" readOnly="true"/>
+                <div class="d-none d-sm-inline col-6"></div>
+
+                <div class="text-start text-primary">
+                    <div class="row px-2">
+                    <x-checkbox-readonly label="Alertness" :datas="$alertnessFields" namePrefix="alertness" :consciousnessStatus="$consciousnessStatus"/>
+                    <x-input-group-readonly label="Sample History" :datas="$sampleFields" namePrefix="sample" :fieldValues="$sampleData" readOnly="true"/>
+                    </div>
+                </div>
+
+                <div class="text-start text-primary">
+                    <div class="row px-2">
+                    <x-input-group-readonly label="Pain Assessment" :datas="$painAssessmentFields" namePrefix="painAssessment" :fieldValues="$painAssessmentData" readOnly="true"/>
+                    <x-radio-hybrid label="Injury Type" :datas="$injuryTypeFields" :fieldValues="$injuryTypeData" name="injury_type" readOnly="true"/> 
+                    </div>
+                </div> 
+            </div>
+        </form>
+    </div>
+@endsection
+
+@section('js')
+    <script src="{{ asset('js/formValidation.js') }}"></script>
+@endsection

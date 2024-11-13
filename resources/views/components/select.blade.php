@@ -1,6 +1,6 @@
-@props(['options', 'name', 'label', 'value' => null, 'required' => false, 'sizeMd' => '6'])
+@props(['options', 'name', 'label', 'value' => null, 'required' => false, 'sizeMd' => '6', 'readOnly' => false ])
 <div class="col-12 col-md-{{ $sizeMd }} mb-2">
-   <select name="{{ $name }}" id="{{ $name }}" class="form-select text-primary" @if($required) required @endif>
+   <select name="{{ $name }}" id="{{ $name }}" class="form-select text-primary" @if($required) required @endif @if($readOnly) disabled @endif>
       <option selected disabled hidden value="">Please Select</option>
       @foreach ($options as $option)
          <option value="{{ $option['id'] }}" 

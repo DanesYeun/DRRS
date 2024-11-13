@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ConsiousnessLevel extends Model
+class ConsciousnessLevel extends Model
 {
-    protected $table = 'patient_care_consiousness_lvl'; 
+    protected $table = 'patient_care_consciousness_lvl'; 
     public $timestamps = false;
 
     protected $fillable = [
