@@ -7,13 +7,14 @@
             <form method="post" action="{{ route('response_records.update', ['id' => $record->responseID]) }}" class="needs-validation" novalidate>
                 @csrf
                 <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
+                    <h4 class="py-2 text-primary text-start">Response Details</h4>
                     <x-input name="date" label="Date" type="date" value="{{ $record->date }}"/>
                     <x-input name="time" label="Time" type="time" value="{{ $record->time }}"/>
 
                     <x-select name="incidentFrom" label="Incident From" :options="$locations" required="true" value="{{ $record->incidentFrom }}"/>
                     <x-select name="takenTo" label="Taken To" :options="$locations" required="true" value="{{ $record->takenTo }}"/>
 
-                    <x-input name="callerOrReporter" label="Responder" type="text" value="{{ $record->callerOrReporter }}"/>
+                    <x-input name="callerOrReporter" label="Reporter" type="text" value="{{ $record->callerOrReporter }}"/>
                     <x-input name="patientName" label="Patient" type="text" value="{{ $record->patientName }}"/>
                     <x-input name="patientAge" label="Age" type="number" value="{{ $record->patientAge }}"/>
                     <x-select name="patientGender" label="Gender" :options="$genders" required="true" value="{{ $record->patientGender }}"/>  

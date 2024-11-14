@@ -47,6 +47,8 @@ Route::controller(ResponseRecordController::class)->group(function () {
     Route::post('/response-records/{id}', 'update')->name('response_records.update');
     Route::get('/response-records/{id}/download', 'download')->name('response_records.download');
     Route::post('/response-records/monthly-report', 'generateMonthlyReport')->name('response_records.monthly_report');
+
+    Route::get('/patient-care/{id}/response/create', 'patient_care_response_create')->name('response_records.patient_care.create');
 });
 
 Route::controller(IncidentReportController::class)->group(function () {
