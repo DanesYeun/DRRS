@@ -4,7 +4,7 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Hazard Map</h3>
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('hazards-shelters') }}">
+            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('hazard_map.shelter') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
                 Back
             </a>

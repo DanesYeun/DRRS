@@ -45,7 +45,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return redirect()->back()->with('error', 'Oh no! An error occured.');
         }
 
         // Create the user
@@ -60,7 +60,7 @@ class UserController extends Controller
             'status' => 1, 
         ]);
 
-        return redirect()->route('users')->with('success', 'Successfully Added', 200);
+        return redirect()->route('users')->with('success', 'User successfully Added!', 200);
     }
 
     // Show details of a user 

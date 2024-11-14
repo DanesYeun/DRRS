@@ -37,7 +37,7 @@
             @endauth
             
             <!-- stage -->
-            <div class="w-100 h-100 overflow-auto text-center p-2 bg-light border border-danger">
+            <div class="w-100 h-100 overflow-auto text-center p-2 bg-light">
             @yield('content')
             </div>
         </div>

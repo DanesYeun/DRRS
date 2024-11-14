@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cases;
 use App\Models\Gender;
+use App\Models\PatientCareReport;
 use Illuminate\Http\Request;
 use App\Models\ResponseRecord;
 use Illuminate\Support\Facades\Storage;
@@ -118,5 +119,24 @@ class ResponseRecordController extends Controller
         $pdf = app('dompdf.wrapper')->loadView('response_records.monthly_report', compact('records', 'month'));
 
         return $pdf->download("monthly_incident_report_{$month}.pdf");
+    }
+
+    public function patient_care_response_create($id)
+    {
+        $locations = [
+            ['id' => 1, 'name' => 'location 1'],
+            ['id' => 2, 'name' => 'location 2'],
+        ];
+        $cases = map_options(Cases::class, 'id', 'description');
+        $genders = map_options(Gender::class, 'id', 'description');
+
+        $data = PatientCareReport::findOrFail($id);
+
+        if (!$data)
+        {
+            return redirect()->back()->with('error', 'Patient care report not found!');
+        }
+
+        return view('pages.responseRecords.add', compact('data', 'locations', 'cases', 'genders'));
     }
 }

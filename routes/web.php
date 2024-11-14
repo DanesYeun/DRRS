@@ -37,11 +37,11 @@ Route::controller(LogoutController::class)->group(function() {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'show')->name('users')->middleware(CheckPasswordUpdate::class);
-    Route::get('/add-user', 'show_addUser')->name('show.addUser');
-    Route::get('/users-details/{id}', 'details')->name('details');
-    Route::post('/add-user', 'store')->name('add-user');
-    Route::post('/edit-user/{id}', 'edit')->name('edit-user');
-    Route::post('/disable-user/{id}', 'disable')->name('disable-user-account');
+    Route::get('/add-user', 'show_addUser')->name('users.create');
+    Route::get('/users-details/{id}', 'details')->name('users.details');
+    Route::post('/add-user', 'store')->name('users.add');
+    Route::post('/edit-user/{id}', 'edit')->name('users.edit');
+    Route::post('/disable-user/{id}', 'disable')->name('users.disable');
 
     Route::get('update-password', 'update_user_password')->name('update.password');
     Route::post('update-password', 'save_password')->name('save.password');
@@ -55,6 +55,8 @@ Route::controller(ResponseRecordController::class)->group(function () {
     Route::post('/response-records/{id}', 'update')->name('response_records.update');
     Route::get('/response-records/{id}/download', 'download')->name('response_records.download');
     Route::post('/response-records/monthly-report', 'generateMonthlyReport')->name('response_records.monthly_report');
+
+    Route::get('/patient-care/{id}/response/create', 'patient_care_response_create')->name('response_records.patient_care.create');
 });
 
 Route::controller(IncidentReportController::class)->group(function () {
@@ -75,7 +77,7 @@ Route::controller(PatientCareReportController::class)->group(function () {
 });
 
 Route::controller(HazardMapController::class)->group(function() {
-    Route::get('/hazard-map', 'index')->name('map')->middleware(CheckPasswordUpdate::class);
+    Route::get('/hazard-map', 'index')->name('hazard_map.index')->middleware(CheckPasswordUpdate::class);
     Route::get('/hazard-map/create', 'create')->name('hazard_map.create');
     Route::post('/hazard-map/create', 'store')->name('hazard_map.store');
     Route::get('/hazard-map/{id}', 'edit')->name('hazard_map.edit');
@@ -83,8 +85,10 @@ Route::controller(HazardMapController::class)->group(function() {
     Route::post('/disable-hazard/{id}', 'updateHazardStatus')->name('hazard_map.disable');
     Route::get('/shelter/create', 'shelterCreate')->name('shelter.create');
     Route::post('/shelter/create', 'shelterStore')->name('shelter.store');
+    Route::get('/shelter/{id}', 'shelter_edit')->name('shelter.edit');
+    Route::post('/shelter/{id}/update', 'shelter_update')->name('shelter.update');
     Route::post('/shelter/{id}/delete', 'shelterDelete')->name('shelter.delete');
-    Route::get('/hazards-shelters', 'view')->name('hazards-shelters');
+    Route::get('/hazards-shelters', 'view')->name('hazard_map.shelter');
 });
 
 Route::controller(AdminDashBoardController::class)->group(function () {
