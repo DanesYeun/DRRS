@@ -12,13 +12,10 @@
 
         <!-- Display success or error message -->
         <x-alert response="error"/>
-
-        <form method="post" action="{{ route('patient_care.store') }}" class="needs-validation" novalidate>
-            @csrf
             <div class="container bg-white rounded mx-2  py-2 row">
                 <div class="d-flex flex-row justify-content-between">
-                    <h4 class="text-start mx-2 text-primary">Patient Care Report Details</h4>
-                    <a class="btn btn-success col-4 col-md-2 mb-3 " href="{{ route('patient_care.index') }}">
+                    <h4 class="text-start mx-2 text-primary pt-3">Patient Care Report Details</h4>
+                    <a class="btn btn-success col-4 col-md-2 mb-3 " href="{{ route('response_records.patient_care.create', ['id' => $patientCare->patientCareID]) }}">
                         <i class="bi bi-file-earmark-plus-fill p-2"></i>
                         <span class="d-none d-sm-inline">Add Response</span>
                     </a>
@@ -53,7 +50,7 @@
                     </div>
                 </div> 
             </div>
-        </form>
+
     </div>
 @endsection
 
