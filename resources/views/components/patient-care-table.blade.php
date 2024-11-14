@@ -1,15 +1,14 @@
 @props(['label', 'datas' => null])
-<div class="container mt-2 table-container">   
+<div class="container mt-2 table-container ml-sm-2">   
     <div class="mb-1 d-flex justify-content-between">
-        <h5 class="p-1">{{ $label }}</h5>
+        <h5 class="p-1 text-secondary">{{ $label }}</h5>
             <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
-    <table class="table table-hover table-striped table-borderless">
+    <table id="reports-table" class="table table-hover table-striped table-borderless">
         <thead class="rounded-top">
             <tr>
                 <th scope="col" class="p-3 rounded-start bg-primary text-white">Patient</th>
                 <th scope="col" class="p-3 bg-primary text-white">Case</th>
-                <th scope="col" class="p-3 bg-primary text-white">Date Created</th>
                 <th scope="col" class="p-3 bg-primary text-white">Responder</th>
                 <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
             </tr>
@@ -19,10 +18,12 @@
                 <tr>
                     <td class="p-3 rounded-start">{{ $data->patientName }}</td>
                     <td class="p-3">{{ $data->patientCareCase->description }}</td>
-                    <td class="p-3">{{ $data->created_at->diffForHumans() }}</td>
                     <td class="p-3">{{ $data->recorded_by->firstname. " ".$data->recorded_by->lastname }}</td>
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('patient_care.show', ['id' => $data->patientCareID]) }}">View</a>
+                        <a class="btn btn-sm btn-success text-white" href="{{ route('patient_care.show', ['id' => $data->patientCareID]) }}">
+                            <i class="bi bi-eye-fill"></i>
+                            <span class="d-none d-sm-inline">View</span>
+                        </a>
                     </td>
                 </tr>
             @endforeach
@@ -34,3 +35,24 @@
         <ul class="pagination justify-content-end" id="pagination"></ul>
     </nav>
 </div>
+
+@section('js')
+<script src="{{ asset('js/searchbox-table.js') }}"></script>
+<script src="{{ asset('js/pagination.js') }}"></script>
+// for pagination
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const data = @json($datas); 
+        paginateTable('reports-table', data, 5);
+        document.getElementById("searchInput").addEventListener("input", function() {
+            searchTable("searchInput", "reports-table");
+        });
+    });
+</script>
+// for searchbox
+<script>
+    document.getElementById("searchInput").addEventListener("input", function() {
+        searchTable("searchInput", "reports-table");
+    });
+</script>
+@endsection

@@ -1,16 +1,16 @@
 @props(['label', 'datas' => null])
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
-        <h5 class="p-1">{{ $label }}</h5>
-            <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
+        <h5 class="p-1 text-secondary">{{ $label }}</h5>
+        <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
-    <table class="table table-hover table-borderless">
+    <table id="responses-table" class="table table-hover table-borderless">
         <thead class="rounded-top">
             <tr>
                 <th scope="col" class="p-3 rounded-start bg-primary text-white">Date</th>
                 <th scope="col" class="p-3 bg-primary text-white">Patient</th>
                 <th scope="col" class="p-3 bg-primary text-white">Case</th>
-                <th scope="col" class="p-3 bg-primary text-white">Responders</th>
+                <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell" style="display:none">Responders</th>
                 <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
             </tr>
         </thead>
@@ -23,9 +23,11 @@
                     </td>
                     <td class="p-3">{{ $data->patientName }}</td>
                     <td class="p-3">{{ $data->case->description }}</td>
-                    <td class="p-3 ">{{ $data->responders }}</td>
+                    <td class="p-3 d-none d-sm-table-cell">{{ $data->responders }}</td>
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('response_records.edit', ['id' => $data->responseID]) }}">Edit</a>
+                        <a class="btn btn-sm btn-secondary -?formattext-white" href="{{ route('response_records.edit', ['id' => $data->responseID]) }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach
@@ -37,3 +39,24 @@
         <ul class="pagination justify-content-end" id="pagination"></ul>
     </nav>
 </div>
+
+@section('js')
+<script src="{{ asset('js/searchbox-table.js') }}"></script>
+<script src="{{ asset('js/pagination.js') }}"></script>
+// for pagination
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const data = @json($datas); 
+        paginateTable('responses-table', data, 5);
+        document.getElementById("searchInput").addEventListener("input", function() {
+            searchTable("searchInput", "responses-table");
+        });
+    });
+</script>
+// for searchbox
+<script>
+    document.getElementById("searchInput").addEventListener("input", function() {
+        searchTable("searchInput", "responses-table");
+    });
+</script>
+@endsection

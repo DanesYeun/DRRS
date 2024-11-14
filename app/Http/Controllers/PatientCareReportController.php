@@ -277,7 +277,9 @@ class PatientCareReportController extends Controller
         $sampleData = $patientCare->sample_history;
         $painAssessmentData = $patientCare->pain_assessment;
         $injuryTypeData = $patientCare->injury_dtl;
-        // dd($injuryTypeData);
+        $dcapbtlsData = $patientCare->dcapbtls;
+        $spotStrokeData = $patientCare->spotStroke;
+        // dd($spotStrokeData);
 
         $cases = map_options(PatientCareCase::class, 'id', 'description');
         $genders = map_options(Gender::class, 'id', 'description');
@@ -285,6 +287,8 @@ class PatientCareReportController extends Controller
         $alertnessFields = create_collection(['A', 'V', 'P', 'U']);
         $sampleFields = create_collection(['S', 'A', 'M', 'P', 'L', 'E']);
         $painAssessmentFields = create_collection(['O', 'P', 'Q', 'R', 'S', 'T']);
+        $dcapbtlsFields = create_collection(['D', 'C', 'A', 'P', 'B', 'T', 'L', 'S']);
+        $spotStrokeFields = create_collection(['B', 'F', 'A', 'S', 'T']);
 
         $injuryTypeFields = [
             ['id' => 1, 'name' => 'Vehicular', 'subdata' => map_options(VehicularAccidentTypes::class, 'id', 'description')],
@@ -303,7 +307,7 @@ class PatientCareReportController extends Controller
         $patientCareReports = PatientCareReport::all();
 
         return view('pages.patientCareReports.view-details', compact(
-            'consciousnessStatus', 'patientCareReports', 'cases', 'genders', 'patientCare', 'alertnessFields', 'sampleFields', 'sampleData', 'painAssessmentData', 'painAssessmentFields', 'injuryTypeFields', 'injuryTypeData'
+            'consciousnessStatus', 'patientCareReports', 'cases', 'genders', 'patientCare', 'alertnessFields', 'sampleFields', 'sampleData', 'painAssessmentData', 'painAssessmentFields', 'injuryTypeFields', 'injuryTypeData', 'dcapbtlsData', 'dcapbtlsFields', 'spotStrokeFields', 'spotStrokeData'
         ));
     }
 }
