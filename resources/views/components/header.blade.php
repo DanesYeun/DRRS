@@ -1,5 +1,5 @@
 <div class="m-0 p-0">
-   <nav id="navbar-example2" class="navbar navbar-light bg-white px-3 align-items-center shadow">
+   <nav class="navbar navbar-light bg-white px-3 align-items-center shadow">
         <div class="container-fluid">
             <a class="navbar-brand text-primary d-flex align-items-center navbar-brand-responsive" href="/">
                 <span>DRRS <span class="d-none d-sm-inline">: Disaster Response & Recovery System</span></span>
@@ -11,7 +11,7 @@
                 </a>
             @endguest
             @auth
-                <small class="text-primary">{{ Auth::user()->firstname. ' ' . Auth::user()->lastname}}</small>
+                <strong class="text-primary font-weight-bold">{{ Auth::user()->firstname. ' ' . Auth::user()->lastname}}</strong>
             @endauth
         </div>
    </nav>

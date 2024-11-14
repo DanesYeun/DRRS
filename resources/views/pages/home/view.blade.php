@@ -1,6 +1,13 @@
 @extends('layouts.layout')
 
 @section('content')
+    @if ($hazardAlert)
+        <div class="mt-4 alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-diamond-fill"></i>
+            <span>Warning! {{ $latestHazard->hazardName }} added last {{ $latestHazard->updated_at->diffForHumans() }}</span> 
+        </div>
+    @endif
+
     <div class="d-flex flex-column m-md-2">
         <h3 class="text-start mx-2 text-primary">Hazard Map</h3>
         <div class="mx-2 mb-3 p-2">
@@ -15,6 +22,8 @@
             </div>
         </div>
     </div>
+
+    
 @endsection
 
 @section('js')

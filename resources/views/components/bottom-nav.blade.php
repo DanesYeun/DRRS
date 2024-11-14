@@ -1,16 +1,40 @@
 <nav class="bottom-nav d-sm-none border text-primary bg-white">
     <div class="d-flex justify-content-around p-2">
-        <a class="text-decoration-none text-center" href="#Home">
-            <i class="bi {{ Route::currentRouteName() == 'home' ? 'bi-house-fill' : 'bi-house' }} fs-5 p-2"></i>
+        <a class="nav-link p-2 {{ Str::startsWith(Route::currentRouteName(), 'home') ? 'bg-light' : ''}} rounded" href="{{ route('home') }}">
+            <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'home') ? 'bi-house-fill' : 'bi-house' }} fs-5 p-2"></i>
         </a>
-        <a class="text-decoration-none text-center" href="#Users">         
-            <i class="bi {{ Route::currentRouteName() == 'home' ? 'bi-people-fill' : 'bi-people' }} fs-5 p-2"></i> 
+        @if(Auth::check() && Auth::user()->role == 1)
+            <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'users') ? 'bg-light' : ''}}" href="{{ route('users') }}">         
+                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'users') ? 'bi-people-fill' : 'bi-people' }} fs-5 p-2"></i> 
+            </a>
+    
+            <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'response_records') ? 'bg-light' : ''}}" href="{{ route('response_records.index') }}">         
+                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'response_records') ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
+            </a>
+        @endif
+
+        <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bg-light' : '' }}" href="{{ route('patient_care.index') }}">         
+            <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bi-clipboard2-pulse-fill' : 'bi-clipboard2-pulse' }} fs-5 p-2"></i>
         </a>
-        <a class="text-decoration-none text-center" href="#Settings">         
-            <i class="bi {{ Route::currentRouteName() == 'home' ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
+        <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bg-light' : '' }}" href="{{ route('hazard_map.index') }}">         
+            <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
         </a>
-        <a class="text-decoration-none text-centerk" href="#">         
-            <i class="bi {{ Route::currentRouteName() == 'home' ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
-        </a>
+        
+        <div class="dropup">
+            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-badge fs-5 p-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="nav-link text-danger" href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
+                        <i class="bi bi-door-closed fs-5 p-2"></i> 
+                    Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>

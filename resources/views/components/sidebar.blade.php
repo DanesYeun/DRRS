@@ -51,13 +51,13 @@
             </li>
         @endif
         <li class="nav-item py-1">
-            <a class="nav-link" href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
-                <i class="bi bi-door-closed p-2"></i> 
+            <a class="nav-link text-danger" href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
+                <i class="bi bi-door-closed fs-5 p-2"></i> 
                 Logout
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
-            </form>
+            </form>        
         </li>
     </ul>
 </div>

@@ -4,9 +4,9 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Add Shelter</h3>
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('hazard_map.index') }}">
+            <a class="btn btn-danger col-2 mb-3 " href="{{ route('hazard_map.index') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
-                Back
+                <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
         <x-alert response="error" color="danger"/> 
@@ -17,7 +17,7 @@
             <!-- Hazard Form -->
             <form method="post" id="hazard-form" action="{{ route('hazard_map.store') }}" class="needs-validation" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-2 px-3 pt-2 pb-2">
+                <div class="border container bg-white rounded row mx-0 px-3 pt-2 pb-2">
                     <h4 class="py-2 text-primary text-start">Hazard Details</h4>
                     <x-input type="text" name="hazardName" label="Hazard Name" required="true"/>
                     <x-input type="text" name="coordinates" label="Hazard Coordinates" readOnly="true" required="true"/>
