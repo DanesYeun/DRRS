@@ -3,7 +3,11 @@
 @section('content')
     <div class="d-flex flex-column m-md-2">
         <h3 class="text-start mx-2 text-primary">Donation Records</h3>
-        
+        @if(session('error'))
+            <x-alert response="error" color="danger"/>
+        @elseif(session('success'))
+            <x-alert response="success" color="success"/>
+        @endif
         <x-select name="donation_type" label="Donation Type" :options="$type" sizeMd="3" required="true" onchange="toggleFields(this.value)"/> 
 
         <!-- Cash Fields -->
@@ -17,10 +21,8 @@
         <div id="2-fields" class="donation-fields d-none">
             <div class="row">
                 <x-donations-table label="Inkind Donations" :datas="$inkindDonations" :type="2"/>
-            </div>
+            </div>  
         </div>
-
-        <a href="{{ route('response_records.create') }}" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i> Create Response Record</a>
     </div>
 @endsection
 

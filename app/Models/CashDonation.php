@@ -17,7 +17,8 @@ class CashDonation extends Model
         'fullname',
         'contactno',
         'donationMode',
-        'amount'
+        'amount',
+        'isPickUp'
     ];
 
     public static function get_data($id = null){

@@ -21,4 +21,17 @@ class FamilyMember extends Model
         'occupation',
         'remarks'
     ]; 
+
+    public static function get_data($id = null){
+
+        $query =  self::leftJoin('gender', 'family_member.gender', '=', 'gender.id')
+                        ->select('family_member.*', 'gender.description as genderDesc');
+
+
+        if (!is_null($id)) {
+            $query->where('family_member.family_head_id', $id);
+        }
+    
+        return $query->get()->toArray();
+     }
 }

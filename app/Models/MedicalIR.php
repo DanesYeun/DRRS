@@ -25,4 +25,9 @@ class MedicalIR extends Model
         'heartRate',
     ];
 
+    public function incidentReports()
+    {
+        return $this->hasMany(IncidentReport::class, 'reportID', 'reportID');
+    }
+
 }

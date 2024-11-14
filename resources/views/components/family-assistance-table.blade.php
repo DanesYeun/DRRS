@@ -1,16 +1,16 @@
 @props(['label', 'datas' => null])
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
-        <h5 class="p-1">{{ $label }}</h5>
-            <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
+        <h5 class="p-1 text-secondary">{{ $label }}</h5>
+        <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
     <table id="assistance-table" class="table table-hover table-borderless">
         <thead class="rounded-top">
             <tr>
                 <th scope="col" class="p-3 rounded-start bg-primary text-white">Date</th>
-                <th scope="col" class="p-3 bg-primary text-white">Reporter Name</th>
-                <th scope="col" class="p-3 bg-primary text-white">Reporter Contact No.</th>
-                <th scope="col" class="p-3 bg-primary text-white">Case</th>
+                <th scope="col" class="p-3 bg-primary text-white">Name</th>
+                <th scope="col" class="p-3 bg-primary text-white">Contact No.</th>
+                <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell" style="display:none">Municipality</th>
                 <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
             </tr>
         </thead>
@@ -18,13 +18,16 @@
             @foreach($datas as $data)
                 <tr>
                     <td class="p-3 rounded-start">
-                        {{ \Carbon\Carbon::parse($data->date)->format('M d, Y') }}
+                        <!-- Carbon is used since date's data type is not 'timestamp' -->
+                        {{ \Carbon\Carbon::parse($data['created_at'])->format('M d, Y') }}
                     </td>
-                    <td class="p-3">{{ $data->reporterFullName }}</td>
-                    <td class="p-3">{{ $data->reporterContactNumber }}</td>
-                    <td class="p-3">{{ $data->incidentCase->description }}</td>
+                    <td class="p-3">{{ $data['last_name'] . ',' . $data['first_name'] . ',' . $data['middle_name'] . ',' . $data['suffix'] }}</td>
+                    <td class="p-3">{{ $data['primary_contact_no'] }}</td>
+                    <td class="p-3 d-none d-sm-table-cell">{{ $data['city_municipality'] }}</td>
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('show-incident-report', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">View</a>
+                        <a class="btn btn-sm btn-warning text-white" href="{{ route('family.assistance.record', ['id' => $data['id']]) }}">
+                            <i class="bi bi-eye-fill"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach
@@ -57,4 +60,3 @@
     });
 </script>
 @endsection
-

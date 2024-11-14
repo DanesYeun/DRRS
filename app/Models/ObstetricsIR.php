@@ -25,4 +25,8 @@ class ObstetricsIR extends Model
         'prenatalCareLocation',
     ];
 
+    public function incidentReports()
+    {
+        return $this->hasMany(IncidentReport::class, 'reportID', 'reportID');
+    }
 }
