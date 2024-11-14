@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\DB;
 
 // app/Helpers/Helper.php
 if (! function_exists('map_options')) {
@@ -13,6 +14,16 @@ if (! function_exists('map_options')) {
     function map_options($model, $idField, $nameField)
     {
         return $model::all()->map(function($item) use ($idField, $nameField) {
+            return [
+                'id' => $item->$idField,
+                'name' => $item->$nameField
+            ];
+        });
+    }
+
+    function map_options_raw($table, $idField, $nameField)
+    {
+        return DB::table($table)->get()->map(function($item) use ($idField, $nameField) {
             return [
                 'id' => $item->$idField,
                 'name' => $item->$nameField

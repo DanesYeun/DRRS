@@ -16,11 +16,14 @@ class IncidentReport extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'incidentType',
+        'typeOfIncident',
         'incidentPlace',
         'landmark',
+        'numberOfCasualties',
         'reporterFullName',
         'reporterContactNumber',
+        'date',
+        'time'
     ];
 
     // One-to-many relationship with ResponseRecord
