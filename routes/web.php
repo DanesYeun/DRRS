@@ -96,20 +96,32 @@ Route::controller(AdminDashBoardController::class)->group(function () {
 });
 
 Route::controller(FamilyAssistanceController::class)->group(function () {
+    Route::get('/family-assistance-records', 'lists')->name('family.assistance.records')->middleware(CheckPasswordUpdate::class);
+
     Route::get('/family-assistance', 'create')->name('request.family.assistance');
     Route::post('/family-assistance', 'store')->name('store.family.assistance');
 });
 
 Route::controller(DonationController::class)->group(function () {
+
+    Route::get('/donations', 'index')->name('donations')->middleware(CheckPasswordUpdate::class);
+    Route::get('donation/{type}/{id}', 'view')->name('view.donation');
+    Route::post('pick-donation/{type}/{id}', 'pickup_donation')->name('pickup.donation');
+    Route::get('print/donation/{type}/{id}', 'print_donation_report')->name('print.donation');
+
     Route::get('/donor-form', 'create')->name('create.donation');
     Route::post('/donor-form', 'store')->name('store.donation');
 });
 
-Route::controller(SecretaryController::class)->group(function () {
-    Route::get('/donations', 'index')->name('donations')->middleware(CheckPasswordUpdate::class);
-    Route::get('donation/{type}/{id}', 'view')->name('view.donation');
-    // Route::post('/donor-form', 'store')->name('store.donation');
-});
+// Route::controller(SecretaryController::class)->group(function () {
+//     Route::get('/donations', 'index')->name('donations')->middleware(CheckPasswordUpdate::class);
+//     Route::get('donation/{type}/{id}', 'view')->name('view.donation');
+//     Route::post('pick-donation/{type}/{id}', 'pickup_donation')->name('pickup.donation');
+    
+
+//     Route::get('print/donation/{type}/{id}', 'print_donation_report')->name('print.donation');
+//     // Route::post('/donor-form', 'store')->name('store.donation');
+// });
 
 
 

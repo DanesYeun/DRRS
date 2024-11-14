@@ -124,7 +124,9 @@ class FamilyAssistanceController extends Controller
         }
 
         return redirect()->route('request.family.assistance')->with('success', 'Successfully sent assistance request!');
-        
+    }
 
+    public function lists(){
+        dd(FamilyAssistance::get_data());
     }
 }

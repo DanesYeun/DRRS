@@ -38,6 +38,12 @@
         @endif
         @if(Auth::check() && in_array(Auth::user()->role, [1, 3]))
             <li class="nav-item py-1">
+                <a class="nav-link" href="{{ route('family.assistance.records') }}">         
+                    <i class="bi {{ Route::currentRouteName() == 'family.assistance.records' ? 'bi-clipboard2-fill' : 'bi-clipboard2' }} fs-5 p-2"></i>
+                    Family Assistance
+                </a>
+            </li>
+            <li class="nav-item py-1">
                 <a class="nav-link" href="{{ route('donations') }}">         
                     <i class="bi {{ Route::currentRouteName() == 'donations' ? 'bi-clipboard2-fill' : 'bi-clipboard2' }} fs-5 p-2"></i>
                     Manage Donations

@@ -18,7 +18,8 @@ class InKindDonation extends Model
         'itemName',
         'quantity',
         'contactno',
-        'donationMode'
+        'donationMode',
+        'isPickUp'
     ];
 
     public static function  get_data($id = null){

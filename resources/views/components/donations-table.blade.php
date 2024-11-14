@@ -38,10 +38,17 @@
                     <td class="p-3 ">{{ $data['donationModeDesc'] }}</td>
                     
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('view.donation', ['type' => $type, 'id' => $data['donationID']]) }}">
-                            <i class="bi bi-check-circle"></i> 
-                        </a>
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('view.donation', ['type' => $type, 'id' => $data['donationID']]) }}">
+                        @if($data['donationMode'] == 2 && $data['isPickUp'] == 0 && Auth::user()->role == 3)
+                            <a class="btn btn-sm btn-success text-white" href=""
+                                onclick="event.preventDefault(); document.getElementById('pickup-form').submit();">
+                                <i class="bi bi-check-circle"></i> 
+                            </a>
+
+                            <form id="pickup-form" action="{{ route('pickup.donation', ['type' => $type, 'id' => $data['donationID']]) }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @endif
+                        <a class="btn btn-sm btn-warning text-white" href="{{ route('print.donation', ['type' => $type, 'id' => $data['donationID']]) }}">
                             <i class="bi bi-printer"></i>
                         </a>
                     </td>
