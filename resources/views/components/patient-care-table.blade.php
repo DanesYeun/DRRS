@@ -4,7 +4,7 @@
         <h5 class="p-1">{{ $label }}</h5>
             <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
-    <table class="table table-hover table-borderless">
+    <table class="table table-hover table-striped table-borderless">
         <thead class="rounded-top">
             <tr>
                 <th scope="col" class="p-3 rounded-start bg-primary text-white">Patient</th>

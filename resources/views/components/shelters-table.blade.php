@@ -18,7 +18,8 @@
                     <td class="p-3 rounded-start">{{ $data->shelterName }}</td>
                     <td class="p-3">{{ $data->created_at->diffForHumans() }}</td>
                     <td class="p-3 rounded-end">
-                        <form action="{{ route('shelter.delete', ['id' => $data->shelterID]) }}" method="POST">
+                        <a class="btn btn-sm btn-primary text-white" href="{{ route('shelter.edit', ['id' => $data->shelterID]) }}">Edit</a>
+                        <form action="{{ route('shelter.delete', ['id' => $data->shelterID]) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                         </form>

@@ -4,22 +4,18 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Add Shelter</h3>
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('map') }}">
+            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('hazard_map.index') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
                 Back
             </a>
         </div>
+        <x-alert response="error" color="danger"/> 
+        
         <div class="mx-2 mb-3 p-2">
             <div id="hazard-map" class="border border-success mb-2" style="width: 100%; height: 300px;" ></div>
-
             <!-- Shelter Form -->
-            <form method="post" id="hazard-form" action="{{ route('shelter.store') }}" class="needs-validation">
+            <form method="post" id="hazard-form" action="{{ route('shelter.store') }}" class="needs-validation" novalidate>
                 @csrf
-                <!-- Display success or error message -->
-                @if(session('error'))
-                    <x-alert response="error"/>
-                @endif
-
                 <div class="border container bg-white rounded row mx-2 px-3 pt-2 pb-2">
                     <h4 class="py-2 text-primary text-start">Shelter Details</h4>
                     <x-input type="text" name="shelterName" label="Shelter Name" required="true"/>
@@ -53,4 +49,6 @@
             initializeHazardMapPin('hazard-map', 'shelterCoordinates');
         });
     </script>
+
+    <script src="{{ asset('js/formValidation.js') }}"></script>
 @endsection

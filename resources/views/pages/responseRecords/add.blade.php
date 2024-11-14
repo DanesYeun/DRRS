@@ -16,7 +16,7 @@
                     <x-select name="incidentFrom" label="Incident From" :options="$locations" required="true"/>
                     <x-select name="takenTo" label="Taken To" :options="$locations" required="true"/>
 
-                    <x-input name="callerOrReporter" label="Caller" type="number"/>
+                    <x-input name="callerOrReporter" label="Reporter" type="text"/>
                     <x-input name="patientName" label="Patient" type="text"/>
                     <x-input name="patientAge" label="Age" type="number"/>
                     <x-select name="patientGender" label="Gender" :options="$genders" required="true"/>  
