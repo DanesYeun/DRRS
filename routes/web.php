@@ -56,13 +56,14 @@ Route::controller(ResponseRecordController::class)->group(function () {
     Route::get('/response-records/{id}/download', 'download')->name('response_records.download');
     Route::post('/response-records/monthly-report', 'generateMonthlyReport')->name('response_records.monthly_report');
 
+    Route::get('/incident/{case}/{id}/response/create', 'incident_response_create')->name('response_records.incident.create');
     Route::get('/patient-care/{id}/response/create', 'patient_care_response_create')->name('response_records.patient_care.create');
 });
 
 Route::controller(IncidentReportController::class)->group(function () {
     Route::post('/incident-reports/{id}', 'delete')->name('delete-incident-report');
-    Route::get('/incident-reports', 'showAllReports')->name('validate-incident-report');
-    Route::get('/incident-report/{id}', 'showReport')->name('create-response');
+    Route::get('/incident-reports', 'showAllReports')->name('show-incident-reports');
+    Route::get('/incident-report/{case}/{id}', 'showReport')->name('show-incident-report');
 
     Route::get('/incident-report', 'create')->name('create-incident-report');
     Route::post('/incident-report', 'store')->name('store-incident-report');
@@ -96,7 +97,8 @@ Route::controller(AdminDashBoardController::class)->group(function () {
 });
 
 Route::controller(FamilyAssistanceController::class)->group(function () {
-    Route::get('/family-assistance-records', 'lists')->name('family.assistance.records')->middleware(CheckPasswordUpdate::class);
+    Route::get('/family-assistance-records', 'index')->name('family.assistance.records')->middleware(CheckPasswordUpdate::class);
+    Route::get('/family-assistance-record/{id}', 'view')->name('family.assistance.record');
 
     Route::get('/family-assistance', 'create')->name('request.family.assistance');
     Route::post('/family-assistance', 'store')->name('store.family.assistance');

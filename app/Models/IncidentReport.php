@@ -26,9 +26,35 @@ class IncidentReport extends Model
         'time'
     ];
 
-    // One-to-many relationship with ResponseRecord
-    public function responses()
+    public function incidentCase()
     {
-        return $this->hasMany(ResponseRecord::class, 'reportID');
+        return $this->belongsTo(IncidentCase::class, 'typeOfIncident', 'id');
     }
+
+    public function obstetrics()
+    {
+        return $this->belongsTo(ObstetricsIR::class, 'typeOfIncident', 'id');
+    }
+
+    public function medical()
+    {
+        return $this->belongsTo(MedicalIR::class, 'typeOfIncident', 'id');
+    }
+
+    public function injury_trauma()
+    {
+        return $this->belongsTo(InjuryTraumaIR::class, 'typeOfIncident', 'id');
+    }
+
+    public function cardia()
+    {
+        return $this->belongsTo(CardiaIR::class, 'typeOfIncident', 'id');
+    }
+
+    public function disaster()
+    {
+        // return $this->belongsTo(DisasterIr::class, 'typeOfIncident', 'id');
+    }
+
+
 }

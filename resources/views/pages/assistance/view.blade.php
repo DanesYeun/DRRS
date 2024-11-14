@@ -4,67 +4,60 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Family Assistance Form</h3>
-              <!-- Display success or error message -->
-            @if(session('error'))
-                <x-alert response="error" color="danger"/>
-            @elseif(session('success'))
-                <x-alert response="success" color="success"/>
-            @endif
             <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ url()->previous() }}">
                 <i class="bi bi-backspace-fill p-2"></i>
                 Back
             </a>
         </div>
         <div class="mx-2 mb-3 p-2">
-            <form method="post" action="{{ route('store.family.assistance') }}" class="needs-validation" novalidate>
+            <form method="post" action="" class="needs-validation" novalidate>
                 @csrf
                 <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
 
                     {{-- <hr class="border border-2 border-dark"> --}}
                     <h6 class="text-start mx-2 text-primary">LOCATION OF THE AFFECTED FAMILY</h6>
-                    <x-input name="region" label="Region" type="text"/>
-                    <x-input name="city_municipality" label="City/Municipality" type="text"/>
-
-                    <x-input name="province" label="Province" type="text"/>
-                    <x-input name="barangay" label="Barangay" type="text"/>
-
-                    <x-input name="district" label="District" type="text"/>
-                    <x-input name="evacuation_center" label="Evacuation Center" type="text"/>
+                    <x-input name="region" label="Region" type="text" value="{{$data['region']}}" readOnly="true"/>
+                    <x-input name="city_municipality" label="City/Municipality" type="text" value="{{$data['city_municipality']}}" readOnly="true"/>
+                    <x-input name="province" label="Province" type="text" value="{{$data['province']}}" readOnly="true"/>
+                    <x-input name="barangay" label="Barangay" type="text" value="{{$data['barangay']}}" readOnly="true"/>
+                    <x-input name="district" label="District" type="text" value="{{$data['district']}}" readOnly="true"/>
+                    <x-input name="evacuation_center" label="Evacuation Center" type="text" value="{{$data['evacuation_center']}}" readOnly="true"/>
 
                     <div class="mb-4"></div>
                     <h6 class="text-start mx-2 text-primary">HEAD OF THE FAMILY</h6>
-                    <x-input name="first_name" label="First Name" type="text" mdSize="3"/>
-                    <x-input name="middle_name" label="Middle Name" type="text" mdSize="3"/>
-                    <x-input name="last_name" label="Last Name" type="text" mdSize="3"/>
-                    <x-input name="suffix" label="Name Ext. (Jr.,Sr.)" type="text" mdSize="3"/>
+                    <x-input name="first_name" label="First Name" type="text" mdSize="3" value="{{$data['first_name']}}" readOnly="true"/>
+                    <x-input name="middle_name" label="Middle Name" type="text" mdSize="3" value="{{$data['middle_name']}}" readOnly="true"/>
+                    <x-input name="last_name" label="Last Name" type="text" mdSize="3" value="{{$data['last_name']}}" readOnly="true"/>
+                    <x-input name="suffix" label="Name Ext. (Jr.,Sr.)" type="text" mdSize="3" value="{{$data['suffix']}}" readOnly="true"/>
 
-                    <x-input name="birthdate" label="Birthdate" type="date" mdSize="3"/>
-                    <x-input name="age" label="Age" type="number" mdSize="2"/>
-                    <x-input name="birthplace" label="Birth Place" type="text" mdSize="7"/>
+                    <x-input name="birthdate" label="Birthdate" type="date" mdSize="3" value="{{$data['birthdate']}}" readOnly="true"/>
+                    <x-input name="age" label="Age" type="number" mdSize="2" value="{{$data['age']}}" readOnly="true"/>
+                    <x-input name="birthplace" label="Birth Place" type="text" mdSize="7" value="{{$data['birthplace']}}" readOnly="true"/>
 
-                    <x-select name="gender" label="Sex" :options="$genders" sizeMd="2" required="true"/>
-                    <x-select name="civil_status" label="Civil Status" :options="$civil_status" sizeMd="2" required="true"/>
-                    <x-input name="religion" label="Religion" type="text" mdSize="2"/>
-                    <x-input name="occupation" label="Occupation" type="text" mdSize="3"/>
-                    <x-input name="monthly_family_net_income" label="Monthly Family Net Income" type="number" mdSize="3"/>
-                    
-                    <x-input name="primary_contact_no" label="Primary Contact Number" type="number" mdSize="2"/>
-                    <x-input name="alternate_contact_no" label="Alternate Contact Number" type="number" mdSize="2"/>
-                    <x-input name="mother_maiden_name" label="Mother's Maiden Name" type="text" mdSize="3"/>
-                    <x-input name="permanent_address" label="Permanent Address" type="text" mdSize="5"/>
+                    <x-input name="gender" label="Sex" type="text" mdSize="2" value="{{$data['genderDesc']}}" readOnly="true"/>
+                    <x-input name="civil_status" label="Civil Status" type="text" mdSize="2" value="{{$data['civilStatus']}}" readOnly="true"/>
+                    <x-input name="religion" label="Religion" type="text" mdSize="2" value="{{$data['religion']}}" readOnly="true"/>
+                    <x-input name="occupation" label="Occupation" type="text" mdSize="3" value="{{$data['occupation']}}" readOnly="true"/>
+                    <x-input name="monthly_family_net_income" label="Monthly Family Net Income" type="number" mdSize="3" value="{{$data['monthly_family_net_income']}}" readOnly="true"/>
 
-                    <x-input name="id_card_presented" label="ID Card Presented" type="text" mdSize="3"/>
-                    <x-input name="id_card_number" label="ID Card Number" type="text" mdSize="3"/>
-                    <x-single-checkbox label="4Ps Beneficiary" name="is4PsBenef" mdSize="2"/> 
-                    <x-single-checkbox label="IP" name="isIP" mdSize="2"/> 
-                    <x-input name="ethnicity" label="Type of Ethnicity" type="text" mdSize="2"/>
+                    <x-input name="primary_contact_no" label="Primary Contact Number" type="number" mdSize="2" value="{{$data['primary_contact_no']}}" readOnly="true"/>
+                    <x-input name="alternate_contact_no" label="Alternate Contact Number" type="number" mdSize="2" value="{{$data['alternate_contact_no']}}" readOnly="true"/>
+                    <x-input name="mother_maiden_name" label="Mother's Maiden Name" type="text" mdSize="3" value="{{$data['mother_maiden_name']}}" readOnly="true"/>
+                    <x-input name="permanent_address" label="Permanent Address" type="text" mdSize="5" value="{{$data['permanent_address']}}" readOnly="true"/>
 
-                    <x-input name="total_older_person" label="No. of Older Person" type="number" mdSize="2"/>
-                    <x-input name="total_preg_women" label="No. of Pregnant Women" type="number" mdSize="2"/>
-                    <x-input name="total_lactating_women" label="No. of Lactating Women" type="number" mdSize="2"/>
-                    <x-input name="total_PWD" label="No. of PWDs due to Medical Condition" type="number" mdSize="2"/>
-                    <x-select name="house_ownership" label="House Ownership" :options="$house_ownership" sizeMd="2" required="true"/>
-                    <x-select name="shelter_damage" label="Shelter Damage" :options="$shelter_damage" sizeMd="2" required="true"/>
+                    <x-input name="id_card_presented" label="ID Card Presented" type="text" mdSize="3" value="{{$data['id_card_presented']}}" readOnly="true"/>
+                    <x-input name="id_card_number" label="ID Card Number" type="text" mdSize="3" value="{{$data['id_card_number']}}" readOnly="true"/>
+                    <x-single-checkbox label="4Ps Beneficiary" name="is4PsBenef" mdSize="2" :checked="$data['is4PsBenef'] == 1" />
+                    <x-single-checkbox label="IP" name="isIP" mdSize="2" :checked="$data['isIP'] == 1" />
+                    <x-input name="ethnicity" label="Type of Ethnicity" type="text" mdSize="2" value="{{$data['ethnicity']}}" readOnly="true"/>
+
+                    <x-input name="total_older_person" label="No. of Older Person" type="number" mdSize="2" value="{{$data['total_older_person']}}" readOnly="true"/>
+                    <x-input name="total_preg_women" label="No. of Pregnant Women" type="number" mdSize="2" value="{{$data['total_preg_women']}}" readOnly="true"/>
+                    <x-input name="total_lactating_women" label="No. of Lactating Women" type="number" mdSize="2" value="{{$data['total_lactating_women']}}" readOnly="true"/>
+                    <x-input name="total_PWD" label="No. of PWDs due to Medical Condition" type="number" mdSize="2" value="{{$data['total_PWD']}}" readOnly="true"/>
+                    <x-input name="house_ownership" label="House Ownership" type="text" mdSize="2" value="{{$data['houseOwnershipDesc']}}" readOnly="true"/>
+                    <x-input name="shelter_damage" label="Shelter Damage" type="text" mdSize="2" value="{{$data['shelterDamageDesc']}}" readOnly="true"/>
+
 
                     <div class="mb-4"></div>
                     <h6 class="text-start mx-2 text-primary">FAMILY INFORMATION</h6>
@@ -80,20 +73,26 @@
                                 <th>Highest Educational Attainment</th>
                                 <th>Occupation</th>
                                 <th>Remarks</th>
-                                <th>Action</th> 
                             </tr>
                         </thead>
                         <tbody>
-                        
+                            @foreach ($family_member as $member)
+                                <tr>
+                                    <td>{{ $member['fullname'] }}</td>
+                                    <td>{{ $member['relation'] }}</td>
+                                    <td>{{ $member['birthdate'] }}</td>
+                                    <td>{{ $member['age'] }}</td>
+                                    <td>{{ $member['genderDesc'] }}</td>
+                                    <td>{{ $member['educational_attainment'] }}</td>
+                                    <td>{{ $member['occupation'] }}</td>
+                                    <td>{{ $member['remarks'] }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
-            
-                    <button class="btn btn-success mb-3" id="addRowBtn" type="button">
-                        + Add Member
-                    </button>
                     
                     <div class="d-flex justify-content-end">   
-                        <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i>  Send Report
+                        <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i>  Print Report
                         </button>
                     </div> 
                 </div>
@@ -103,7 +102,7 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     // Function to add a new row to the table
     document.getElementById("addRowBtn").addEventListener("click", function() {
@@ -142,5 +141,5 @@
             newRow.remove(); // Remove the row from the table
         });
     });
-</script>
+</script> --}}
 @endsection

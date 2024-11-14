@@ -30,16 +30,22 @@
                 </a>
             </li>
             <li class="nav-item py-1">
+                <a class="nav-link" href="{{ route('show-incident-reports') }}">         
+                    <i class="bi {{ Route::currentRouteName() == 'show-incident-reports' ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
+                    Incident Reports
+                </a>
+            </li>
+            <li class="nav-item py-1">
                 <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bg-light' : '' }}" href="{{ route('hazard_map.index') }}">         
                     <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
                     Hazard Map
                 </a>
             </li>
         @endif
-        @if(Auth::check() && in_array(Auth::user()->role, [1, 3]))
+        @if(Auth::check() && in_array(Auth::user()->role, [3]))
             <li class="nav-item py-1">
                 <a class="nav-link" href="{{ route('family.assistance.records') }}">         
-                    <i class="bi {{ Route::currentRouteName() == 'family.assistance.records' ? 'bi-clipboard2-fill' : 'bi-clipboard2' }} fs-5 p-2"></i>
+                    <i class="bi {{ Route::currentRouteName() == 'family.assistance.records' ? 'bi bi-person-fill' : 'bi bi-person' }} fs-5 p-2"></i>
                     Family Assistance
                 </a>
             </li>

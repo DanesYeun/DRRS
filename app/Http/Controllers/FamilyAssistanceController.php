@@ -126,7 +126,18 @@ class FamilyAssistanceController extends Controller
         return redirect()->route('request.family.assistance')->with('success', 'Successfully sent assistance request!');
     }
 
-    public function lists(){
-        dd(FamilyAssistance::get_data());
+    public function index(){
+        
+        $datas = FamilyAssistance::select('id', 'first_name', 'middle_name', 'last_name', 'suffix','primary_contact_no', 'city_municipality', 'created_at')->get()->toArray();
+  
+        return view('pages.assistance.index', compact('datas'));
+    }
+
+    public function view($id){
+
+        $data = FamilyAssistance::get_data($id)[0];
+        $family_member = FamilyMember::get_data($id);
+        // dd($data, $family_member);
+        return view('pages.assistance.view', compact('data', 'family_member'));
     }
 }

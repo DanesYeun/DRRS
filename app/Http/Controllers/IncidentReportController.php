@@ -17,9 +17,9 @@ class IncidentReportController extends Controller
 
     public function showAllReports()
     {
-        $incidentReports = IncidentReport::all();
+        $incidentReports = IncidentReport::with('incidentCase')->get();
 
-        return view('incidentReports.index', compact('incidentReports'));
+        return view('pages.incident.view', compact('incidentReports'));
     }
 
     public function create(){
@@ -102,15 +102,25 @@ class IncidentReportController extends Controller
     }
 
    // display a specific incident report
-    public function showReport(Request $request, $id)
+    public function showReport($type, $id)
     {
-       
-        $incidentReport = IncidentReport::find($id);
+        if($type == 1){ 
 
-        if (!$incidentReport) {
-            return response()->json(['error' => 'Incident report not found'], 404);
+            $incidentReport = IncidentReport::with('obstetrics')->where('reportID', $id)->get()[0];
+
+        }else if($type == 2){ 
+            
+            $incidentReport = IncidentReport::with('medical')->where('reportID', $id)->get()[0];
+
+        }else if($type == 3) {
+
+            $incidentReport = IncidentReport::with('injury_trauma')->where('reportID', $id)->get()[0];
+
+        }else if($type == 4){
+
+            $incidentReport = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
         }
-
-        return view('incidentReports.show', compact('incidentReport'));
+        // dd($incidentReport->date);
+        return view('pages.incident.details', compact('incidentReport'));
     }
 }

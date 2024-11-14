@@ -19,4 +19,9 @@ class IncidentCase extends Model
         'description'
 
     ];
+
+    public function incidentReports()
+    {
+        return $this->hasMany(IncidentReport::class, 'typeOfIncident', 'id');
+    }
 }

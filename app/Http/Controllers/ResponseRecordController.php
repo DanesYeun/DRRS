@@ -7,6 +7,7 @@ use App\Models\Gender;
 use App\Models\PatientCareReport;
 use Illuminate\Http\Request;
 use App\Models\ResponseRecord;
+use App\Models\IncidentReport;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\PDF;
 
@@ -33,25 +34,29 @@ class ResponseRecordController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'date' => 'required|date',
-            'time' => 'nullable|string|max:50',
-            'incidentFrom' => 'required|string|max:50',
-            'takenTo' => 'nullable|string|max:50',
-            'callerOrReporter' => 'nullable|integer|max:50',
-            'patientName' => 'required|string|max:50',
-            'patientAge' => 'nullable|integer',
-            'patientAddress' => 'nullable|string|max:50',
-            'patientCase' => 'required|string|max:50',
-            'patientGender' => 'required|string|max:50',
-            'responders' => 'required|string|max:50',
-            'actionTaken' => 'nullable|string|max:50',
-            'remarks' => 'nullable|string|max:50',
-        ]);
-
-        ResponseRecord::create($request->all());
-
-        return redirect()->route('response_records.index')->with('success', 'Response Record created successfully.');
+        try{
+            $request->validate([
+                'date' => 'required|date',
+                'time' => 'nullable|string|max:50',
+                'incidentFrom' => 'required|string|max:50',
+                'takenTo' => 'nullable|string|max:50',
+                'callerOrReporter' => 'nullable|string|max:50',
+                'patientName' => 'required|string|max:50',
+                'patientAge' => 'nullable|integer',
+                'patientAddress' => 'nullable|string|max:50',
+                'patientCase' => 'required|string|max:50',
+                'patientGender' => 'required|string|max:50',
+                'responders' => 'required|string|max:50',
+                'actionTaken' => 'nullable|string|max:50',
+                'remarks' => 'nullable|string|max:50',
+            ]);
+    
+            ResponseRecord::create($request->all());
+    
+            return redirect()->route('response_records.index')->with('success', 'Response Record created successfully.');
+        }catch(\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
     //display specific record
@@ -138,5 +143,34 @@ class ResponseRecordController extends Controller
         }
 
         return view('pages.responseRecords.add', compact('data', 'locations', 'cases', 'genders'));
+    }
+
+    public function incident_response_create($type, $id){
+
+        if($type == 1){ 
+
+            $data = IncidentReport::with('obstetrics')->where('reportID', $id)->get()[0];
+
+        }else if($type == 2){ 
+            
+            $data = IncidentReport::with('medical')->where('reportID', $id)->get()[0];
+
+        }else if($type == 3) {
+
+            $data = IncidentReport::with('injury_trauma')->where('reportID', $id)->get()[0];
+
+        }else if($type == 4){
+
+            $data = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
+        }
+        
+        $locations = [
+            ['id' => 1, 'name' => 'location 1'],
+            ['id' => 2, 'name' => 'location 2'],
+        ];
+        $cases = map_options(Cases::class, 'id', 'description');
+        $genders = map_options(Gender::class, 'id', 'description');
+
+        return view('pages.responseRecords.add_incident', compact('data', 'locations', 'cases', 'genders'));
     }
 }

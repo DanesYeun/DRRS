@@ -20,4 +20,9 @@ class InjuryTraumaIR extends Model
         'paleness',
         'heartRate',
     ];
+
+    public function incidentReports()
+    {
+        return $this->hasMany(IncidentReport::class, 'reportID', 'reportID');
+    }
 }
