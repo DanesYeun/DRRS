@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
+
     public function show(Request $request)
     {
         // Active users
@@ -21,8 +25,10 @@ class UserController extends Controller
 
     public function show_addUser(Request $request)
     {
+        $generated_password = Str::random(10);
         $roles = map_options(Role::class, 'role_id', 'description');
-        return view('pages.users.addUser', compact('roles'));
+
+        return view('pages.users.addUser', compact('roles', 'generated_password'));
     }
 
     // Add a new user
@@ -34,7 +40,7 @@ class UserController extends Controller
             'lastname' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'emailaddress' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
             'role' => 'required|string',
         ]);
 
@@ -49,6 +55,7 @@ class UserController extends Controller
             'username' => $request->username,
             'emailaddress' => $request->emailaddress,
             'password' => Hash::make($request->password),
+            'password_updated_at' => null,
             'role' => (int)$request->role,  
             'status' => 1, 
         ]);
@@ -112,4 +119,41 @@ class UserController extends Controller
 
         return redirect()->route('users')->with('success', 'User account successfully disabled.');
     }
+
+
+    public function update_user_password(){
+        return view('pages.auth.update_password');
+    }
+
+    public function save_password(Request $request) {
+
+       try{
+            $request->validate([
+                'password' => 'required|string|min:8|confirmed'
+            ]);
+
+            $user = User::find(Auth::user()->id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User doesn\'t exist');
+            }
+    
+            $user->update([
+                'password' => Hash::make($request->password),
+                'password_updated_at' => Carbon::now(),
+            ]);
+    
+            Auth::logout();
+            
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
+
+            return redirect()->route('loginPage')->with('success', 'Password updated successfully. Please log in again.');
+
+       }catch(\Exception $e){
+         dd($e->getMessage());
+       }
+    }
+
 }

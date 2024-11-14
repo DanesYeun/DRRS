@@ -21,18 +21,28 @@
                 </a>
             </li>
         @endif
-        <li class="nav-item py-1">
-            <a class="nav-link" href="{{ route('patient_care.index') }}">         
-                <i class="bi bi-clipboard2-pulse fs-5 p-2"></i>
-                Patient Care Reports
-            </a>
-        </li>
-        <li class="nav-item py-1">
-            <a class="nav-link" href="{{ route('map') }}">         
-                <i class="bi {{ Route::currentRouteName() == 'map' ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
-                Hazard Map
-            </a>
-        </li>
+        @if(Auth::check() && in_array(Auth::user()->role, [1, 2]))
+            <li class="nav-item py-1">
+                <a class="nav-link" href="{{ route('patient_care.index') }}">         
+                    <i class="bi bi-clipboard2-pulse fs-5 p-2"></i>
+                    Patient Care Reports
+                </a>
+            </li>
+            <li class="nav-item py-1">
+                <a class="nav-link" href="{{ route('map') }}">         
+                    <i class="bi {{ Route::currentRouteName() == 'map' ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
+                    Hazard Map
+                </a>
+            </li>
+        @endif
+        @if(Auth::check() && in_array(Auth::user()->role, [1, 3]))
+            <li class="nav-item py-1">
+                <a class="nav-link" href="{{ route('donations') }}">         
+                    <i class="bi {{ Route::currentRouteName() == 'donations' ? 'bi-clipboard2-fill' : 'bi-clipboard2' }} fs-5 p-2"></i>
+                    Manage Donations
+                </a>
+            </li>
+        @endif
         <li class="nav-item py-1">
             <a class="nav-link" href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
                 <i class="bi bi-door-closed p-2"></i> 

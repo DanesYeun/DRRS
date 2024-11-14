@@ -11,9 +11,11 @@
                 
                 <!-- Display success or error message -->
                 @if(session('error'))
-                    <x-alert response="error"/>
+                    <x-alert response="error" color="danger"/>
+                @elseif(session('success'))
+                    <x-alert response="success" color="success"/>
                 @endif
-
+                
                 <form method="post" action="{{ route('login') }}" class="needs-validation" novalidate>
                     @csrf
                     

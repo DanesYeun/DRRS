@@ -24,7 +24,7 @@
             </p>
         </div>
         <div class="d-flex justify-content-center align-items-center px-5 col-12 col-md-6">
-            <a class="btn btn-outline-primary flex-fill btn-lg" href="">
+            <a class="btn btn-outline-primary flex-fill btn-lg" href="{{ route('create.donation') }}">
                 Donate
             </a>
         </div>
@@ -33,13 +33,13 @@
     <div class=" border d-flex flex-column flex-md-row m-md-2 py-2">
         <div class="col-12 col-md-6 px-3">
             <h3 class="text-primary">Report Incident</h3>
-            <a class="btn btn-outline-success" href="">
+            <a class="btn btn-outline-success" href="{{ route('create-incident-report') }}">
                 Report Incident
             </a>
         </div>
         <div class="col-12 col-md-6 px-3">
             <h3 class="text-primary">Request Relief Goods</h3>
-            <a class="btn btn-outline-secondary" href="">
+            <a class="btn btn-outline-secondary" href="{{ route('request.family.assistance') }}">
                 Request Relief Goods
             </a>
         </div>

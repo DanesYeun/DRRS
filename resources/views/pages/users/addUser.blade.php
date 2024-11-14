@@ -15,7 +15,7 @@
                 <div class="border container bg-white rounded row mx-2 p-3">
                     <h4 class="py-2 text-primary text-start">User Information</h4>
 
-                    <x-input name="firstname" label="First Name" type="text"/>
+                    <x-input name="firstname"   label="First Name" type="text"/>
                     <x-input name="lastname" label="Last Name" type="text"/>
 
                     <x-input name="username" label="Username" type="text"/>
@@ -23,8 +23,8 @@
                     <x-input name="emailaddress" label="Email" type="email"/>            
                     <x-select name="role" label="Role" :options="$roles" required="true"/>
 
-                    <x-input name="password" label="Password" type="password"/>
-                    <x-input name="password_confirmation" label="Confirm Password" type="password"/>
+                    <x-input name="password" label="Temporary Password" type="text" value="{{$generated_password}}" readOnly="true"/>
+                    {{-- <x-input name="password_confirmation" label="Confirm Password" type="password"/> --}}
 
 
                     <div class="d-flex justify-content-end">   
