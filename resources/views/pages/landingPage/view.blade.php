@@ -1,7 +1,14 @@
 @extends('layouts.layout')
 
 @section('content')
-    <div class=" border d-flex flex-column m-md-2">
+
+    @if ($hazardAlert)
+        <div class="mt-4 alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-diamond-fill"></i>
+            <span>Warning! {{ $latestHazard->hazardName }} added last {{ $latestHazard->updated_at->diffForHumans() }}</span> 
+        </div>
+    @endif
+    <div class="d-flex flex-column mx-md-2">
         <h3 class="text-start mx-2 text-primary">Hazard Map</h3>
         <div class="mx-2 mb-3 p-2">
             <div id="hazard-map" class="border border-success mb-2" style="width: 100%; height: 400px;"></div>
@@ -16,11 +23,11 @@
         </div>
     </div>
 
-    <div class="border d-flex flex-column flex-md-row m-md-2 py-2">
+    <div class="d-flex flex-column flex-md-row m-md-2 py-2">
         <div class="col-12 col-md-6 text-start px-3">
             <h3 class="text-primary">Donate</h3>
-            <p class="">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt molestiae eos accusamus delectus architecto dicta esse voluptatibus veniam magnam? Repellendus sapiente error laudantium illum nihil.
+            <p class="">               
+                Your generous donation will directly support our efforts to make a positive impact in the community. Together, we can create lasting change and bring hope to those who need it most.
             </p>
         </div>
         <div class="d-flex justify-content-center align-items-center px-5 col-12 col-md-6">
@@ -30,7 +37,7 @@
         </div>
     </div>
 
-    <div class=" border d-flex flex-column flex-md-row m-md-2 py-2">
+    <div class="d-flex flex-column flex-md-row m-md-2 py-2">
         <div class="col-12 col-md-6 px-3">
             <h3 class="text-primary">Report Incident</h3>
             <a class="btn btn-outline-success" href="{{ route('create-incident-report') }}">

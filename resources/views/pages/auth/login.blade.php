@@ -1,24 +1,16 @@
 @extends('layouts.layout')
 
 @section('content')
-    <div class="d-flex flex-column flex-md-row m-md-5">
-        <div class="p-2 p-md-5 d-flex flex-column justify-content-center">
-            <h1 class="text-primary"><< LOGO HERE>></h1>
-            <p class="text-muted">Disaster Respose and Recovery on your hands!</p>
+    <div class="row m-md-5">
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <img src="images/stories/login.png" alt="login.jpg" class="img-fluid d-none d-sm-inline" style="width: 400px; object-fit: cover;">
+            <h4 class="text-primary d-none d-sm-inline">Disaster Respose and Recovery on your hands!</h4>
         </div>
-        <div class="flex-fill p-md-5 d-flex">
-            <div class="border rounded bg-white shadow p-3 mx-md-5 flex-fill">
-                
-                <!-- Display success or error message -->
-                @if(session('error'))
-                    <x-alert response="error" color="danger"/>
-                @elseif(session('success'))
-                    <x-alert response="success" color="success"/>
-                @endif
-                
+        <div class="col-12 col-md-6 p-md-5 my-5 py-5">
+            <div class="border rounded bg-white shadow p-3 mx-md-5">          
+                <x-alert response="error"/>
                 <form method="post" action="{{ route('login') }}" class="needs-validation" novalidate>
-                    @csrf
-                    
+                    @csrf               
                     <x-floating-input type="text" name="username" label="Username"/>
                     <x-floating-input type="password" name="password" label="Password"/>
 
@@ -26,7 +18,7 @@
                         <input type="checkbox" class="form-check-input" id="showPassword" name="showPassword" value="1">
                         <label for="showPassword" class="ms-2 mt-2">Show Password</label>
                     </div>
-                    <div class="d-grid mb-3">
+                    <div class="d-grid">
                         <button type="submit" class="btn btn-lg btn-outline-primary">Login</button>
                     </div>
                 </form>

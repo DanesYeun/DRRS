@@ -4,18 +4,18 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Add User</h3>
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('users') }}">
+            <a class="btn btn-danger col-2 mb-3 " href="{{ route('users') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
-                Back
+                <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
 
         <x-alert response="error"/> 
             
-        <div class="mx-2 mb-3 p-2">
+        <div class="mx-0 mb-3 p-0">
             <form method="post" action="{{ route('users.add') }}" class="needs-validation" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-2 p-3">
+                <div class="border container bg-white rounded row mx-0 p-3">
                     <h4 class="py-2 text-primary text-start">User Information</h4>
 
                     <x-input name="firstname"   label="First Name" type="text"/>
