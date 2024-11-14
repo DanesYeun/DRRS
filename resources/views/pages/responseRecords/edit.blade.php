@@ -13,7 +13,7 @@
                     <x-select name="incidentFrom" label="Incident From" :options="$locations" required="true" value="{{ $record->incidentFrom }}"/>
                     <x-select name="takenTo" label="Taken To" :options="$locations" required="true" value="{{ $record->takenTo }}"/>
 
-                    <x-input name="callerOrReporter" label="Caller" type="number" value="{{ $record->callerOrReporter }}"/>
+                    <x-input name="callerOrReporter" label="Responder" type="text" value="{{ $record->callerOrReporter }}"/>
                     <x-input name="patientName" label="Patient" type="text" value="{{ $record->patientName }}"/>
                     <x-input name="patientAge" label="Age" type="number" value="{{ $record->patientAge }}"/>
                     <x-select name="patientGender" label="Gender" :options="$genders" required="true" value="{{ $record->patientGender }}"/>  

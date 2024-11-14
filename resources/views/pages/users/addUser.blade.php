@@ -8,23 +8,26 @@
                 <i class="bi bi-backspace-fill p-2"></i>
                 Back
             </a>
-        </div>     
+        </div>
+
+        <x-alert response="error"/> 
+            
         <div class="mx-2 mb-3 p-2">
-            <form method="post" action="{{ route('add-user') }}" class="needs-validation" novalidate>
+            <form method="post" action="{{ route('users.add') }}" class="needs-validation" novalidate>
                 @csrf
                 <div class="border container bg-white rounded row mx-2 p-3">
                     <h4 class="py-2 text-primary text-start">User Information</h4>
 
-                    <x-input name="firstname" label="First Name" type="text"/>
-                    <x-input name="lastname" label="Last Name" type="text"/>
+                    <x-input name="firstname" label="First Name" type="text" required="true"/>
+                    <x-input name="lastname" label="Last Name" type="text" required="true"/>
 
-                    <x-input name="username" label="Username" type="text"/>
+                    <x-input name="username" label="Username" type="text" required="true"/>
                     <div class="col-6 d-none d-sm-inline"></div>
-                    <x-input name="emailaddress" label="Email" type="email"/>            
+                    <x-input name="emailaddress" label="Email" type="email" required="true"/>            
                     <x-select name="role" label="Role" :options="$roles" required="true"/>
 
-                    <x-input name="password" label="Password" type="password"/>
-                    <x-input name="password_confirmation" label="Confirm Password" type="password"/>
+                    <x-input name="password" label="Password" type="password" required="true"/>
+                    <x-input name="password_confirmation" label="Confirm Password" type="password" required="true"/>
 
 
                     <div class="d-flex justify-content-end">   
@@ -37,4 +40,5 @@
 @endsection
 
 @section('js')
+    <script src="{{ asset('js/formValidation.js') }}"></script>
 @endsection

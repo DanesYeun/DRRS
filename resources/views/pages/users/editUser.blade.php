@@ -10,7 +10,7 @@
             </a>
         </div>     
         <div class="mx-2 mb-3 p-2">
-            <form method="post" action="{{ route('edit-user', ['id' => $userDetails->id]) }}" class="needs-validation" novalidate>
+            <form method="post" action="{{ route('users.edit', ['id' => $userDetails->id]) }}" class="needs-validation" novalidate>
                 @csrf
                 <div class="border container bg-white rounded row mx-2 p-3">
                     <h4 class="py-2 text-primary text-start">User Information</h4>

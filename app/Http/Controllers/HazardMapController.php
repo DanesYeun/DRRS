@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hazard;
 use App\Models\Shelter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class HazardMapController extends Controller
 {
@@ -25,10 +26,15 @@ class HazardMapController extends Controller
     public function store(Request $request)
     {
         // Validate incoming data
-        $validation = $request->validate([
+        $validator = Validator::make($request->all(),[
             'hazardName' => 'required|string|max:255',
             'coordinates' => 'required|string|min:1',
         ]);
+
+        if($validator->fails())
+        {
+            return redirect()->back()->with('error', 'Oh no! An error occured.');
+        }
  
         // Create the danger zone
         $zone = Hazard::create([
@@ -37,7 +43,7 @@ class HazardMapController extends Controller
             'coordinates' => $request->coordinates,
         ]);
 
-        return redirect()->intended(route('map'));   
+        return redirect()->intended(route('hazard_map.index'));   
     }
 
     public function edit($id)
@@ -63,7 +69,7 @@ class HazardMapController extends Controller
         $hazard = Hazard::findOrFail($id);
         $hazard->update($request->all());
 
-        return redirect()->route('hazards-shelters');
+        return redirect()->route('hazard_map.shelter');
     }
 
     public function updateHazardStatus(Request $request, $id)
@@ -79,20 +85,61 @@ class HazardMapController extends Controller
             'hazardStatus' => 2,
         ]);
 
-        return redirect()->route('hazards-shelters')->with('success','Hazard status is set to inactive!');
+        return redirect()->route('hazard_map.shelter')->with('success','Hazard status is set to inactive!');
     }
     public function shelterCreate()
     {
         return view('pages.hazardMap.add-shelter');
     }
 
+    public function shelter_edit(Request $request, $id)
+    {
+        $shelter = Shelter::findOrFail($id);
+
+        if (!$shelter)
+        {
+            return redirect()->back()->with('error', 'Shelter not found!');
+        }
+
+        return view('pages.hazardMap.edit-shelter', compact('shelter'));
+    }
+
+    public function shelter_update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'shelterName' => 'nullable|string',
+            'shelterCoordinates' => 'nullable|string'
+        ]);
+
+        if ($validator->fails())
+        {
+            return redirect()->back()->with('error', 'Oh no! An error occured.');
+        }
+
+        $shelter = Shelter::findOrFail($id);
+
+        if (!$shelter)
+        {
+            return redirect()->back()->with('error', 'Shelter not found!');
+        }
+
+        $shelter->update($request->all());
+
+        return redirect()->route('hazard_map.shelter')->with('success', 'Shelter was updated!');
+    }
+
     public function shelterStore(Request $request)
     {
         // Validate incoming data
-        $validation = $request->validate([
+        $validator = Validator::make($request->all(),[
             'shelterName' => 'required|string|max:255',
             'shelterCoordinates' => 'required|string|min:1',
         ]);
+
+        if($validator->fails())
+        {
+            return redirect()->back()->with('error', 'Oh no! An error occured.');
+        }
  
         // Create the danger zone
         $shelter = Shelter::create([
@@ -100,7 +147,7 @@ class HazardMapController extends Controller
             'shelterCoordinates' => $request->shelterCoordinates,
         ]);
 
-        return redirect()->intended(route('map'));   
+        return redirect()->intended(route('hazard_map.index'));   
     }
 
     public function shelterDelete($id)

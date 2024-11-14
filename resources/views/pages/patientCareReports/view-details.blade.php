@@ -4,18 +4,25 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Patient Care Report</h3>
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('patient_care.index') }}">
+            <a class="btn btn-danger col-2 mb-3 " href="{{ route('patient_care.index') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
-                Back
+                <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
 
         <!-- Display success or error message -->
         <x-alert response="error"/>
+
         <form method="post" action="{{ route('patient_care.store') }}" class="needs-validation" novalidate>
             @csrf
-            <div class="container bg-white rounded py-2 row">
-                <h4 class="py-2 text-primary text-start">Patient Care Report Details</h4>      
+            <div class="container bg-white rounded mx-2  py-2 row">
+                <div class="d-flex flex-row justify-content-between">
+                    <h4 class="text-start mx-2 text-primary">Patient Care Report Details</h4>
+                    <a class="btn btn-success col-4 col-md-2 mb-3 " href="{{ route('patient_care.index') }}">
+                        <i class="bi bi-file-earmark-plus-fill p-2"></i>
+                        <span class="d-none d-sm-inline">Add Response</span>
+                    </a>
+                </div>    
                 <x-input name="patientName" value="{{ $patientCare->patientName }}" label="Patient Name" type="text" mdSize="12" readOnly="true"/>
 
                 <x-input name="patientAge" value="{{ $patientCare->patientAge }}" label="Age" type="text" mdSize="2" readOnly="true"/>

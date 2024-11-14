@@ -1,35 +1,36 @@
-<div class="sidebar bg-light p-2 h-100 d-none d-sm-inline" style="width: 300px;">
+<div class="sidebar bg-white p-2 h-100 d-none d-sm-inline" style="width: 300px;">
+    <div class="mt-2"></div>
     <ul class="nav flex-column">
         <li class="nav-item py-1">
-            <a class="nav-link" href="{{ route('home') }}">
-                <i class="bi {{ Route::currentRouteName() == 'home' ? 'bi-house-fill' : 'bi-house' }} fs-5 p-2"></i>
+            <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'home') ? 'bg-light' : ''}} rounded" href="{{ route('home') }}">
+                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'home') ? 'bi-house-fill' : 'bi-house' }} fs-5 p-2"></i>
                 Home
             </a>
         </li>
         @if(Auth::check() && Auth::user()->role == 1)
             <li class="nav-item py-1">
-                <a class="nav-link" href="{{ route('users') }}">         
-                    <i class="bi {{ Route::currentRouteName() == 'users' ? 'bi-people-fill' : 'bi-people' }} fs-5 p-2"></i> 
+                <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'users') ? 'bg-light' : ''}}" href="{{ route('users') }}">         
+                    <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'users') ? 'bi-people-fill' : 'bi-people' }} fs-5 p-2"></i> 
                     Users
                 </a>
             </li>
         
             <li class="nav-item py-1">
-                <a class="nav-link" href="{{ route('response_records.index') }}">         
-                    <i class="bi {{ Route::currentRouteName() == 'response_records.index' ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
+                <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'response_records') ? 'bg-light' : ''}}" href="{{ route('response_records.index') }}">         
+                    <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'response_records') ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
                     Response Records
                 </a>
             </li>
         @endif
         <li class="nav-item py-1">
-            <a class="nav-link" href="{{ route('patient_care.index') }}">         
-                <i class="bi bi-clipboard2-pulse fs-5 p-2"></i>
+            <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bg-light' : '' }}" href="{{ route('patient_care.index') }}">         
+                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bi-clipboard2-pulse-fill' : 'bi-clipboard2-pulse' }} fs-5 p-2"></i>
                 Patient Care Reports
             </a>
         </li>
         <li class="nav-item py-1">
-            <a class="nav-link" href="{{ route('map') }}">         
-                <i class="bi {{ Route::currentRouteName() == 'map' ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
+            <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bg-light' : '' }}" href="{{ route('hazard_map.index') }}">         
+                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>
                 Hazard Map
             </a>
         </li>
