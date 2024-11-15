@@ -9,7 +9,7 @@
             <tr>
                 <th scope="col" class="p-3 rounded-start bg-primary text-white">Date</th>
                 <th scope="col" class="p-3 bg-primary text-white">Reporter Name</th>
-                <th scope="col" class="p-3 bg-primary text-white">Reporter Contact No.</th>
+                <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell">Reporter Contact No.</th>
                 <th scope="col" class="p-3 bg-primary text-white">Case</th>
                 <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
             </tr>
@@ -21,10 +21,10 @@
                         {{ \Carbon\Carbon::parse($data->date)->format('M d, Y') }}
                     </td>
                     <td class="p-3">{{ $data->reporterFullName }}</td>
-                    <td class="p-3">{{ $data->reporterContactNumber }}</td>
+                    <td class="p-3 d-none d-sm-table-cell">{{ $data->reporterContactNumber }}</td>
                     <td class="p-3">{{ $data->incidentCase->description }}</td>
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('show-incident-report', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">View</a>
+                        <a class="btn btn-sm btn-warning text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">View</a>
                     </td>
                 </tr>
             @endforeach

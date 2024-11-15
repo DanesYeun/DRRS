@@ -17,7 +17,7 @@
         </div>
 
         <div class="mx-2 mb-3 p-2">
-            <form method="post" action="{{ route('store-incident-report') }}" class="needs-validation" novalidate>
+            <form method="post" action="{{ route('incident_report.store') }}" class="needs-validation" novalidate>
                 @csrf
                 <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
 

@@ -36,14 +36,19 @@ class HazardMapController extends Controller
             return redirect()->back()->with('error', 'Oh no! An error occured.');
         }
  
-        // Create the danger zone
-        $zone = Hazard::create([
-            'hazardName' => $request->hazardName,
-            'hazardStatus' => 1,
-            'coordinates' => $request->coordinates,
-        ]);
+        try{
+            $zone = Hazard::create([
+                'hazardName' => $request->hazardName,
+                'hazardStatus' => 1,
+                'coordinates' => $request->coordinates,
+            ]);
 
-        return redirect()->intended(route('hazard_map.index'));   
+            return redirect()->intended(route('hazard_map.index'))->with('success', 'Hazard added successfully');  
+
+        }catch(\Exception $e) {
+            return redirect()->back()->with('error', 'Oh no! An error has occured');
+        }  
+
     }
 
     public function edit($id)
@@ -140,14 +145,17 @@ class HazardMapController extends Controller
         {
             return redirect()->back()->with('error', 'Oh no! An error occured.');
         }
- 
-        // Create the danger zone
-        $shelter = Shelter::create([
-            'shelterName' => $request->shelterName,
-            'shelterCoordinates' => $request->shelterCoordinates,
-        ]);
 
-        return redirect()->intended(route('hazard_map.index'));   
+        try{
+            $shelter = Shelter::create([
+                'shelterName' => $request->shelterName,
+                'shelterCoordinates' => $request->shelterCoordinates,
+            ]);
+
+            return redirect()->intended(route('hazard_map.index'))->with('success', 'Shelter added successfully!');
+        }catch(\Exception $e) {
+            return redirect()->back()->with('error', 'Oh no! An error has occured');
+        }     
     }
 
     public function shelterDelete($id)

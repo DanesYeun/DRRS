@@ -3,15 +3,14 @@
 @section('content')
     <div class="d-flex flex-column m-md-2">
 
-        <div class="d-flex flex-row justify-content-between">
+        <div class="d-flex flex-row justify-content-between pt-2">
             <h3 class="text-start mx-2 text-primary">Update Password</h3>
             <x-alert response="error"/>
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ url()->previous() }}">
-                <i class="bi bi-backspace-fill p-2"></i>
-                Back
-            </a>
         </div>
-
+        <div class="text-start alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            Warning: Default password detected! Please change your password.
+        </div>
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('save.password') }}" class="needs-validation" novalidate>
                 @csrf

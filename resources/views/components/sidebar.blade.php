@@ -21,6 +21,13 @@
                     Response Records
                 </a>
             </li>
+
+            <li class="nav-item py-1">
+                <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'incident_report') || Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bg-light' : '' }}" href="{{ route('incident_report.show_all') }}">         
+                    <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
+                    Incident Reports
+                </a>
+            </li>
         @endif
         @if(Auth::check() && in_array(Auth::user()->role, [1, 2]))
             <li class="nav-item py-1">
@@ -29,12 +36,7 @@
                     Patient Care Reports
                 </a>
             </li>
-            <li class="nav-item py-1">
-                <a class="nav-link" href="{{ route('show-incident-reports') }}">         
-                    <i class="bi {{ Route::currentRouteName() == 'show-incident-reports' ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
-                    Incident Reports
-                </a>
-            </li>
+            
             <li class="nav-item py-1">
                 <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bg-light' : '' }}" href="{{ route('hazard_map.index') }}">         
                     <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'hazard_map') || Str::startsWith(Route::currentRouteName(), 'shelter') ? 'bi-pin-map-fill' : 'bi-pin-map' }} fs-5 p-2"></i>

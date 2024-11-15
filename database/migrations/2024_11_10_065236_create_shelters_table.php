@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shelters', function (Blueprint $table) {
             $table->id('shelterID');
             $table->string('shelterName');
-            $table->json('shelterCoordinates'); // Store coordinates as JSON
+            $table->string('shelterCoordinates'); // Store coordinates as JSON
             $table->timestamps();
         });
     }

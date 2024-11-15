@@ -23,7 +23,7 @@ class LandingPageController extends Controller
 
             // Check if the time difference < 1 hour and 30 mins
             if ($timeDifference <= 90) {
-                $showAlert = true;
+                $hazardAlert = true;
             }
         }
 

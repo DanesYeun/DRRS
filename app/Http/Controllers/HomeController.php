@@ -20,10 +20,8 @@ class HomeController extends Controller
         if ($latestHazard) {
             $hazardTime = Carbon::parse($latestHazard->created_at);
             $timeDifference = $hazardTime->diffInMinutes(Carbon::now());
-
-            // Check if the time difference < 1 hour and 30 mins
             if ($timeDifference <= 90) {
-                $showAlert = true;
+                $hazardAlert = true;
             }
             
         }
