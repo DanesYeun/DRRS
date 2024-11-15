@@ -96,9 +96,16 @@ class IncidentReportController extends Controller
     public function delete($id)
     {
         $incidentReport = IncidentReport::findOrFail($id);
+        
+        $incidentReport->deleteObstetrics()->delete();
+        $incidentReport->deleteMedical()->delete();
+        $incidentReport->deleteInjury_trauma()->delete();
+        $incidentReport->deleteCardia()->delete();
+
+        // Delete the main incident report
         $incidentReport->delete();
 
-        return response()->json(['message' => 'Incident report deleted successfully.']);
+        return back()->with('success', 'Incident report deleted successfully.');
     }
 
    // display a specific incident report
@@ -123,7 +130,7 @@ class IncidentReportController extends Controller
             }else{
                 return back()->with('error', 'No data found');
             }
-            
+
             return view('pages.incident.details', compact('incidentReport'));
         }catch(\Exception $e) {
             return back()->with('error', $e->getMessage());
