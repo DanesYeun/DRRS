@@ -46,13 +46,13 @@
         @endif
         @if(Auth::check() && in_array(Auth::user()->role, [3]))
             <li class="nav-item py-1">
-                <a class="nav-link" href="{{ route('family.assistance.records') }}">         
-                    <i class="bi {{ Route::currentRouteName() == 'family.assistance.records' ? 'bi bi-person-fill' : 'bi bi-person' }} fs-5 p-2"></i>
+                <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'family.assistance') || Str::startsWith(Route::currentRouteName(), 'family.assistance') ? 'bg-light' : '' }}" href="{{ route('family.assistance.records') }}">         
+                    <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'family.assistance') ? 'bi bi-person-fill' : 'bi bi-person' }} fs-5 p-2"></i>
                     Family Assistance
                 </a>
             </li>
             <li class="nav-item py-1">
-                <a class="nav-link" href="{{ route('donations') }}">         
+                <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'donations') || Str::startsWith(Route::currentRouteName(), 'donations') ? 'bg-light' : '' }}" href="{{ route('donations') }}">         
                     <i class="bi {{ Route::currentRouteName() == 'donations' ? 'bi-clipboard2-fill' : 'bi-clipboard2' }} fs-5 p-2"></i>
                     Manage Donations
                 </a>
