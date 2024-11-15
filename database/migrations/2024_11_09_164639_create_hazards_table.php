@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('hazardID');
             $table->string('hazardName');
             $table->unsignedBigInteger('hazardStatus');
-            $table->json('coordinates'); // Store coordinates as JSON
+            $table->string('coordinates'); // Store coordinates as JSON
             $table->timestamps();
 
             $table->foreign('hazardStatus')->references('id')->on('hazard_statuses')->onDelete('cascade');

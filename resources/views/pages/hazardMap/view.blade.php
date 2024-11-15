@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
+    <x-alert response="success" color="success"/>
     <div class="d-flex flex-column m-md-2">
         <h3 class="text-start mx-2 text-primary">Hazard Map</h3>
         <div class="text-start px-3">

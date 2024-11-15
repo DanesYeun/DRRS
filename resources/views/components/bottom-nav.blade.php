@@ -13,6 +13,10 @@
             </a>
         @endif
 
+        <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'incident_report') || Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bg-light' : '' }}" href="{{ route('incident_report.show_all') }}">         
+            <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
+        </a>
+
         <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bg-light' : '' }}" href="{{ route('patient_care.index') }}">         
             <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bi-clipboard2-pulse-fill' : 'bi-clipboard2-pulse' }} fs-5 p-2"></i>
         </a>

@@ -40,7 +40,7 @@
     <div class="d-flex flex-column flex-md-row m-md-2 py-2">
         <div class="col-12 col-md-6 px-3">
             <h3 class="text-primary">Report Incident</h3>
-            <a class="btn btn-outline-success" href="{{ route('create-incident-report') }}">
+            <a class="btn btn-outline-success" href="{{ route('incident_report.create') }}">
                 Report Incident
             </a>
         </div>
