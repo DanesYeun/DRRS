@@ -27,76 +27,86 @@ class DonationController extends Controller
 
     public function store(Request $request){
         
-        $validator = Validator::make($request->all(), [
-            'fullname' => 'required|string|max:255',
-            'contactno' => 'required|string|regex:/^[0-9]{10,11}$/',
-            'donationMode' => 'required|integer', 
-            'donation_type' => 'required|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return back()->with('error', implode('<br>', $validator->errors()->all()));
-        }
-
-        if(is_null($request->amount)){
-
+        try{
             $validator = Validator::make($request->all(), [
-                'category' => 'required|integer',
-                'itemName' => 'required|string',
-                'quantity' => 'nullable|integer'
+                'fullname' => 'required|string|max:255',
+                'contactno' => 'required|string|regex:/^[0-9]{10,11}$/',
+                'donationMode' => 'required|integer', 
+                'donation_type' => 'required|integer',
             ]);
-
+    
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                return back()->with('error', implode('<br>', $validator->errors()->all()));
             }
-
-            InKindDonation::create([
+    
+            if(is_null($request->amount)){
+    
+                $validator = Validator::make($request->all(), [
+                    'category' => 'required|integer',
+                    'itemName' => 'required|string',
+                    'quantity' => 'nullable|integer'
+                ]);
+    
+                if ($validator->fails()) {
+                    return back()->with('error', implode('<br>', $validator->errors()->all()));
+                }
+    
+                InKindDonation::create([
+                    'fullname' => $request->fullname, 
+                    'contactno' => $request->contactno, 
+                    'donationMode' => $request->donationMode, 
+                    'category' => $request->category, 
+                    'itemName' => $request->itemName, 
+                    'quantity' => $request->quantity, 
+                    'isPickUp' => 0
+                ]);
+    
+                return redirect()->route('create.donation')->with('success', 'Successfully sent assistance request!');
+            }
+    
+            CashDonation::create([
                 'fullname' => $request->fullname, 
                 'contactno' => $request->contactno, 
                 'donationMode' => $request->donationMode, 
-                'category' => $request->category, 
-                'itemName' => $request->itemName, 
-                'quantity' => $request->quantity, 
-                'isPickUp' => 0
+                'amount' => $request->amount, 
+                'isPickUp' => 0 
             ]);
-
+    
             return redirect()->route('create.donation')->with('success', 'Successfully sent assistance request!');
+
+        }catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        CashDonation::create([
-            'fullname' => $request->fullname, 
-            'contactno' => $request->contactno, 
-            'donationMode' => $request->donationMode, 
-            'amount' => $request->amount, 
-            'isPickUp' => 0 
-        ]);
-
-        return redirect()->route('create.donation')->with('success', 'Successfully sent assistance request!');
     }
 
     public function index(){
         
-        $donation_mode = map_options_raw('donation_mode', 'id', 'description');
-        $categories = map_options_raw('donation_category', 'id', 'description');
+        try {
+            $donation_mode = map_options_raw('donation_mode', 'id', 'description');
+            $categories = map_options_raw('donation_category', 'id', 'description');
 
-        $type = [
-            ['id' => 1, 'name' => 'Cash'],
-            ['id' => 2, 'name' => 'In-kind']
-        ];
+            $type = [
+                ['id' => 1, 'name' => 'Cash'],
+                ['id' => 2, 'name' => 'In-kind']
+            ];
 
-        $cashDonations = CashDonation::get_data();
-        $inkindDonations = InKindDonation::get_data();
+            $cashDonations = CashDonation::get_data();
+            $inkindDonations = InKindDonation::get_data();
 
-        // dd($inkindDonations, $cashDonations);
-        return view('pages.secretary.index', compact('type', 'donation_mode', 'categories', 'cashDonations', 'inkindDonations'));
+            // dd($inkindDonations, $cashDonations);
+            return view('pages.secretary.index', compact('type', 'donation_mode', 'categories', 'cashDonations', 'inkindDonations'));
+
+        }catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function view($type, $id){
         
         $data = $type == 1 ? CashDonation::get_data($id) : InKindDonation::get_data($id);
 
-        $donation = $data[0];
-        // dd($donation);
+        $donation = $data ?? $data[0];
+
         return view('pages.donation.view_donation', compact('donation', 'type'));
     }
 
@@ -111,8 +121,8 @@ class DonationController extends Controller
 
             return redirect()->route('donations')->with('success', 'Donation pickup successfully confirmed.');
 
-        }catch(\Exception $e){
-            dd($e->getMessage());
+        } catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
     }
 

@@ -27,103 +27,107 @@ class FamilyAssistanceController extends Controller
 
     public function store(Request $request){
         
-        // Validate input data
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:50',
-            'middle_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'suffix' => 'nullable|string|max:20',
-            'birthdate' => 'required|date',
-            'age' => 'required|integer',
-            'birthplace' => 'required|string|max:225',
-            'gender' => 'required', 
-            'permanent_address' => 'required|string|max:225',
-            'civil_status' => 'required',  
-            'religion' => 'nullable|string|max:100',
-            'occupation' => 'required|string|max:100',
-            'primary_contact_no' => 'required|regex:/^0?[0-9]{11}$/',  
-            'alternate_contact_no' => 'required|regex:/^0?[0-9]{11}$/', 
-            'mother_maiden_name' => 'nullable|string|max:50',
-            'monthly_family_net_income' => 'required|numeric|min:0',
-            'id_card_presented' => 'nullable|string|max:50',
-            'id_card_number' => 'nullable|string|max:50',
-            'ethnicity' => 'nullable|string|max:50',
-            'region' => 'required|string|max:100',
-            'province' => 'required|string|max:100',
-            'district' => 'required|string|max:100',
-            'city_municipality' => 'required|string|max:100',
-            'barangay' => 'required|string|max:100',
-            'evacuation_center' => 'nullable|string|max:100',
-            'total_older_person' => 'nullable|integer|min:0',
-            'total_preg_women' => 'nullable|integer|min:0',
-            'total_lactating_women' => 'nullable|integer|min:0',
-            'total_PWD' => 'nullable|integer|min:0',
-            'house_ownership' => 'required',
-            'shelter_damage' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return back()->with('error', implode('<br>', $validator->errors()->all()));
-        }
-
-        $fam_assistance = FamilyAssistance::create([
-                    'first_name' => $request->first_name,
-                    'middle_name' => $request->middle_name,
-                    'last_name' => $request->last_name,
-                    'suffix' => $request->suffix,
-                    'birthdate' => $request->birthdate,
-                    'age' => $request->age,
-                    'birthplace' => $request->birthplace,
-                    'gender' => $request->gender, 
-                    'permanent_address' => $request->permanent_address,
-                    'civil_status' => $request->civil_status,  
-                    'religion' => $request->religion,
-                    'occupation' => $request->occupation,
-                    'primary_contact_no' => $request->primary_contact_no,  
-                    'alternate_contact_no' => $request->alternate_contact_no, 
-                    'mother_maiden_name' => $request->mother_maiden_name,
-                    'monthly_family_net_income' => $request->monthly_family_net_income,
-                    'id_card_presented' => $request->id_card_presented,
-                    'id_card_number' => $request->id_card_number,
-                    'ethnicity' => $request->ethnicity,
-                    'region' => $request->region,
-                    'province' => $request->province,
-                    'district' => $request->district,
-                    'city_municipality' => $request->city_municipality,
-                    'barangay' => $request->barangay,
-                    'evacuation_center' => $request->evacuation_center,
-                    'total_older_person' => $request->total_older_person ?? 0,
-                    'total_preg_women' => $request->total_preg_women ?? 0,
-                    'total_lactating_women' => $request->total_lactating_women ?? 0,
-                    'total_PWD' => $request->total_PWD ?? 0,
-                    'house_ownership' => $request->house_ownership,
-                    'shelter_damage' => $request->shelter_damage,
-                    'is4PsBenef' => !is_null($request->is4PsBenef) ? 1 : 0,
-                    'isIP' => !is_null($request->isIP) ? 1 : 0,
-                ]);
-
-        if($request->family_member){
-            $family_member_arrs = $request->family_member;
-
-            foreach ($family_member_arrs as $member) {
-            
-                $familyMemberData = [
-                    'family_head_id' => $fam_assistance->id,
-                    'fullname' => $member[0],
-                    'relation' => $member[1], 
-                    'birthdate' => $member[2], 
-                    'age' => $member[3], 
-                    'gender' => $member[4], 
-                    'educational_attainment' => $member[5], 
-                    'occupation' => $member[6], 
-                    'remarks' => $member[7], 
-                ];
-        
-                FamilyMember::create($familyMemberData);
+        try {
+            $validator = Validator::make($request->all(), [
+                'first_name' => 'required|string|max:50',
+                'middle_name' => 'required|string|max:50',
+                'last_name' => 'required|string|max:50',
+                'suffix' => 'nullable|string|max:20',
+                'birthdate' => 'required|date',
+                'age' => 'required|integer',
+                'birthplace' => 'required|string|max:225',
+                'gender' => 'required', 
+                'permanent_address' => 'required|string|max:225',
+                'civil_status' => 'required',  
+                'religion' => 'nullable|string|max:100',
+                'occupation' => 'required|string|max:100',
+                'primary_contact_no' => 'required|regex:/^0?[0-9]{11}$/',  
+                'alternate_contact_no' => 'required|regex:/^0?[0-9]{11}$/', 
+                'mother_maiden_name' => 'nullable|string|max:50',
+                'monthly_family_net_income' => 'required|numeric|min:0',
+                'id_card_presented' => 'nullable|string|max:50',
+                'id_card_number' => 'nullable|string|max:50',
+                'ethnicity' => 'nullable|string|max:50',
+                'region' => 'required|string|max:100',
+                'province' => 'required|string|max:100',
+                'district' => 'required|string|max:100',
+                'city_municipality' => 'required|string|max:100',
+                'barangay' => 'required|string|max:100',
+                'evacuation_center' => 'nullable|string|max:100',
+                'total_older_person' => 'nullable|integer|min:0',
+                'total_preg_women' => 'nullable|integer|min:0',
+                'total_lactating_women' => 'nullable|integer|min:0',
+                'total_PWD' => 'nullable|integer|min:0',
+                'house_ownership' => 'required',
+                'shelter_damage' => 'required',
+            ]);
+    
+            if ($validator->fails()) {
+                return back()->with('error', implode('<br>', $validator->errors()->all()));
             }
+    
+            $fam_assistance = FamilyAssistance::create([
+                        'first_name' => $request->first_name,
+                        'middle_name' => $request->middle_name,
+                        'last_name' => $request->last_name,
+                        'suffix' => $request->suffix,
+                        'birthdate' => $request->birthdate,
+                        'age' => $request->age,
+                        'birthplace' => $request->birthplace,
+                        'gender' => $request->gender, 
+                        'permanent_address' => $request->permanent_address,
+                        'civil_status' => $request->civil_status,  
+                        'religion' => $request->religion,
+                        'occupation' => $request->occupation,
+                        'primary_contact_no' => $request->primary_contact_no,  
+                        'alternate_contact_no' => $request->alternate_contact_no, 
+                        'mother_maiden_name' => $request->mother_maiden_name,
+                        'monthly_family_net_income' => $request->monthly_family_net_income,
+                        'id_card_presented' => $request->id_card_presented,
+                        'id_card_number' => $request->id_card_number,
+                        'ethnicity' => $request->ethnicity,
+                        'region' => $request->region,
+                        'province' => $request->province,
+                        'district' => $request->district,
+                        'city_municipality' => $request->city_municipality,
+                        'barangay' => $request->barangay,
+                        'evacuation_center' => $request->evacuation_center,
+                        'total_older_person' => $request->total_older_person ?? 0,
+                        'total_preg_women' => $request->total_preg_women ?? 0,
+                        'total_lactating_women' => $request->total_lactating_women ?? 0,
+                        'total_PWD' => $request->total_PWD ?? 0,
+                        'house_ownership' => $request->house_ownership,
+                        'shelter_damage' => $request->shelter_damage,
+                        'is4PsBenef' => !is_null($request->is4PsBenef) ? 1 : 0,
+                        'isIP' => !is_null($request->isIP) ? 1 : 0,
+                    ]);
+    
+            if($request->family_member){
+                $family_member_arrs = $request->family_member;
+    
+                foreach ($family_member_arrs as $member) {
+                
+                    $familyMemberData = [
+                        'family_head_id' => $fam_assistance->id,
+                        'fullname' => $member[0],
+                        'relation' => $member[1], 
+                        'birthdate' => $member[2], 
+                        'age' => $member[3], 
+                        'gender' => $member[4], 
+                        'educational_attainment' => $member[5], 
+                        'occupation' => $member[6], 
+                        'remarks' => $member[7], 
+                    ];
+            
+                    FamilyMember::create($familyMemberData);
+                }
+            }
+    
+            return redirect()->route('request.family.assistance')->with('success', 'Successfully sent assistance request!');
+        }catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        return redirect()->route('request.family.assistance')->with('success', 'Successfully sent assistance request!');
+        
     }
 
     public function index(){
