@@ -93,19 +93,40 @@ class IncidentReportController extends Controller
     }
 
     // Deleteincident report
-    public function delete($id)
+    public function delete($type, $id)
     {
-        $incidentReport = IncidentReport::findOrFail($id);
-        
-        $incidentReport->deleteObstetrics()->delete();
-        $incidentReport->deleteMedical()->delete();
-        $incidentReport->deleteInjury_trauma()->delete();
-        $incidentReport->deleteCardia()->delete();
+        try{
+           
+            $incidentReport = IncidentReport::findOrFail($id);
 
-        // Delete the main incident report
-        $incidentReport->delete();
+            if($type == 1){ 
 
-        return back()->with('success', 'Incident report deleted successfully.');
+                $incidentReport->deleteObstetrics()->where('reportID', $id)->delete();
+    
+            }else if($type == 2){ 
+                
+                $incidentReport->deleteMedical()->where('reportID', $id)->delete();
+    
+            }else if($type == 3) {
+    
+                $incidentReport->deleteInjury_trauma()->where('reportID', $id)->delete();
+    
+            }else if($type == 4){
+    
+                $incidentReport->deleteCardia()->where('reportID', $id)->delete();
+            }else{
+                return back()->with('error', 'No data found');
+            }
+
+            $incidentReport->delete();
+
+            return redirect()->back()->with('success', 'Incident report deleted successfully.');
+
+        }catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+
     }
 
    // display a specific incident report

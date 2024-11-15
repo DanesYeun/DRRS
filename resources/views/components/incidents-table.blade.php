@@ -2,6 +2,11 @@
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
         <h5 class="p-1">{{ $label }}</h5>
+        @if(session('error'))
+                <x-alert response="error" color="danger"/>
+            @elseif(session('success'))
+                <x-alert response="success" color="success"/>
+            @endif
             <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
     <table id="assistance-table" class="table table-hover table-borderless">
@@ -25,7 +30,11 @@
                     <td class="p-3">{{ $data->incidentCase->description }}</td>
                     <td class="p-3 rounded-end">
                         <a class="btn btn-sm btn-warning text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">View</a>
-                        <a class="btn btn-sm btn-danger text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">Delete</a>
+                        <a class="btn btn-sm btn-danger text-white" href="" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Delete</a>
+                       
+                        <form id="delete-form" action="{{ route('incident_report.delete', ['case' => $data->incidentCase->id, 'id' => $data->reportID])  }}" method="POST" style="display: none;">
+                            @csrf
+                        </form> 
                     </td>
                 </tr>
             @endforeach
