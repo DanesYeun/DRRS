@@ -25,6 +25,7 @@
                     <td class="p-3">{{ $data->incidentCase->description }}</td>
                     <td class="p-3 rounded-end">
                         <a class="btn btn-sm btn-warning text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">View</a>
+                        <a class="btn btn-sm btn-danger text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">Delete</a>
                     </td>
                 </tr>
             @endforeach

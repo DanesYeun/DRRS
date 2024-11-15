@@ -33,27 +33,49 @@ class IncidentReport extends Model
 
     public function obstetrics()
     {
-        return $this->belongsTo(ObstetricsIR::class, 'typeOfIncident', 'id');
+        return $this->belongsTo(ObstetricsIR::class, 'reportID', 'reportID');
     }
 
     public function medical()
     {
-        return $this->belongsTo(MedicalIR::class, 'typeOfIncident', 'id');
+        return $this->belongsTo(MedicalIR::class, 'reportID', 'reportID');
     }
 
     public function injury_trauma()
     {
-        return $this->belongsTo(InjuryTraumaIR::class, 'typeOfIncident', 'id');
+        return $this->belongsTo(InjuryTraumaIR::class, 'reportID', 'reportID');
     }
 
     public function cardia()
     {
-        return $this->belongsTo(CardiaIR::class, 'typeOfIncident', 'id');
+        return $this->belongsTo(CardiaIR::class, 'reportID', 'reportID');
     }
 
     public function disaster()
     {
-        // return $this->belongsTo(DisasterIr::class, 'typeOfIncident', 'id');
+        // return $this->belongsTo(DisasterIr::class, 'reportID', 'id');
+    }
+
+    
+
+    public function deleteObstetrics()
+    {
+        return $this->hasOne(ObstetricsIR::class, 'reportID', 'reportID');
+    }
+
+    public function deleteMedical()
+    {
+        return $this->hasOne(MedicalIR::class, 'reportID', 'reportID');
+    }
+
+    public function deleteInjury_trauma()
+    {
+        return $this->hasOne(InjuryTraumaIR::class, 'reportID', 'reportID');
+    }
+
+    public function deleteCardia()
+    {
+        return $this->hasOne(CardiaIR::class, 'reportID', 'reportID');
     }
 
 

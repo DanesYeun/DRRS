@@ -61,7 +61,7 @@ Route::controller(ResponseRecordController::class)->group(function () {
 });
 
 Route::controller(IncidentReportController::class)->group(function () {
-    Route::post('/incident-reports/{id}', 'delete')->name('delete-incident-report');
+    Route::post('/incident-reports/{id}', 'delete')->name('incident_Report.delete');
     Route::get('/incident-reports', 'showAllReports')->name('incident_report.show_all');
     Route::get('/incident-report/{case}/{id}', 'showReport')->name('incident_report.show');
 
