@@ -104,23 +104,29 @@ class IncidentReportController extends Controller
    // display a specific incident report
     public function showReport($type, $id)
     {
-        if($type == 1){ 
+        try{
+            if($type == 1){ 
 
-            $incidentReport = IncidentReport::with('obstetrics')->where('reportID', $id)->get()[0];
-
-        }else if($type == 2){ 
+                $incidentReport = IncidentReport::with('obstetrics')->where('reportID', $id)->get()[0];
+    
+            }else if($type == 2){ 
+                
+                $incidentReport = IncidentReport::with('medical')->where('reportID', $id)->get()[0];
+    
+            }else if($type == 3) {
+    
+                $incidentReport = IncidentReport::with('injury_trauma')->where('reportID', $id)->get()[0];
+    
+            }else if($type == 4){
+    
+                $incidentReport = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
+            }else{
+                return back()->with('error', 'No data found');
+            }
             
-            $incidentReport = IncidentReport::with('medical')->where('reportID', $id)->get()[0];
-
-        }else if($type == 3) {
-
-            $incidentReport = IncidentReport::with('injury_trauma')->where('reportID', $id)->get()[0];
-
-        }else if($type == 4){
-
-            $incidentReport = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
+            return view('pages.incident.details', compact('incidentReport'));
+        }catch(\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-        // dd($incidentReport->date);
-        return view('pages.incident.details', compact('incidentReport'));
     }
 }

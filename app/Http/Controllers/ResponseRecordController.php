@@ -162,6 +162,8 @@ class ResponseRecordController extends Controller
         }else if($type == 4){
 
             $data = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
+        }else{
+            return back()->with('error', 'No data found');
         }
         
         $locations = [
