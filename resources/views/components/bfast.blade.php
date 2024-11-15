@@ -5,7 +5,7 @@
         @foreach ($datas as $data)
             <div class="form-check">
                 <!-- General checkbox -->
-                <input class="form-check-input" type="checkbox" value=1 id="{{ $data['name'] }}" name="{{ $namePrefix }}[{{ $data['name'] }}]" {{ $readOnly ? 'disabled' : ''}} {{ (isset($bfastValues[$data['name']]) && $bfastValues[$data['name']] == 1) || ( $bfastValues['T'] != 0) ? 'checked' : ''}}>
+                <input class="form-check-input" type="checkbox" value=1 id="{{ $data['name'] }}" name="{{ $namePrefix }}[{{ $data['name'] }}]" {{ $readOnly ? 'disabled' : ''}} {{ (isset($bfastValues[$data['name']]) && isset($bfastValues[$data['name']]) == 1) || ( isset($bfastValues['T']) != 0) ? 'checked' : ''}}>
                 <label class="form-check-label" for="{{ $data['name'] }}">
                     {{ $data['name'] }}
                 </label>
@@ -13,7 +13,7 @@
                 <!-- Show input field when "T" is selected -->
                 @if ($data['name'] === 'T')
                     <div class="form-check ms-4">
-                        <input class="form-control" type="time" name="{{ $namePrefix }}_T" placeholder="Specify T" id="{{ $data['name'] }}_input" {{ $readOnly ? 'readonly' : ''}} value="{{ $bfastValues['T'] }}" disabled>
+                        <input class="form-control" type="time" name="{{ $namePrefix }}_T" placeholder="Specify T" id="{{ $data['name'] }}_input" {{ $readOnly ? 'readonly' : ''}} value="{{ isset($bfastValues['T']) }}" disabled>
                     </div>
                 @endif
             </div>

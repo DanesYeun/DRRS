@@ -77,7 +77,8 @@ class PatientCareReportController extends Controller
         ]);
         // dd($request->all());
         if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Validation Error! : '. $validator->errors());
+            \Log::error('Errors: '. $validator->errors());
+            return redirect()->back()->with('error', 'Oh no! An error has occured');
         }
 
         DB::beginTransaction();
