@@ -47,7 +47,7 @@
 @section('js')
 <script src="{{ asset('js/searchbox-table.js') }}"></script>
 <script src="{{ asset('js/pagination.js') }}"></script>
-// for pagination
+ {{-- for pagination --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const data = @json($datas); 
@@ -57,7 +57,7 @@
         });
     });
 </script>
-// for searchbox
+ {{-- for searchbox --}}
 <script>
     document.getElementById("searchInput").addEventListener("input", function() {
         searchTable("searchInput", "hazards-table");
