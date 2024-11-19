@@ -23,7 +23,8 @@ class IncidentReport extends Model
         'reporterFullName',
         'reporterContactNumber',
         'date',
-        'time'
+        'time',
+        'isConfirmed'
     ];
 
     public function incidentCase()
@@ -38,22 +39,22 @@ class IncidentReport extends Model
 
     public function medical()
     {
-        return $this->belongsTo(MedicalIR::class, 'reportID', 'reportID');
+        return $this->hasMany(MedicalIR::class, 'reportID', 'reportID');
     }
 
     public function injury_trauma()
     {
-        return $this->belongsTo(InjuryTraumaIR::class, 'reportID', 'reportID');
+        return $this->hasMany(InjuryTraumaIR::class, 'reportID', 'reportID');
     }
 
     public function cardia()
     {
-        return $this->belongsTo(CardiaIR::class, 'reportID', 'reportID');
+        return $this->hasMany(CardiaIR::class, 'reportID', 'reportID');
     }
 
     public function disaster()
     {
-        // return $this->belongsTo(DisasterIr::class, 'reportID', 'id');
+        return $this->belongsTo(DisasterIr::class, 'reportID', 'reportID');
     }
 
     
@@ -76,6 +77,11 @@ class IncidentReport extends Model
     public function deleteCardia()
     {
         return $this->hasOne(CardiaIR::class, 'reportID', 'reportID');
+    }
+
+    public function deleteDisaster()
+    {
+        return $this->hasOne(DisasterIr::class, 'reportID', 'reportID');
     }
 
 

@@ -9,7 +9,7 @@ class CheckPasswordUpdate
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role != 1 && is_null(Auth::user()->password_updated_at)) {
+        if (Auth::check() && is_null(Auth::user()->password_updated_at)) {
             return redirect()->route('update.password');
         }
         

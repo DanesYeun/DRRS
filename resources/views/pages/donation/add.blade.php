@@ -19,7 +19,7 @@
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('store.donation') }}" class="needs-validation" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
+                <div class="border container bg-white rounded row mx-auto px-3 pt-5 pb-2">
 
                 
                     <x-input name="fullname" label="Complete Name" type="text" required="true"/>

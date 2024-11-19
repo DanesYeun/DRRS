@@ -64,6 +64,7 @@ Route::controller(IncidentReportController::class)->group(function () {
     Route::post('/incident-reports/{case}/{id}', 'delete')->name('incident_report.delete');
     Route::get('/incident-reports', 'showAllReports')->name('incident_report.show_all');
     Route::get('/incident-report/{case}/{id}', 'showReport')->name('incident_report.show');
+    Route::get('/incident-report/{id}', 'confirmReport')->name('incident_report.confirm');
 
     Route::get('/incident-report', 'create')->name('incident_report.create');
     Route::post('/incident-report', 'store')->name('incident_report.store');

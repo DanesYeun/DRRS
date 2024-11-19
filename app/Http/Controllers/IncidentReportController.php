@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\IncidentReport;
 use App\Models\IncidentCase;
-use App\Models\ResponseRecord;
+use App\Models\DisasterIR;
 use App\Models\ObstetricsIR;
 use App\Models\MedicalIR;
 use App\Models\InjuryTraumaIR;
 use App\Models\CardiaIR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class IncidentReportController extends Controller
 {
@@ -25,8 +27,9 @@ class IncidentReportController extends Controller
     public function create(){
 
         $cases = map_options(IncidentCase::class, 'id', 'description');
-
-        return view('pages.incident.add', compact('cases'));
+        $disaster_types = map_options_raw('disaster_type', 'id', 'description');
+ 
+        return view('pages.incident.add', compact('cases', 'disaster_types'));
     }
 
     public function store(Request $request){
@@ -42,7 +45,8 @@ class IncidentReportController extends Controller
                 'reporterFullName' =>$request->reporter_name,
                 'reporterContactNumber'=> $request->reporter_contactno,
                 'date' => $request->date,
-                'time' => $request->time
+                'time' => $request->time,
+                'isConfirmed' => 0
             ]);
 
             if($case == 1){
@@ -57,31 +61,73 @@ class IncidentReportController extends Controller
                 ]);
             } else if($case == 2){
 
-                MedicalIR::create([
-                    'reportID' => $incidentReport->reportID, 
-                    'fullName' => $request->medical_full_name,  
-                    'shortnessOfBreath' => $request->medical_shortness_breath ,
-                    'paleness' => $request->medical_paleness,
-                    'heartRate' => $request->medical_heart_rate,
-                ]);
+                $medicalData = $request->medical;
+                foreach($medicalData as $data){
+
+                    MedicalIR::create([
+                        'reportID' => $incidentReport->reportID, 
+                        'fullName' => $data['full_name'],  
+                        'shortnessOfBreath' => array_key_exists('shortness_breath', $data) ? 1 : 0 ,
+                        'paleness' => array_key_exists('paleness', $data) ? 1 : 0,
+                        'heartRate' => $data['heart_rate'],
+                    ]);
+                }
+               
             }else if($case == 3){
 
-                InjuryTraumaIR::create([
-                    'reportID' => $incidentReport->reportID, 
-                    'fullName' => $request->injury_trauma_full_name,  
-                    'shortnessOfBreath' => $request->injury_trauma_shortness_breath ,
-                    'paleness' => $request->injury_trauma_paleness,
-                    'heartRate' => $request->injury_trauma_heart_rate,
-                ]);
+                $injury_traumaData = $request->injury_trauma;
+                foreach($injury_traumaData as $data){
+                    InjuryTraumaIR::create([
+                        'reportID' => $incidentReport->reportID, 
+                        'fullName' => $data['full_name'],  
+                        'shortnessOfBreath' => array_key_exists('shortness_breath', $data) ? 1 : 0 ,
+                        'paleness' => array_key_exists('paleness', $data) ? 1 : 0,
+                        'heartRate' => $data['heart_rate'],
+                    ]);
+                }
+               
             }else if($case == 4){
 
-                CardiaIR::create([
+                $cardiaData = $request->cardia;
+                foreach($cardiaData as $data){
+                    CardiaIR::create([
+                        'reportID' => $incidentReport->reportID, 
+                        'fullName' => $data['full_name'],  
+                        'shortnessOfBreath' => array_key_exists('shortness_breath', $data) ? 1 : 0 ,
+                        'paleness' => array_key_exists('paleness', $data) ? 1 : 0,
+                        'heartRate' => $data['heart_rate'],
+                    ]);
+                }
+               
+            }else if($case == 5){
+
+                if ($request->hasFile('disaster_image') && $request->file('disaster_image')->isValid()){
+
+                    $request->validate([
+                        'disaster_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', 
+                    ]);
+    
+                    $file = $request->file('disaster_image');
+                    $extension = $file->getClientOriginalExtension();
+                    $formattedDateTime = Carbon::now()->format('Y-m-d_H-i-s');
+    
+                    // customized file name using date and reporter_name
+                    $fileName = $formattedDateTime . '_' . $request->reporter_name . '.' . $extension;
+    
+                    $path = $file->storeAs('incident', $fileName, 'public');
+                  
+                }
+
+                $coordinates = [$request->latitude, $request->longitude];
+                
+                DisasterIR::create([
                     'reportID' => $incidentReport->reportID, 
-                    'fullName' => $request->cardia_full_name,  
-                    'shortnessOfBreath' => $request->cardia_shortness_breath ,
-                    'paleness' => $request->cardia_paleness,
-                    'heartRate' => $request->cardia_heart_rate,
+                    'photoPathFile' => $path,  
+                    'description' => $request->description ,
+                    'disasterTypeID' => $request->disaster_type,
+                    'coordinates' => json_encode($coordinates),
                 ]);
+
             }
 
             return redirect()->route('landingPage')->with('success', 'Successfully sent incident report!');
@@ -114,6 +160,10 @@ class IncidentReportController extends Controller
             }else if($type == 4){
     
                 $incidentReport->deleteCardia()->where('reportID', $id)->delete();
+            }else if($type == 5){
+
+                $incidentReport->deleteDisaster()->where('reportID', $id)->delete();
+
             }else{
                 return back()->with('error', 'No data found');
             }
@@ -148,6 +198,11 @@ class IncidentReportController extends Controller
             }else if($type == 4){
     
                 $incidentReport = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
+            
+            }else if($type == 5){
+
+                $incidentReport = IncidentReport::with(['disaster.disasterType'])->where('reportID', $id)->first();
+ 
             }else{
                 return back()->with('error', 'No data found');
             }
@@ -156,5 +211,26 @@ class IncidentReportController extends Controller
         }catch(\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function confirmReport($id){
+
+        try {
+            $incident = IncidentReport::findOrFail($id);
+
+            if($incident){
+                $incident->update([
+                    'isConfirmed' => 1
+                ]);
+            }else{
+                return back()->with('error', 'No data found');
+            }
+
+            return redirect()->back()->with('success', 'The incident report has been successfully confirmed.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 }
