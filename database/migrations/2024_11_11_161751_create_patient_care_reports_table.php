@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('patientAge');
             $table->string('patientContactPerson');
             $table->string('contactNumber');
+            $table->string('incidentDate');
             $table->string('incidentPlace');
             $table->unsignedTinyInteger('patientGender');
             $table->string('time');

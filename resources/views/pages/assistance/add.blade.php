@@ -3,23 +3,23 @@
 @section('content')
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
-            <h3 class="text-start mx-2 text-primary">Family Assistance Form</h3>
+            <h3 class="text-start mx-2 text-primary">Family Assistance</h3>
               <!-- Display success or error message -->
             @if(session('error'))
                 <x-alert response="error" color="danger"/>
             @elseif(session('success'))
                 <x-alert response="success" color="success"/>
             @endif
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('landingPage') }}">
+            <a class="btn btn-danger col-2 mb-3 " href="{{ route('landingPage') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
-                Back
+                <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('store.family.assistance') }}" class="needs-validation" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-auto px-3 pt-5 pb-2">
-
+                <div class="border bg-white rounded row m-0 px-3 pt-5 pb-2">
+                    <h3 class="text-primary text-start mb-3">Family Assistance Form</h3>
                     {{-- <hr class="border border-2 border-dark"> --}}
                     <h6 class="text-start mx-2 text-primary">LOCATION OF THE AFFECTED FAMILY</h6>
                     <x-input name="region" label="Region" type="text"/>
@@ -68,32 +68,36 @@
 
                     <div class="mb-4"></div>
                     <h6 class="text-start mx-2 text-primary">FAMILY INFORMATION</h6>
-                    
-                    <table class="table table-bordered" id="familyTable">
-                        <thead>
-                            <tr>
-                                <th>Family Member</th>
-                                <th>Relation To Head Member</th>
-                                <th>Birthdate</th>
-                                <th>Age</th>
-                                <th>Sex</th>
-                                <th>Highest Educational Attainment</th>
-                                <th>Occupation</th>
-                                <th>Remarks</th>
-                                <th>Action</th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-                        </tbody>
-                    </table>
+                    <!-- add table-responsive class to not overflow -->
+                    <div class="table-responsive">                  
+                        <table class="table table-responsive table-bordered" id="familyTable">
+                            <thead>
+                                <tr>
+                                    <th>Family Member</th>
+                                    <th>Relation To Head Member</th>
+                                    <th>Birthdate</th>
+                                    <th>Age</th>
+                                    <th>Sex</th>
+                                    <th>Highest Educational Attainment</th>
+                                    <th>Occupation</th>
+                                    <th>Remarks</th>
+                                    <th>Action</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                            </tbody>
+                        </table>
+                    </div> 
             
                     <button class="btn btn-success mb-3" id="addRowBtn" type="button">
                         + Add Member
                     </button>
                     
                     <div class="d-flex justify-content-end">   
-                        <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i>  Send Report
+                        <button id="submit-btn" class="btn btn-success mx-2">
+                            <i class="bi bi-postcard-heart-fill"></i>
+                            <span class="d-none d-sm-inline">Send Form</span>
                         </button>
                     </div> 
                 </div>
@@ -103,7 +107,6 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     // Function to add a new row to the table
     document.getElementById("addRowBtn").addEventListener("click", function() {

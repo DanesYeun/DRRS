@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('shelterID');
             $table->string('shelterName');
             $table->string('shelterCoordinates'); // Store coordinates as JSON
+            $table->string('photo_path')->nullable();
             $table->timestamps();
         });
     }

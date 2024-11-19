@@ -2,7 +2,13 @@
 
 @section('content')
     <div class="d-flex flex-column m-md-2">
-        <h3 class="text-start mx-2 text-primary">Edit Response Record</h3>
+        <div class="d-flex flex-row justify-content-between">
+            <h3 class="text-start mx-2 text-primary">Edit Response Record</h3>
+            <a class="btn btn-danger col-2 mb-3 " href="{{ route('response_records.index') }}">
+                <i class="bi bi-backspace-fill p-2"></i>
+                <span class="d-none d-sm-inline">Back</span>
+            </a>
+        </div>
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('response_records.update', ['id' => $record->responseID]) }}" class="needs-validation" novalidate>
                 @csrf

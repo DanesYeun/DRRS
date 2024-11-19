@@ -6,9 +6,22 @@
             </a>
 
             @guest
-                <a class="btn btn-outline-primary d-flex align-items-center" href="{{ route('loginPage') }}">
-                    Login
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary " href="{{ route('request.family.assistance') }}">
+                    <i class="bi bi-box2-heart-fill"></i>
+                    <span class="d-none d-sm-inline">Request Relief Goods</span>
                 </a>
+
+                <a class="btn btn-danger" href="{{ route('incident_report.create') }}">
+                    <i class="bi bi-shield-exclamation"></i>
+                    <span class="d-none d-sm-inline">Report Incident</span>
+                </a>
+
+                <a class="btn btn-outline-primary" href="{{ route('loginPage') }}">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="d-none d-sm-inline">Login</span>
+                </a>
+            </div>
             @endguest
             @auth
                 <strong class="text-primary font-weight-bold">{{ Auth::user()->firstname. ' ' . Auth::user()->lastname}}</strong>
