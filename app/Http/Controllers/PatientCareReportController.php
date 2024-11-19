@@ -59,9 +59,10 @@ class PatientCareReportController extends Controller
             'contactNumber' => 'nullable|string|max:11',
             'incidentPlace' => 'required|string|max:200',
             'incidentDate' => 'required|date',
-            'time' => 'nullable|string',
+            'time' => 'required|string',
             'case' => 'required|integer',
             'others' => 'nullable|string|max:100',
+            'responder' => 'required|string|max:255',
             'recievedBy' => 'nullable|string|max:100',
 
             'alertness' => 'nullable|array',
@@ -94,10 +95,10 @@ class PatientCareReportController extends Controller
                 'contactNumber' => $request->contactNumber,
                 'incidentPlace' => $request->incidentPlace,
                 'incidentDate' => $request->incidentDate,
-                'time' => $request->incidentTime,
+                'time' => $request->time,
                 'case' => $request->case,
                 'others' => $request->others,
-                'recordedBy' => auth()->user()->id,
+                'recordedBy' => $request->responder,
                 'recievedBy' => $request->recievedBy,
             ]);
 

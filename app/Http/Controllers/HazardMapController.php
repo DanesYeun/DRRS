@@ -139,23 +139,27 @@ class HazardMapController extends Controller
         $validator = Validator::make($request->all(),[
             'shelterName' => 'required|string|max:255',
             'shelterCoordinates' => 'required|string|min:1',
+            'shelterImagePath' => 'image|max:10240', // max 10mb image file
         ]);
 
-        if($validator->fails())
-        {
-            return redirect()->back()->with('error', 'Oh no! An error occured.');
-        }
-
-        try{
-            $shelter = Shelter::create([
+        try {
+            $photoPath = null;
+            if ($request->hasFile('shelterImagePath')) { // Match the form input name
+                $photoPath = $request->file('shelterImagePath')->store('shelter_photos', 'public');
+            }
+        
+            $shelter = Shelter::create([ 
                 'shelterName' => $request->shelterName,
                 'shelterCoordinates' => $request->shelterCoordinates,
+                'shelterImagePath' => $photoPath
             ]);
-
+        
             return redirect()->intended(route('hazard_map.index'))->with('success', 'Shelter added successfully!');
-        }catch(\Exception $e) {
-            return redirect()->back()->with('error', 'Oh no! An error has occured');
-        }     
+        } catch(\Exception $e) {
+            \Log::error('Shelter creation error: ' . $e->getMessage());
+            \Log::error('Error trace: ' . $e->getTraceAsString());
+            return redirect()->back()->with('error', 'Oh no! An error has occurred');
+        }    
     }
 
     public function shelterDelete($id)

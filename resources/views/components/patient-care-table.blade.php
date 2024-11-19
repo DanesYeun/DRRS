@@ -18,7 +18,7 @@
                 <tr>
                     <td class="p-3 rounded-start">{{ $data->patientName }}</td>
                     <td class="p-3">{{ $data->patientCareCase->description }}</td>
-                    <td class="p-3">{{ $data->recorded_by->firstname. " ".$data->recorded_by->lastname }}</td>
+                    <td class="p-3">{{ $data->recordedBy }}</td>
                     <td class="p-3 rounded-end">
                         <a class="btn btn-sm btn-success text-white" href="{{ route('patient_care.show', ['id' => $data->patientCareID]) }}">
                             <i class="bi bi-eye-fill"></i>
@@ -36,7 +36,7 @@
     </nav>
 </div>
 
-@section('js')
+
 <script src="{{ asset('js/searchbox-table.js') }}"></script>
 <script src="{{ asset('js/pagination.js') }}"></script>
  {{-- for pagination --}}
@@ -55,4 +55,4 @@
         searchTable("searchInput", "reports-table");
     });
 </script>
-@endsection
+

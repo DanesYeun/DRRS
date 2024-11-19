@@ -1,183 +1,212 @@
 function initializeHazardMap(hazardData, shelterData, mapContainerId) {
-    // Initialize the map
-    var map = L.map(mapContainerId).setView([10.728, 123.826], 16); // Set coordinates and zoom level
+    var map = L.map(mapContainerId).setView([10.728, 123.826], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
     }).addTo(map);
 
-    map.addControl(new L.Control.FullScreen()); // Adds full screen view to the buttons on the top left
+    map.addControl(new L.Control.FullScreen());
 
-    // for storing hazard, shelter, and nearest shelter datas. 
     var hazardLayers = [];
     var shelterLayers = [];
-    var nearestShelters = {}; // To hold nearest shelter info for each hazard
+    
+    // store original names
+    var originalPopups = new Map();
 
-    // Add hazard polygons to the map (red/danger zones)
+    function clearAllPopups() {
+        hazardLayers.forEach(layer => layer.closePopup());
+        shelterLayers.forEach(layer => layer.closePopup());
+    }
+
+    function createPopupAndOpen(layer, content) {
+        var popup = L.popup({
+            autoClose: false,
+            closeOnClick: false
+        })
+        .setContent(content);
+        
+        layer.bindPopup(popup);
+        setTimeout(() => layer.openPopup(), 100);
+    }
+
+    function calculateDistance(point1, point2) {
+        return L.latLng(point1[0], point1[1]).distanceTo(L.latLng(point2[0], point2[1]));
+    }
+
+    function findNearbyShelters(hazardCoordinates, shelterData) {
+        const MAX_DISTANCE = 500;
+        let nearbyShelters = [];
+
+        shelterData.forEach(function(shelter) {
+            try {
+                var shelterCoordinatesString = shelter.shelterCoordinates;
+                if (shelterCoordinatesString.startsWith('"') && shelterCoordinatesString.endsWith('"')) {
+                    shelterCoordinatesString = shelterCoordinatesString.slice(1, -1);
+                }
+                var shelterCoordinates = JSON.parse(shelterCoordinatesString);
+
+                if (Array.isArray(shelterCoordinates) && shelterCoordinates.length === 2) {
+                    let minDistance = Infinity;
+                    hazardCoordinates.forEach(point => {
+                        const distance = calculateDistance(point, shelterCoordinates);
+                        minDistance = Math.min(minDistance, distance);
+                    });
+
+                    if (minDistance <= MAX_DISTANCE) {
+                        nearbyShelters.push({
+                            shelter: shelter,
+                            distance: (minDistance / 1000).toFixed(2)
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Error processing shelter:', shelter.shelterName, e);
+            }
+        });
+
+        return nearbyShelters.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+    }
+
+    function restoreOriginalPopups() {
+        originalPopups.forEach((popup, layer) => {
+            layer.bindPopup(popup);
+            layer.openPopup();
+        });
+    }
+
+    let markersToOpen = [];
+
     hazardData.forEach(function (hazard) {
         try {
             var coordinatesString = hazard.coordinates;
-
             if (coordinatesString.startsWith('"') && coordinatesString.endsWith('"')) {
                 coordinatesString = coordinatesString.slice(1, -1);
             }
 
-            var coordinates = JSON.parse(coordinatesString); // Decode JSON string into an array
+            var coordinates = JSON.parse(coordinatesString);
 
-            // Check if coordinates are valid
             if (Array.isArray(coordinates) && coordinates.length > 0 && Array.isArray(coordinates[0])) {
-                // Create zones
                 var hazardPolygon = L.polygon(coordinates, {
                     color: 'red',
                     fillColor: 'red',
                     fillOpacity: 0.5
                 }).addTo(map);
 
-                // Bind a popup to the polygon with the hazard name
-                hazardPolygon.bindPopup(hazard.hazardName);
+                var originalPopup = L.popup({
+                    autoClose: false,
+                    closeOnClick: false
+                })
+                .setContent(`Hazard: ${hazard.hazardName}`);
+                
+                hazardPolygon.bindPopup(originalPopup);
+                originalPopups.set(hazardPolygon, originalPopup);
+                markersToOpen.push(hazardPolygon);
 
-                // Add filtering, showing the nearest shelter
-                hazardPolygon.on('click', function () {
-                    showNearestShelter(hazard.hazardName); // Automatically show nearest shelter when clicking a hazard
-                });
+                hazardPolygon.on('click', function() {
+                    hazardLayers.forEach(layer => map.removeLayer(layer));
+                    shelterLayers.forEach(layer => map.removeLayer(layer));
 
-                // Initialize nearest shelter
-                let nearestShelter = null;
-                let minDistance = Infinity;
+                    hazardPolygon.addTo(map);
+                    createPopupAndOpen(hazardPolygon, `Hazard: ${hazard.hazardName}`);
 
-                shelterData.forEach(function (shelter) {
-                    try {
-                        var shelterCoordinatesString = shelter.shelterCoordinates;
-
-                        if (shelterCoordinatesString.startsWith('"') && shelterCoordinatesString.endsWith('"')) {
-                            shelterCoordinatesString = shelterCoordinatesString.slice(1, -1);
-                        }
-
-                        var shelterCoordinates = JSON.parse(shelterCoordinatesString); // Decode JSON string into an array
-
-                        // Check if the shelter coordinates are valid
-                        if (Array.isArray(shelterCoordinates) && shelterCoordinates.length === 2) {
-                            var shelterLatLng = L.latLng(shelterCoordinates[0], shelterCoordinates[1]);
-
-                            // calculate distance to the shelter point
-                            coordinates.forEach(function (point) {
-                                var hazardLatLng = L.latLng(point[0], point[1]);
-                                
-                                // Calculate distance to the shelter
-                                var distance = hazardLatLng.distanceTo(shelterLatLng);
-
-                                if (distance < minDistance) {
-                                    minDistance = distance;
-                                    nearestShelter = shelter; // Store the nearest shelter
-                                }
-                            });
-                        } else {
-                            console.error('Invalid coordinates for shelter: ', shelter.shelterName);
-                        }
-                    } catch (e) {
-                        console.error('Error parsing coordinates for shelter: ', shelter.shelterName, e);
+                    const nearbyShelters = findNearbyShelters(coordinates, shelterData);
+                    
+                    if (nearbyShelters.length > 0) {
+                        nearbyShelters.forEach(nearbyInfo => {
+                            try {
+                                var shelterCoords = JSON.parse(
+                                    nearbyInfo.shelter.shelterCoordinates.replace(/^"|"$/g, '')
+                                );
+                                var shelterMarker = L.marker(shelterCoords).addTo(map);
+                                createPopupAndOpen(shelterMarker, 
+                                    `
+                                    <div class="text-center">
+                                        <h6>Nearby Shelter: ${nearbyInfo.shelter.shelterName}</h6>
+                                        ${nearbyInfo.shelter.shelterImagePath ? 
+                                            `<img src="/storage/${nearbyInfo.shelter.shelterImagePath}" 
+                                                 alt="${nearbyInfo.shelter.shelterName}" 
+                                                 class="img-fluid" 
+                                                 style="max-width: 200px; max-height: 200px; object-fit: cover;">` 
+                                            : ''}
+                                        <p>Distance: ${nearbyInfo.distance} km</p>
+                                    </div>
+                                    `
+                                );
+                                shelterLayers.push(shelterMarker);
+                            } catch (e) {
+                                console.error('Error creating shelter marker:', e);
+                            }
+                        });
                     }
                 });
 
-                // Store nearest shelter information for this hazard
-                if (nearestShelter) {
-                    nearestShelters[hazard.hazardName] = {
-                        shelter: nearestShelter,
-                        distance: (minDistance / 1000).toFixed(2) // Convert to km
-                    };
-                } else {
-                    console.warn(`No nearest shelter found for hazard: ${hazard.hazardName}`);
-                }
-
-                // Update the popup to include nearest shelter information
-                hazardPolygon.bindPopup(`Hazard: ${hazard.hazardName}<br>${nearestShelter ? `Nearest Shelter: ${nearestShelter.shelterName}, Distance: ${nearestShelters[hazard.hazardName].distance} km` : 'No shelter available'}`);
-                hazardLayers.push(hazardPolygon); // Store polygon
-
-            } else {
-                console.error('Invalid coordinates for hazard: ', hazard.hazardName);
+                hazardLayers.push(hazardPolygon);
             }
-
         } catch (e) {
-            console.error('Error parsing coordinates for hazard: ', hazard.hazardName, e);
+            console.error('Error parsing coordinates for hazard:', hazard.hazardName, e);
         }
     });
 
-    // Iterate through each shelter and add pins to the map
     shelterData.forEach(function (shelter) {
         try {
             var coordinatesString = shelter.shelterCoordinates;
-
             if (coordinatesString.startsWith('"') && coordinatesString.endsWith('"')) {
                 coordinatesString = coordinatesString.slice(1, -1);
             }
 
-            var coordinates = JSON.parse(coordinatesString); // Decode JSON string into an array
+            var coordinates = JSON.parse(coordinatesString);
 
             if (Array.isArray(coordinates) && coordinates.length === 2) {
-                // Pin per shelter
                 var shelterMarker = L.marker([coordinates[0], coordinates[1]]).addTo(map);
-                shelterMarker.bindPopup(shelter.shelterName).openPopup();
+                var originalPopup = L.popup({
+                    autoClose: false,
+                    closeOnClick: false
+                })
+                .setContent(`
+                    <div class="text-center">
+                        <h6>${shelter.shelterName}</h6>
+                        ${shelter.shelterImagePath ? 
+                            `<img src="/storage/${shelter.shelterImagePath}" 
+                                 alt="${shelter.shelterName}" 
+                                 class="img-fluid" 
+                                 style="max-width: 160px; max-height: 160px; object-fit: cover;">` 
+                            : ''}
+                    </div>
+                `);
+                
+                shelterMarker.bindPopup(originalPopup);
+                originalPopups.set(shelterMarker, originalPopup);
+                markersToOpen.push(shelterMarker);
                 shelterLayers.push(shelterMarker);
-            } else {
-                console.error('Invalid coordinates for shelter: ', shelter.shelterName);
             }
-
         } catch (e) {
-            console.error('Error parsing coordinates for shelter: ', shelter.shelterName, e);
+            console.error('Error parsing coordinates for shelter:', shelter.shelterName, e);
         }
     });
 
-    // Function to show the nearest shelter for a selected hazard
-    function showNearestShelter(hazardName) {
-        // Clear current displayed nearest layers
-        hazardLayers.forEach(layer => {
-            const popup = layer.getPopup();
-            if (popup && popup.getContent().includes(hazardName)) {
-                layer.addTo(map);
-            } else {
-                // Remove other hazards
-                map.removeLayer(layer);
-            }
-        });
+    setTimeout(() => {
+        markersToOpen.forEach(marker => marker.openPopup());
+    }, 500);
 
-        // Find and add nearest shelter
-        if (nearestShelters[hazardName]) {
-            const nearestShelterInfo = nearestShelters[hazardName];
-            const nearestShelter = nearestShelterInfo.shelter;
-            const distance = nearestShelterInfo.distance;
-
-            var shelterCoordinatesString = nearestShelter.shelterCoordinates;
-            if (shelterCoordinatesString.startsWith('"') && shelterCoordinatesString.endsWith('"')) {
-                shelterCoordinatesString = shelterCoordinatesString.slice(1, -1);
-            }
-            var shelterCoordinates = JSON.parse(shelterCoordinatesString); // Decode JSON string into an array
-
-            if (Array.isArray(shelterCoordinates) && shelterCoordinates.length === 2) {
-                // Create a marker for the nearest shelter and bind the popup
-                var nearestShelterMarker = L.marker([shelterCoordinates[0], shelterCoordinates[1]]).addTo(map);
-                nearestShelterMarker.bindPopup(`Nearest shelter to ${hazardName}: ${nearestShelter.shelterName}, Distance: ${distance} km`).openPopup();
-            }
-        } else {
-            console.warn(`No nearest shelter found for hazard: ${hazardName}`);
-        }
-    }
-
-    // button for show all
     function showAll() {
+        clearAllPopups();
         hazardLayers.forEach(layer => layer.addTo(map));
         shelterLayers.forEach(layer => layer.addTo(map));
+        restoreOriginalPopups();
     }
 
-    // button for hazard filter
     function showHazards() {
+        clearAllPopups();
         hazardLayers.forEach(layer => layer.addTo(map));
         shelterLayers.forEach(layer => map.removeLayer(layer));
+        restoreOriginalPopups();
     }
 
-    // button for shelter filter
     function showShelters() {
+        clearAllPopups();
         shelterLayers.forEach(layer => layer.addTo(map));
         hazardLayers.forEach(layer => map.removeLayer(layer));
+        restoreOriginalPopups();
     }
 
     var FilterControl = L.Control.extend({
@@ -193,15 +222,12 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
             });
             return div;
         },
-        onRemove: function (map) {
-        }
+        onRemove: function (map) { }
     });
 
-    // Add the filter to map
     var filterControl = new FilterControl();
     filterControl.addTo(map);
 
-    // event listeners for filter buttons
     document.getElementById('show-all').addEventListener('click', showAll);
     document.getElementById('show-hazards').addEventListener('click', showHazards);
     document.getElementById('show-shelters').addEventListener('click', showShelters);

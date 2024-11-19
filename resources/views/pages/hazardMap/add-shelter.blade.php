@@ -14,13 +14,18 @@
         <div class="mx-2 mb-3 p-2">
             <div id="hazard-map" class="border border-success mb-2" style="width: 100%; height: 300px;" ></div>
             <!-- Shelter Form -->
-            <form method="post" id="hazard-form" action="{{ route('shelter.store') }}" class="needs-validation" novalidate>
+            <form method="post" id="hazard-form" action="{{ route('shelter.store') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                 @csrf
                 <div class="border container mx-0 bg-white row rounded px-3 pt-2 pb-2">
                     <h4 class="py-2 text-primary text-start">Shelter Details</h4>
                     <x-input type="text" name="shelterName" label="Shelter Name" required="true"/>
                     <x-input type="text" name="shelterCoordinates" label="Shelter Coordinates" readOnly="true" required="true"/>
 
+                    <x-input type="file" name="shelterImagePath" label="Shelter Image"/>
+                    <!-- image container -->
+                    <div class="col-12 col-md-6">
+                        <img id="imagePreview" src="" alt="Image Preview" class="img-fluid" style="display: none; max-height: 200px;">
+                    </div>
                     <div class="d-flex justify-content-end">   
                         <button type="submit" class="btn btn-success mx-2">
                             <i class="bi bi-geo-fill p-2"></i>
@@ -47,6 +52,24 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             initializeHazardMapPin('hazard-map', 'shelterCoordinates');
+
+            // Image preview functionality
+            const imageInput = document.getElementById('shelterImagePath');
+            const imagePreview = document.getElementById('imagePreview');
+
+            imageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+            });
         });
     </script>
 

@@ -4,24 +4,24 @@
     <div class="d-flex flex-column m-md-2">
 
         <div class="d-flex flex-row justify-content-between">
-            <h3 class="text-start mx-2 text-primary">Donation Form</h3>
+            <h3 class="text-start mx-2 text-primary">Send Donation</h3>
             @if(session('error'))
                 <x-alert response="error" color="danger"/>
             @elseif(session('success'))
                 <x-alert response="success" color="success"/>
             @endif
-            <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{  route('landingPage') }}">
+            <a class="btn btn-danger col-2 mb-3" href="{{  route('landingPage') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
-                Back
+                <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
 
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('store.donation') }}" class="needs-validation" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-auto px-3 pt-5 pb-2">
-
                 
+                <div class="border bg-white rounded row mx-2 px-3 pt-5 pb-2">
+                    <h3 class="text-primary text-start mb-3">Donation Form</h3>
                     <x-input name="fullname" label="Complete Name" type="text" required="true"/>
                     <x-input name="contactno" label="Contact Number" type="number"/>
                     <x-select name="donationMode" label="Donation Mode" :options="$donation_mode" required="true"/> 
@@ -46,7 +46,9 @@
                     </div>
 
                     <div class="d-flex justify-content-end">   
-                        <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i>  Send Report
+                        <button id="submit-btn" class="btn btn-success">
+                            <i class="bi bi-box2-heart-fill"></i>  
+                            <span class="d-none d-sm-inline">Send Donations</span>
                         </button>
                     </div> 
                 </div>

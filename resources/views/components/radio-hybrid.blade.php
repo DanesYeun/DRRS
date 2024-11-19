@@ -38,24 +38,50 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Get the "broken" radio and input elements
     const brokenRadio = document.getElementById('{{ strtolower($datas[3]['name']) }}'); 
     const brokenInput = document.getElementById('{{ strtolower($datas[3]['name']) }}_input');
 
+    // Function to toggle the "broken" input field's disabled state
     function toggleBrokenInput() {
-        // heck if the broken is checked
         if (brokenRadio.checked) {
             brokenInput.disabled = false;
         } else {
             brokenInput.disabled = true;
+            brokenInput.value = '';
         }
     }
 
+    // Get the "vehicular" radio button and the subtypes
+    const vehicularRadio = document.getElementById('{{ strtolower($datas[0]['name']) }}'); 
+    const vehicularSubTypes = document.getElementsByName('{{ $name }}_sub');
+    console.log(vehicularSubTypes);
+
+    function toggleVehicularSubTypes() {
+        if (vehicularRadio.checked) {
+            vehicularSubTypes.forEach(function(subType) {
+                subType.disabled = false;  // Enable subtypes if vehicular radio is checked
+            });
+        } else {
+            vehicularSubTypes.forEach(function(subType) {
+                subType.disabled = true;   // Disable subtypes if vehicular radio is unchecked
+                subType.checked = false;   // Uncheck subtypes when disabled
+            });
+        }
+    }
+
+    vehicularRadio.addEventListener('change', toggleVehicularSubTypes);
+
+    toggleVehicularSubTypes();
     toggleBrokenInput();
 
     const radios = document.getElementsByName('{{ $name }}');
     radios.forEach(function(radio) {
-        radio.addEventListener('change', toggleBrokenInput);
+        radio.addEventListener('change', function() {
+            toggleBrokenInput();       // Update broken input state
+            toggleVehicularSubTypes(); // Update vehicular subtypes state
+        });
     });
 });
-
 </script>
+

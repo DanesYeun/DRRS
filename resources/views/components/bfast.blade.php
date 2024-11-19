@@ -13,7 +13,16 @@
                 <!-- Show input field when "T" is selected -->
                 @if ($data['name'] === 'T')
                     <div class="form-check ms-4">
-                        <input class="form-control" type="time" name="{{ $namePrefix }}_T" placeholder="Specify T" id="{{ $data['name'] }}_input" {{ $readOnly ? 'readonly' : ''}} value="{{ isset($bfastValues['T']) }}" disabled>
+                    <input 
+                            class="form-control" 
+                            type="time" 
+                            name="{{ $namePrefix }}_T" 
+                            placeholder="Specify T" 
+                            id="{{ $data['name'] }}_input" 
+                            {{ $readOnly ? 'readonly' : ''}}
+                            value="{{ $bfastValues['T'] ?? '' }}"
+                            {{ (!isset($bfastValues['T']) || empty($bfastValues['T'])) ? 'disabled' : '' }}
+                        >
                     </div>
                 @endif
             </div>

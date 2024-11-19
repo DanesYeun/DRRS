@@ -16,9 +16,6 @@
 
         <!-- custom accordion css -->
         <link rel="stylesheet" href="{{ asset('css/accordion.css') }}">
-        
-        <!-- JQuery CDN -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- bootstrap icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -49,6 +46,10 @@
         @endauth
 
         <!-- Include Bootstrap JS and dependencies -->
+
+        <!-- JQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- bootstrap cdn -->
         <script src="{{ asset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') }}"></script>
         @yield('js')
     </body>
