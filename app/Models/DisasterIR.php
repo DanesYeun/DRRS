@@ -17,7 +17,7 @@ class DisasterIR extends Model
         'reportID',
         'photoPathFile',
         'description',
-        'disasterType',
+        'disasterTypeID',
         'coordinates'
     ];
 
@@ -25,5 +25,11 @@ class DisasterIR extends Model
     {
         return $this->hasMany(IncidentReport::class, 'reportID', 'reportID');
     }
+
+    public function disasterType()
+    {
+        return $this->belongsTo(DisasterType::class, 'disasterTypeID', 'id');
+    }
+
 
 }

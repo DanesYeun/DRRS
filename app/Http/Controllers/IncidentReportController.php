@@ -45,7 +45,8 @@ class IncidentReportController extends Controller
                 'reporterFullName' =>$request->reporter_name,
                 'reporterContactNumber'=> $request->reporter_contactno,
                 'date' => $request->date,
-                'time' => $request->time
+                'time' => $request->time,
+                'isConfirmed' => 0
             ]);
 
             if($case == 1){
@@ -123,7 +124,7 @@ class IncidentReportController extends Controller
                     'reportID' => $incidentReport->reportID, 
                     'photoPathFile' => $path,  
                     'description' => $request->description ,
-                    'disasterType' => $request->disaster_type,
+                    'disasterTypeID' => $request->disaster_type,
                     'coordinates' => json_encode($coordinates),
                 ]);
 
@@ -159,6 +160,10 @@ class IncidentReportController extends Controller
             }else if($type == 4){
     
                 $incidentReport->deleteCardia()->where('reportID', $id)->delete();
+            }else if($type == 5){
+
+                $incidentReport->deleteDisaster()->where('reportID', $id)->delete();
+
             }else{
                 return back()->with('error', 'No data found');
             }
@@ -193,6 +198,11 @@ class IncidentReportController extends Controller
             }else if($type == 4){
     
                 $incidentReport = IncidentReport::with('cardia')->where('reportID', $id)->get()[0];
+            
+            }else if($type == 5){
+
+                $incidentReport = IncidentReport::with(['disaster.disasterType'])->where('reportID', $id)->first();
+ 
             }else{
                 return back()->with('error', 'No data found');
             }
@@ -201,5 +211,26 @@ class IncidentReportController extends Controller
         }catch(\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function confirmReport($id){
+
+        try {
+            $incident = IncidentReport::findOrFail($id);
+
+            if($incident){
+                $incident->update([
+                    'isConfirmed' => 1
+                ]);
+            }else{
+                return back()->with('error', 'No data found');
+            }
+
+            return redirect()->back()->with('success', 'The incident report has been successfully confirmed.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
     }
 }

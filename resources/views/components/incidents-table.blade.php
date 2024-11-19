@@ -11,6 +11,7 @@
                 <th scope="col" class="p-3 bg-primary text-white">Reporter Name</th>
                 <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell">Reporter Contact No.</th>
                 <th scope="col" class="p-3 bg-primary text-white">Case</th>
+                <th scope="col" class="p-3 bg-primary text-white">Status</th>
                 <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
             </tr>
         </thead>
@@ -23,10 +24,10 @@
                     <td class="p-3">{{ $data->reporterFullName }}</td>
                     <td class="p-3 d-none d-sm-table-cell">{{ $data->reporterContactNumber }}</td>
                     <td class="p-3">{{ $data->incidentCase->description }}</td>
+                    <td class="p-3">{{ $data->isConfirmed == 1 ? 'Confirmed' : 'Pending' }}</td>
                     <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">View</a>
-                        <a class="btn btn-sm btn-danger text-white" href="" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $data->reportID }}').submit();">Delete</a>
-
+                        <a class="btn btn-sm btn-warning text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}"><i class="bi bi-eye"></i></a>
+                        <a class="btn btn-sm btn-danger text-white" href="" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $data->reportID }}').submit();"><i class="bi bi-trash"></i></a>
                         <form id="delete-form-{{ $data->reportID }}" action="{{ route('incident_report.delete', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}" method="POST" style="display: none;">
                             @csrf
                         </form> 
