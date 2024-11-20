@@ -129,11 +129,11 @@ class DonationController extends Controller
     public function print_donation_report($type, $id){
         $data = $type == 1 ? CashDonation::get_data($id) : InKindDonation::get_data($id);
         $datas = $data[0];
-        // dd($datas);
-        $pdf = app('dompdf.wrapper')->loadView('pages.donation.donation_report', compact('datas'))
-                ->setPaper('A5', 'portrait');;
 
-        // Download the generated PDF
-        return $pdf->download('invoice_' . $datas['fullname'] . '.pdf');
+        $pdf = app('dompdf.wrapper')->loadView('pages.donation.donation_report', compact('datas', 'type'))
+                ->setPaper([0, 0, 612, 792], 'portrait');
+   
+        // download the generated PDF
+        return $pdf->download('donation_' . $datas['fullname'] . '.pdf');
     }
 }

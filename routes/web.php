@@ -138,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
         Route::controller(FamilyAssistanceController::class)->group(function () {
             Route::get('/family-assistance-records', 'index')->name('family.assistance.records');
             Route::get('/family-assistance-record/{id}', 'view')->name('family.assistance.record');
+            Route::post('/family-assistance-print-record', 'print_record')->name('family.assistance.print');
         });
 
         // Donations
