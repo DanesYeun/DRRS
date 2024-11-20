@@ -141,20 +141,14 @@ class FamilyAssistanceController extends Controller
 
         $data = FamilyAssistance::get_data($id)[0];
         $family_member = FamilyMember::get_data($id);
-        // dd($data, $family_member);
+        
         return view('pages.assistance.view', compact('data', 'family_member'));
     }
 
     public function print_record(Request $request){
         
         $data = $request->all();
-        // dd($data);
-        // return view('pages.assistance.report', compact('data'));
         $pdf = app('dompdf.wrapper')->loadView('pages.assistance.report', compact('data'))
-                ->setOption('margin_top', 5) // Top margin in millimeters
-                ->setOption('margin_bottom', 5) // Bottom margin in millimeters
-                ->setOption('margin_left', 1) // Left margin in millimeters
-                ->setOption('margin_right', 1) // Right margin in millimeters
                 ->setPaper('legal', 'portrait');
    
         // download the generated PDF
