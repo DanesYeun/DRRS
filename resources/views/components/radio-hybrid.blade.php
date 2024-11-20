@@ -14,7 +14,7 @@
 
             <!-- for broken -->
             @if ($data['name'] === 'Broken')
-                <input class="form-control" type="text" name="{{ $name }}_broken" placeholder="Specify broken part" id="{{ strtolower($data['name']) }}_input" {{ isset($fieldValues['broken']) ? 'value=' . $fieldValues['broken'] : '' }}>
+                <input class="form-control" type="text" name="{{ $name }}_broken" placeholder="" id="{{ strtolower($data['name']) }}_input" {{ isset($fieldValues['broken']) ? 'value=' . $fieldValues['broken'] : '' }}>
             @endif
 
             @isset($data['subdata'])
@@ -46,9 +46,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function toggleBrokenInput() {
         if (brokenRadio.checked) {
             brokenInput.disabled = false;
+            brokenInput.placeholder = "Specify Broken Part";
         } else {
             brokenInput.disabled = true;
             brokenInput.value = '';
+            brokenInput.placeholder = "";
         }
     }
 

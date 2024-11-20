@@ -134,7 +134,8 @@ class IncidentReportController extends Controller
             // return redirect()->back()->with('success', 'Successfully sent incident report!');
 
         }catch(\Exception $e){
-            return redirect()->back()->with('error', $e->getMessage());
+            \Log::error('Error: '. $e->getMessage());
+            return redirect()->back()->with('error', 'Oh no! An error occured.');
         }
     }
 
