@@ -22,36 +22,36 @@
                     <h3 class="text-primary text-start mb-3">Family Assistance Form</h3>
                     {{-- <hr class="border border-2 border-dark"> --}}
                     <h6 class="text-start mx-2 text-primary">LOCATION OF THE AFFECTED FAMILY</h6>
-                    <x-input name="region" label="Region" type="text"/>
-                    <x-input name="city_municipality" label="City/Municipality" type="text"/>
+                    <x-input name="region" label="Region" type="text" required="true"/>
+                    <x-input name="city_municipality" label="City/Municipality" type="text" required="true"/>
 
-                    <x-input name="province" label="Province" type="text"/>
-                    <x-input name="barangay" label="Barangay" type="text"/>
+                    <x-input name="province" label="Province" type="text" required="true"/>
+                    <x-input name="barangay" label="Barangay" type="text" required="true"/>
 
-                    <x-input name="district" label="District" type="text"/>
+                    <x-input name="district" label="District" type="text" required="true"/>
                     <x-input name="evacuation_center" label="Evacuation Center" type="text"/>
 
                     <div class="mb-4"></div>
                     <h6 class="text-start mx-2 text-primary">HEAD OF THE FAMILY</h6>
-                    <x-input name="first_name" label="First Name" type="text" mdSize="3"/>
-                    <x-input name="middle_name" label="Middle Name" type="text" mdSize="3"/>
-                    <x-input name="last_name" label="Last Name" type="text" mdSize="3"/>
+                    <x-input name="first_name" label="First Name" type="text" mdSize="3" required="true"/>
+                    <x-input name="middle_name" label="Middle Name" type="text" mdSize="3" required="true"/>
+                    <x-input name="last_name" label="Last Name" type="text" mdSize="3" required="true"/>
                     <x-input name="suffix" label="Name Ext. (Jr.,Sr.)" type="text" mdSize="3"/>
 
-                    <x-input name="birthdate" label="Birthdate" type="date" mdSize="3"/>
-                    <x-input name="age" label="Age" type="number" mdSize="2"/>
-                    <x-input name="birthplace" label="Birth Place" type="text" mdSize="7"/>
+                    <x-input name="birthdate" label="Birthdate" type="date" mdSize="3" required="true"/>
+                    <x-input name="age" label="Age" type="number" mdSize="2" required="true"/>
+                    <x-input name="birthplace" label="Birth Place" type="text" mdSize="7" required="true"/>
 
                     <x-select name="gender" label="Sex" :options="$genders" sizeMd="2" required="true"/>
                     <x-select name="civil_status" label="Civil Status" :options="$civil_status" sizeMd="2" required="true"/>
                     <x-input name="religion" label="Religion" type="text" mdSize="2"/>
-                    <x-input name="occupation" label="Occupation" type="text" mdSize="3"/>
-                    <x-input name="monthly_family_net_income" label="Monthly Family Net Income" type="number" mdSize="3"/>
+                    <x-input name="occupation" label="Occupation" type="text" mdSize="3" required="true"/>
+                    <x-input name="monthly_family_net_income" label="Monthly Family Net Income" type="number" mdSize="3" required="true"/>
                     
-                    <x-input name="primary_contact_no" label="Primary Contact Number" type="number" mdSize="2"/>
+                    <x-input name="primary_contact_no" label="Primary Contact Number" type="number" mdSize="2" required="true"/>
                     <x-input name="alternate_contact_no" label="Alternate Contact Number" type="number" mdSize="2"/>
                     <x-input name="mother_maiden_name" label="Mother's Maiden Name" type="text" mdSize="3"/>
-                    <x-input name="permanent_address" label="Permanent Address" type="text" mdSize="5"/>
+                    <x-input name="permanent_address" label="Permanent Address" type="text" mdSize="5" required="true"/>
 
                     <x-input name="id_card_presented" label="ID Card Presented" type="text" mdSize="3"/>
                     <x-input name="id_card_number" label="ID Card Number" type="text" mdSize="3"/>
@@ -108,42 +108,9 @@
 
 @section('js')
     <script>
-    // Function to add a new row to the table
-    document.getElementById("addRowBtn").addEventListener("click", function() {
-        let table = document.getElementById("familyTable").getElementsByTagName('tbody')[0];
-        let newRow = table.insertRow(table.rows.length);
-        
-        let rowIndex = table.rows.length - 1;
         let genders = @json($genders);
+    </script>
 
-        // Create cells and append to the row
-        for (let i = 0; i < 8; i++) {
-            let cell = newRow.insertCell(i);
-
-            if (i === 4) { 
-                // Create the select dropdown for gender
-                cell.innerHTML = `<select name="family_member[${rowIndex}][${i}]" class="form-control">` + 
-                    genders.map(gender => `<option value="${gender.id}">${gender.name}</option>`).join('') + 
-                    '</select>';
-            }else if(i === 2){
-                cell.innerHTML = `<input type="date" name="family_member[${rowIndex}][${i}]" class="form-control">`;
-            }else {
-                // General input for other cells
-                cell.innerHTML = `<input type="text" name="family_member[${rowIndex}][${i}]" class="form-control">`;
-            }
-        }
-        
-        let deleteCell = newRow.insertCell(8); 
-        deleteCell.innerHTML = `
-            <button type="button" class="btn btn-danger btn-sm deleteBtn">
-                Delete
-            </button>
-        `;
-        
-        // Add event listener for delete button
-        deleteCell.querySelector(".deleteBtn").addEventListener("click", function() {
-            newRow.remove(); // Remove the row from the table
-        });
-    });
-</script>
+    <script src="{{ asset('js/add-row-assistance.js') }}"></script>
+    <script src="{{ asset('js/formValidation.js') }}"></script>
 @endsection

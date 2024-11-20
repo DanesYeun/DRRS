@@ -42,7 +42,7 @@ class FamilyAssistanceController extends Controller
                 'religion' => 'nullable|string|max:100',
                 'occupation' => 'required|string|max:100',
                 'primary_contact_no' => 'required|regex:/^0?[0-9]{11}$/',  
-                'alternate_contact_no' => 'required|regex:/^0?[0-9]{11}$/', 
+                'alternate_contact_no' => 'nullable|regex:/^0?[0-9]{11}$/', 
                 'mother_maiden_name' => 'nullable|string|max:50',
                 'monthly_family_net_income' => 'required|numeric|min:0',
                 'id_card_presented' => 'nullable|string|max:50',

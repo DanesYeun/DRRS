@@ -49,7 +49,7 @@
                                     <div class="text-start text-primary">
                                         <div class="row px-2">
                                             <x-small-input-group label="Pain Assessment" :datas="$painAssessmentData" namePrefix="painAssessment"/>
-                                            <x-radio-hybrid label="Injury Type" :datas="$injuryTypes" name="injury_type" />      
+                                            <div class="col-12 col-md-6" id="injury-types"><x-radio-hybrid label="Injury Type" :datas="$injuryTypes" name="injury_type" /> </div>     
                                         </div>
                                     </div>
 
@@ -91,5 +91,25 @@
 @endsection
 
 @section('js')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const caseSelect = document.getElementById('case');
+            const injuryTypesDiv = document.getElementById('injury-types');
+
+            function toggleInjuryTypes() {
+                if (caseSelect.value == '3') { 
+                    injuryTypesDiv.classList.remove('d-none'); 
+                } else {
+                    injuryTypesDiv.classList.add('d-none');
+                }
+            }
+
+            // Initial check when the page loads
+            toggleInjuryTypes();
+
+            // Listen for changes to the case select dropdown
+            caseSelect.addEventListener('change', toggleInjuryTypes);
+        });
+    </script>
     <script src="{{ asset('js/formValidation.js') }}"></script>
 @endsection
