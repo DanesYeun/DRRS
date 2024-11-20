@@ -19,9 +19,9 @@
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('incident_report.store') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-auto px-3 pt-5 pb-2">
-
-                    <x-select id="incident_type" name="incident_type" label="Type of Incident" :options="$cases" required="true" onchange="toggleFields(this.value)"/>
+                <div class="border bg-white rounded row mx-2 px-3 pt-5 pb-2">
+                    <h3 class="text-start text-primary mb-3">Incident Report</h3>
+                    <x-select name="incident_type" label="Type of Incident" :options="$cases" required="true" onchange="toggleFields(this.value)"/> 
 
                     <div class="mb-4"></div>
 
@@ -109,10 +109,10 @@
                         </div>
                     </div>
 
-                    <!-- Other fields -->
-                    <hr class="border border-1 border-dark">
-                    <x-input name="date" label="Date" type="date" :value="now()->format('Y-m-d')" />
-                    <x-input name="time" label="Time" type="time" :value="now()->timezone('Asia/Manila')->format('H:i')" />
+                    <hr/>
+
+                    <x-input name="date" label="Date" type="date" value="{{ now()->toDateString() }}"/>
+                    <x-input name="time" label="Time" type="time" value="{{ now()->format('H:i') }}"/>
                     <x-input name="place" label="Place of Incident" type="text"/>
                     <x-input name="landmark" label="Landmark" type="text"/>
                     <x-input name="number_casualties" label="Number of Casualties" type="number"/>

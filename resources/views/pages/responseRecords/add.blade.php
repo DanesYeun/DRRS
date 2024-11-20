@@ -2,7 +2,14 @@
 
 @section('content')
     <div class="d-flex flex-column m-md-2">
-        <h3 class="text-start mx-2 text-primary">Add Response Record</h3>
+        <div class="d-flex flex-row justify-content-between">
+            <h3 class="text-start mx-2 text-primary">Add Response Record</h3>
+            <a class="btn btn-danger col-2 mb-3 " href="{{ route('response_records.index') }}">
+                <i class="bi bi-backspace-fill p-2"></i>
+                <span class="d-none d-sm-inline">Back</span>
+            </a>
+        </div>
+        <x-alert response="error" color="danger"/>
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('response_records.store') }}" class="needs-validation" novalidate>
                 @csrf
@@ -10,8 +17,8 @@
                 <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
                     <h4 class="py-2 text-primary text-start">Response Details</h4>
       
-                    <x-input name="date" label="Date" type="date" value="{{ date('Y-m-d', strtotime(isset($data->created_at))) ?? '' }}"/>
-                    <x-input name="time" label="Time" type="time" value="{{ date('H:i', strtotime(isset($data->created_at))) ?? ''}}"/>
+                    <x-input name="date" label="Date" type="date" value="{{ now()->toDateString() }}"/>
+                    <x-input name="time" label="Time" type="time" value="{{ now()->format('H:i')}}"/>
 
                     <x-select name="incidentFrom" label="Incident From" :options="$locations" required="true"/>
                     <x-select name="takenTo" label="Taken To" :options="$locations" required="true"/>
@@ -39,4 +46,5 @@
 @endsection
 
 @section('js')
+    <script src="{{ asset('js/formValidation.js') }}"></script>
 @endsection

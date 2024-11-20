@@ -46,7 +46,7 @@ class ResponseRecordController extends Controller
                 'patientAddress' => 'nullable|string|max:50',
                 'patientCase' => 'required|string|max:50',
                 'patientGender' => 'required|string|max:50',
-                'responders' => 'required|string|max:50',
+                'responders' => 'required|string|max:255',
                 'actionTaken' => 'nullable|string|max:50',
                 'remarks' => 'nullable|string|max:50',
             ]);
@@ -55,7 +55,8 @@ class ResponseRecordController extends Controller
     
             return redirect()->route('response_records.index')->with('success', 'Response Record created successfully.');
         }catch(\Exception $e) {
-            dd($e->getMessage());
+            \Log::error('Error on saving response record: '.$e->getMessage());
+            return redirect()->back()->with('error','Oh no! An error occured.');
         }
     }
 

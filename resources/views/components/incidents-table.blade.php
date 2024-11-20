@@ -4,38 +4,47 @@
         <h5 class="p-1">{{ $label }}</h5>
         <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
-    <table id="assistance-table" class="table table-hover table-borderless">
-        <thead class="rounded-top">
-            <tr>
-                <th scope="col" class="p-3 rounded-start bg-primary text-white">Date</th>
-                <th scope="col" class="p-3 bg-primary text-white">Reporter Name</th>
-                <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell">Reporter Contact No.</th>
-                <th scope="col" class="p-3 bg-primary text-white">Case</th>
-                <th scope="col" class="p-3 bg-primary text-white">Status</th>
-                <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            @foreach($datas as $data)
-                <tr data-case="{{ $data->incidentCase->id }}" data-reportid="{{ $data->reportID }}">
-                    <td class="p-3 rounded-start">
-                        {{ \Carbon\Carbon::parse($data->date)->format('M d, Y') }}
-                    </td>
-                    <td class="p-3">{{ $data->reporterFullName }}</td>
-                    <td class="p-3 d-none d-sm-table-cell">{{ $data->reporterContactNumber }}</td>
-                    <td class="p-3">{{ $data->incidentCase->description }}</td>
-                    <td class="p-3">{{ $data->isConfirmed == 1 ? 'Confirmed' : 'Pending' }}</td>
-                    <td class="p-3 rounded-end">
-                        <a class="btn btn-sm btn-warning text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}"><i class="bi bi-eye"></i></a>
-                        <a class="btn btn-sm btn-danger text-white" href="" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $data->reportID }}').submit();"><i class="bi bi-trash"></i></a>
-                        <form id="delete-form-{{ $data->reportID }}" action="{{ route('incident_report.delete', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}" method="POST" style="display: none;">
-                            @csrf
-                        </form> 
-                    </td>
+    <div class="table-responsive">
+        <table id="assistance-table" class="table table-hover table-borderless">
+            <thead class="rounded-top">
+                <tr>
+                    <th scope="col" class="p-3 rounded-start bg-primary text-white">Date</th>
+                    <th scope="col" class="p-3 bg-primary text-white">Reporter Name</th>
+                    <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell">Reporter Contact No.</th>
+                    <th scope="col" class="p-3 bg-primary text-white">Case</th>
+                    <th scope="col" class="p-3 bg-primary text-white">Status</th>
+                    <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="tableBody">
+                @foreach($datas as $data)
+                    <tr data-case="{{ $data->incidentCase->id }}" data-reportid="{{ $data->reportID }}">
+                        <td class="p-3 rounded-start">
+                            {{ \Carbon\Carbon::parse($data->date)->format('M d, Y') }}
+                        </td>
+                        <td class="p-3">{{ $data->reporterFullName }}</td>
+                        <td class="p-3 d-none d-sm-table-cell">{{ $data->reporterContactNumber }}</td>
+                        <td class="p-3">{{ $data->incidentCase->description }}</td>
+                        <td class="p-3">{{ $data->isConfirmed == 1 ? 'Confirmed' : 'Pending' }}</td>
+                        <td class="p-3 rounded-end">
+                            <a class="btn btn-sm btn-secondary text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">
+                                <i class="bi bi-pencil-square"></i>
+                                <span class="d-none d-sm-inline">View</span>
+                            </a>
+                            <a class="btn btn-sm btn-danger text-white my-2" href="" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $data->reportID }}').submit();">
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span class="d-none d-sm-inline">Delete</span>
+                            </a>
+
+                            <form id="delete-form-{{ $data->reportID }}" action="{{ route('incident_report.delete', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}" method="POST" style="display: none;">
+                                @csrf
+                            </form> 
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
     <!-- Pagination -->
     <nav class="pagination-container">

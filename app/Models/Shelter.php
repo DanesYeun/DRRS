@@ -10,5 +10,6 @@ class Shelter extends Model
     protected $fillable = [
         'shelterName',
         'shelterCoordinates',
+        'shelterImagePath'
     ];
 }
