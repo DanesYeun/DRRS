@@ -10,7 +10,7 @@
             </a>
         </div>
         <div class="mx-2 mb-3 p-2">
-            <form method="post" action="" class="needs-validation" novalidate>
+            <form method="post" action="{{ route('family.assistance.print') }}">
                 @csrf
                 <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
 
@@ -86,6 +86,15 @@
                                     <td>{{ $member['educational_attainment'] }}</td>
                                     <td>{{ $member['occupation'] }}</td>
                                     <td>{{ $member['remarks'] }}</td>
+
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][fullname]" value="{{ $member['fullname'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][relation]" value="{{ $member['relation'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][birthdate]" value="{{ $member['birthdate'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][age]" value="{{ $member['age'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][genderDesc]" value="{{ $member['genderDesc'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][educational_attainment]" value="{{ $member['educational_attainment'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][occupation]" value="{{ $member['occupation'] }}">
+                                    <input type="hidden" name="family_member[{{ $loop->index }}][remarks]" value="{{ $member['remarks'] }}">
                                 </tr>
                             @endforeach
                         </tbody>
@@ -102,44 +111,4 @@
 @endsection
 
 @section('js')
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    // Function to add a new row to the table
-    document.getElementById("addRowBtn").addEventListener("click", function() {
-        let table = document.getElementById("familyTable").getElementsByTagName('tbody')[0];
-        let newRow = table.insertRow(table.rows.length);
-        
-        let rowIndex = table.rows.length - 1;
-        let genders = @json($genders);
-
-        // Create cells and append to the row
-        for (let i = 0; i < 8; i++) {
-            let cell = newRow.insertCell(i);
-
-            if (i === 4) { 
-                // Create the select dropdown for gender
-                cell.innerHTML = `<select name="family_member[${rowIndex}][${i}]" class="form-control">` + 
-                    genders.map(gender => `<option value="${gender.id}">${gender.name}</option>`).join('') + 
-                    '</select>';
-            }else if(i === 2){
-                cell.innerHTML = `<input type="date" name="family_member[${rowIndex}][${i}]" class="form-control">`;
-            }else {
-                // General input for other cells
-                cell.innerHTML = `<input type="text" name="family_member[${rowIndex}][${i}]" class="form-control">`;
-            }
-        }
-        
-        let deleteCell = newRow.insertCell(8); 
-        deleteCell.innerHTML = `
-            <button type="button" class="btn btn-danger btn-sm deleteBtn">
-                Delete
-            </button>
-        `;
-        
-        // Add event listener for delete button
-        deleteCell.querySelector(".deleteBtn").addEventListener("click", function() {
-            newRow.remove(); // Remove the row from the table
-        });
-    });
-</script> --}}
 @endsection
