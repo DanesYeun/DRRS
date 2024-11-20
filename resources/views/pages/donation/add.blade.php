@@ -5,16 +5,17 @@
 
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Send Donation</h3>
-            @if(session('error'))
-                <x-alert response="error" color="danger"/>
-            @elseif(session('success'))
-                <x-alert response="success" color="success"/>
-            @endif
             <a class="btn btn-danger col-2 mb-3" href="{{  route('landingPage') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
                 <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
+
+        @if(session('error'))
+            <x-alert response="error" color="danger"/>
+        @elseif(session('success'))
+            <x-alert response="success" color="success"/>
+        @endif
 
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('store.donation') }}" class="needs-validation" novalidate>

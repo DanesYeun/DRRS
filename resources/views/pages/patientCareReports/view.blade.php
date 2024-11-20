@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="text-start text-primary" id="injury">
+                                    <div class="text-start text-primary">
                                         <div class="row px-2">
                                         <x-small-input-group label="Vital Signs" :datas="$vitals" namePrefix="vitals"/>
                                             <div class="col-12 col-md-6 mb-2 pt-4">

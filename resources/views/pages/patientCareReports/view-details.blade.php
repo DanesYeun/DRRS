@@ -56,6 +56,24 @@
                     <x-bfast label="Spot Stroke" :datas="$spotStrokeFields" :bfastValues="$spotStrokeData" namePrefix="spotStroke" readOnly="true"/>    
                 </div>
             </div>
+
+            <div class="text-start text-primary" id="injury">
+                <div class="row px-2">
+                <x-input-group-readonly label="Vital Signs" :datas="$vitalsFields" namePrefix="vitals" :fieldValues="$vitalsData" readOnly="true"/>
+                    <div class="col-12 col-md-6 mb-2 pt-4">
+                        <x-input name="others" label="Others" type="text" value="{{ $patientCare->others }}" mdSize="12" readOnly="true"/>
+                        <x-input name="responder" label="Responder/s" value="{{ $patientCare->recordedBy }}" type="text" mdSize="12" readOnly="true"/>
+                        <x-input name="recievedBy" label="Recieved By" type="text" value="{{ $patientCare->recievedBy }}" mdSize=12 readOnly="true"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end row m-0">   
+                <a target="_blank" type="submit" class="btn btn-primary col-12 col-sm-2" href="{{ route('patient_care.download', $patientCare->patientCareID) }}">
+                    <i class="bi bi-download px-2"></i>
+                    Download
+                </a>
+            </div>
         </div>
     </div>
 @endsection

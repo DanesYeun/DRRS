@@ -5,7 +5,7 @@
         @foreach ($datas as $data)
             <div class="form-check">
                 <!-- General checkbox -->
-                <input class="form-check-input" type="checkbox" value=1 id="{{ $data['name'] }}" name="{{ $namePrefix }}[{{ $data['name'] }}]" {{ $readOnly ? 'disabled' : ''}} {{ (isset($bfastValues[$data['name']]) && isset($bfastValues[$data['name']]) == 1) || ( isset($bfastValues['T']) != 0) ? 'checked' : ''}}>
+                <input class="form-check-input" type="checkbox" value=1 id="{{ $data['name'] }}" name="{{ $namePrefix }}[{{ $data['name'] }}]" {{ $readOnly ? 'disabled' : ''}} {{ (isset($bfastValues[$data['name']]) && $bfastValues[$data['name']] == 1) ||(isset($bfastValues[$data['name']]) && $data['name'] == 'T' && !is_null($bfastValues['T'])) ? 'checked' : ''}}>
                 <label class="form-check-label" for="{{ $data['name'] }}">
                     {{ $data['name'] }}
                 </label>
