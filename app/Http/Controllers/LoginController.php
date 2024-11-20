@@ -26,6 +26,12 @@ class LoginController extends Controller
 
             $user = Auth::user();
 
+            if ($user->status != 1) {
+                Auth::logout();
+                
+                return redirect()->back()->with('error', 'Your account is inactive.');
+            }
+
             // Store user data in session
             session(['user_data' => $user]);
 
