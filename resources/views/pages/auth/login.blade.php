@@ -18,10 +18,15 @@
                     <x-floating-input type="text" name="username" label="Username"/>
                     <x-floating-input type="password" name="password" label="Password"/>
 
-                    <div class="d-flex align-items-center mb-3">
-                        <input type="checkbox" class="form-check-input" id="showPassword" name="showPassword" value="1">
-                        <label for="showPassword" class="ms-2 mt-2">Show Password</label>
+                       <!-- Forgot Password and Show Password -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <input type="checkbox" class="form-check-input" id="showPassword" name="showPassword" value="1">
+                            <label for="showPassword" class="ms-2">Show Password</label>
+                        </div>
+                        <a href="{{ route('password.request') }}" class="text-decoration-none text-primary">Forgot Password?</a>
                     </div>
+
                     <div class="d-grid">
                         <button type="submit" class="btn btn-lg btn-outline-primary">Login</button>
                     </div>

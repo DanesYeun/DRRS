@@ -13,7 +13,7 @@ use App\Http\Controllers\AdminDashBoardController;
 use App\Http\Controllers\PatientCareReportController;
 use App\Http\Controllers\FamilyAssistanceController;
 use App\Http\Controllers\DonationController;
-use App\Http\Controllers\SecretaryController;
+use App\Http\Controllers\ForgotPasswordController;
 
 use App\Http\Middleware\CheckPasswordUpdate;
 
@@ -116,16 +116,14 @@ Route::controller(DonationController::class)->group(function () {
     Route::post('/donor-form', 'store')->name('store.donation');
 });
 
-// Route::controller(SecretaryController::class)->group(function () {
-//     Route::get('/donations', 'index')->name('donations')->middleware(CheckPasswordUpdate::class);
-//     Route::get('donation/{type}/{id}', 'view')->name('view.donation');
-//     Route::post('pick-donation/{type}/{id}', 'pickup_donation')->name('pickup.donation');
-    
+Route::controller(ForgotPasswordController::class)->group(function () {
 
-//     Route::get('print/donation/{type}/{id}', 'print_donation_report')->name('print.donation');
-//     // Route::post('/donor-form', 'store')->name('store.donation');
-// });
+    Route::get('/forgot-password', 'index')->name('password.request');
+    Route::post('forgot-password', 'forgotPassword')->name('password.email');
+    Route::get('reset-password/{token}', 'showResetForm')->name('password.reset');
+    Route::post('reset-password', 'resetPassword')->name('password.save');
 
+});
 
 
 
