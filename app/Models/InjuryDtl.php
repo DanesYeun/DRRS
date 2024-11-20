@@ -17,4 +17,9 @@ class InjuryDtl extends Model
     {
         return $this->belongsTo(PatientCareReport::class, 'patientCareID');
     }
+
+    public function vehicular_type()
+    {
+        return $this->belongsTo(VehicularAccidentTypes::class, 'vehicular');
+    }
 }

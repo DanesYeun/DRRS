@@ -12,10 +12,13 @@ use App\Models\SampleHistory;
 use App\Models\SpotStroke;
 use App\Models\VehicularAccidentTypes;
 use App\Models\Vitals;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use App\Models\PatientCareReport;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\PDF;
 
 class PatientCareReportController extends Controller
 {
@@ -281,7 +284,8 @@ class PatientCareReportController extends Controller
         $injuryTypeData = $patientCare->injury_dtl;
         $dcapbtlsData = $patientCare->dcapbtls;
         $spotStrokeData = $patientCare->spotStroke;
-        // dd($spotStrokeData);
+        $vitalsData = $patientCare->vitals;
+        // dd($vitalsData);
 
         $cases = map_options(PatientCareCase::class, 'id', 'description');
         $genders = map_options(Gender::class, 'id', 'description');
@@ -305,11 +309,29 @@ class PatientCareReportController extends Controller
             'P' => $consciousnessData->P ?? 0,
             'U' => $consciousnessData->U ?? 0,
         ];
+        $vitalsFields = create_collection(['BP', 'TEMP', 'HR', 'SPo2', 'RR']);
 
         $patientCareReports = PatientCareReport::all();
 
         return view('pages.patientCareReports.view-details', compact(
-            'consciousnessStatus', 'patientCareReports', 'cases', 'genders', 'patientCare', 'alertnessFields', 'sampleFields', 'sampleData', 'painAssessmentData', 'painAssessmentFields', 'injuryTypeFields', 'injuryTypeData', 'dcapbtlsData', 'dcapbtlsFields', 'spotStrokeFields', 'spotStrokeData'
+            'consciousnessStatus', 'patientCareReports', 'cases', 'genders', 'patientCare', 'alertnessFields', 'sampleFields', 'sampleData', 'painAssessmentData', 'painAssessmentFields', 'injuryTypeFields', 'injuryTypeData', 'dcapbtlsData', 'dcapbtlsFields', 'spotStrokeFields', 'spotStrokeData','vitalsFields', 'vitalsData'
         ));
     }
+
+    public function download($id)
+{
+    $patientCareReport = PatientCareReport::findOrFail($id);
+
+    $dompdf = new Dompdf();
+
+    $html = view('pages.patientCareReports.patient-care-report-pdf', compact('patientCareReport'))->render();
+
+    $dompdf->loadHtml($html);
+
+    $dompdf->setPaper('A4', 'portrait');
+
+    $dompdf->render();
+
+    return $dompdf->stream('patient_care_report.pdf', ['Attachment' => false]);
+}
 }

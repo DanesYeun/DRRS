@@ -6,11 +6,18 @@ use App\Models\Hazard;
 use App\Models\Shelter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class LandingPageController extends Controller
 {
     public function index()
     {
+
+        // if authenticated, go to home instead
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+
         $hazards = Hazard::where('hazardStatus', 1)->get();
         $shelters = Shelter::all();
 
