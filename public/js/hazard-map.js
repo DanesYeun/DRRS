@@ -70,7 +70,6 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
     function restoreOriginalPopups() {
         originalPopups.forEach((popup, layer) => {
             layer.bindPopup(popup);
-            layer.openPopup();
         });
     }
 
@@ -183,10 +182,6 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
             console.error('Error parsing coordinates for shelter:', shelter.shelterName, e);
         }
     });
-
-    setTimeout(() => {
-        markersToOpen.forEach(marker => marker.openPopup());
-    }, 500);
 
     function showAll() {
         clearAllPopups();
