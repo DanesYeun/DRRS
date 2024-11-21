@@ -1,18 +1,19 @@
 @extends('layouts.layout')
 
 @section('content')
-    <div class="row m-md-5">
-        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <img src="images/stories/login.png" alt="login.jpg" class="img-fluid d-none d-sm-inline" style="width: 400px; object-fit: cover;">
-            <h4 class="text-primary d-none d-sm-inline">Disaster Respose and Recovery on your hands!</h4>
+    <div class="row m-0 w-100 h-100">
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center d-none d-sm-inline">
+            <img src="images/stories/login.png" alt="login.jpg" class="img-fluid" style="width: 400px; object-fit: cover;">
+            <h4 class="text-primary">Disaster Respose and Recovery on your hands!</h4>
         </div>
-        <div class="col-12 col-md-6 p-md-5 my-5 py-5">
-            <div class="border rounded bg-white shadow p-3 mx-md-5">          
-                @if(session('error'))
-                    <x-alert response="error" color="danger"/>
-                @elseif(session('success'))
-                    <x-alert response="success" color="success"/>
-                @endif
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <div class="w-75 mb-2">
+                <h1><code class="text-primary">Welcome to DRRS</code></h1>
+            </div>
+            <div class="border rounded bg-white w-75 shadow p-3 mx-md-5">     
+                <x-alert response="error" color="danger"/>
+                <x-alert response="success" color="success"/>
+                
                 <form method="post" action="{{ route('login') }}" class="needs-validation" novalidate>
                     @csrf               
                     <x-floating-input type="text" name="username" label="Username"/>

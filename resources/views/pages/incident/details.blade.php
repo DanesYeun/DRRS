@@ -4,16 +4,18 @@
     <div class="d-flex flex-column m-md-2">
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Incident Report Details</h3>
-            @if(session('error'))
-                <x-alert response="error" color="danger"/>
-            @elseif(session('success'))
-                <x-alert response="success" color="success"/>
-            @endif
             <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{ route('incident_report.show_all')}}">
                 <i class="bi bi-backspace-fill p-2"></i>
                 Back
             </a>
         </div>
+        
+        @if(session('error'))
+            <x-alert response="error" color="danger"/>
+        @elseif(session('success'))
+            <x-alert response="success" color="success"/>
+        @endif
+
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="" class="needs-validation" novalidate>
                 @csrf
@@ -68,30 +70,28 @@
                     <x-input name="reporterContactNumber" type="input" label="Reporter Contact Number" value="{{ $incidentReport->reporterContactNumber }}" readOnly/>
 
                     @if($incidentReport->typeOfIncident == 5)
-                        
-                        <img src="{{ asset('storage/' . $incidentReport->disaster->photoPathFile) }}" alt="Disaster Image" class="img-fluid" style="max-width: 100%; height: 20%;">
-                
+                        <div class="col-12 mb-3">
+                            <img src="{{ asset('storage/' . $incidentReport->disaster->photoPathFile) }}" alt="Disaster Image" class="img-fluid border" style="max-width: 500px; max-height: 500px;">
+                        </div>                   
                     @endif
-                </div>
-                
-            </form>
-            
-        </div>
 
-        <div class="row d-flex justify-content-between">
-            <div class="col-12 col-md-6 mb-2">
-                <a href="{{ route('response_records.incident.create', ['case' => $incidentReport->typeOfIncident ,'id' => $incidentReport->reportID]) }}" class="btn btn-success">
-                    <i class="bi bi-file-earmark-plus-fill p-2"></i> Create Response Record
-                </a>
-            </div>
+                    <div class="row d-flex justify-content-between mt-2">
+                        <div class="col mb-2">
+                            <a href="{{ route('response_records.incident.create', ['case' => $incidentReport->typeOfIncident ,'id' => $incidentReport->reportID]) }}" class="btn btn-success">
+                                <i class="bi bi-file-earmark-plus-fill p-2"></i> Create Response Record
+                            </a>
+                        </div>
 
-            @if($incidentReport->isConfirmed == 0)
-                <div class="col-12 col-md-6 mb-2">
-                    <a href="{{ route('incident_report.confirm', ['id' => $incidentReport->reportID]) }}" class="btn btn-warning">
-                        <i class="bi bi-check-circle-fill p-2"></i> Confirm Incident Report
-                    </a>
-                </div>
-            @endif
+                        @if($incidentReport->isConfirmed == 0)
+                            <div class="col mb-2">
+                                <a href="{{ route('incident_report.confirm', ['id' => $incidentReport->reportID]) }}" class="btn btn-warning">
+                                    <i class="bi bi-check-circle-fill p-2"></i> Confirm Incident Report
+                                </a>
+                            </div>
+                        @endif
+                    </div> 
+                </div>  
+            </form>        
         </div>
     </div>
 @endsection

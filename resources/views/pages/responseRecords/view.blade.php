@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="d-flex flex-column m-md-2">
-        <x-alert response="success" color="success"/>
         
         <h3 class="text-start mx-2 text-primary">Response Records</h3>
         @if(session('error'))

@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-
+    <x-toast />
     @if ($hazardAlert)
         <div class="mt-4 alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-diamond-fill"></i>
@@ -54,12 +54,12 @@
     <script src="{{ asset('js/hazard-map.js') }}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {          
             // pass json data 
             var hazardData = @json($hazards); 
             var shelterData = @json($shelters);
             
             initializeHazardMap(hazardData, shelterData, 'hazard-map');
         });
-    </script>
+    </script>  
 @endsection

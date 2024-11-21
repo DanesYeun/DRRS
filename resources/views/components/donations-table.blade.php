@@ -1,5 +1,10 @@
 @props(['label', 'datas' => null, 'type'])
 <div class="container mt-2 table-container"> 
+    <div class="mb-1 d-flex justify-content-between">
+        <h5 class="p-1 text-secondary">{{ $label }}</h5>
+        <!-- <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">   -->
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover table-borderless">
             <thead class="rounded-top">
@@ -61,3 +66,4 @@
         <ul class="pagination justify-content-end" id="pagination"></ul>
     </nav> --}}
 </div>
+

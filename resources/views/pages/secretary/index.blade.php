@@ -15,14 +15,14 @@
 
         <!-- Cash Fields -->
         <div id="1-fields" class="donation-fields d-none">
-            <div class="row">
+            <div class="row m-0">
                 <x-donations-table label="Cash Donations" :datas="$cashDonations" :type="1"/>
             </div>
         </div>
         
         <!-- Inkind Fields -->
         <div id="2-fields" class="donation-fields d-none">
-            <div class="row">
+            <div class="row m-0">
                 <x-donations-table label="Inkind Donations" :datas="$inkindDonations" :type="2"/>
             </div>  
         </div>
