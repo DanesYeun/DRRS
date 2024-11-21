@@ -110,19 +110,30 @@ class DonationController extends Controller
         return view('pages.donation.view_donation', compact('donation', 'type'));
     }
 
-    public function pickup_donation($type, $id){
+    public function pickup_donation(Request $request){
         
         try{
+            $type = $request->type;
+            $id = $request->id;
+
             $data = $type == 1 ?  CashDonation::find($id) : InKindDonation::find($id);
 
             $data->update([
                 'isPickUp' => 1
             ]);
 
-            return redirect()->route('donations')->with('success', 'Donation pickup successfully confirmed.');
-
+            // return redirect()->route('donations')->with('success', 'Donation pickup successfully confirmed.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Donation pickup successfully confirmed.'
+            ]);
         } catch(\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            // return back()->with('error', $e->getMessage());
+
+            return response()->json([
+                'success' => true,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 

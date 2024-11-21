@@ -145,7 +145,7 @@ Route::middleware(['auth'])->group(function () {
         Route::controller(DonationController::class)->group(function () {
             Route::get('/donations', 'index')->name('donations');
             Route::get('donation/{type}/{id}', 'view')->name('view.donation');
-            Route::post('pick-donation/{type}/{id}', 'pickup_donation')->name('pickup.donation');
+            Route::post('pickup/donation', 'pickup_donation')->name('pickup.donation');
             Route::get('print/donation/{type}/{id}', 'print_donation_report')->name('print.donation');
         });
 
