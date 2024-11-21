@@ -2,7 +2,7 @@
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
         <h5 class="p-1 text-primary">{{ $label }}</h5>
-            <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
+            <input type="text" id="searchInput-shelter" class="form-control w-25" placeholder="Search...">  
     </div>
     <table id="shelters-table" class="table table-striped table-hover table-borderless">
         <thead class="rounded-top">
@@ -36,7 +36,7 @@
 
     <!-- Pagination -->
     <nav class="pagination-container">
-        <ul class="pagination justify-content-end" id="pagination"></ul>
+        <ul class="pagination justify-content-end" id="pagination-shelter"></ul>
     </nav>
 </div>
 
@@ -47,16 +47,16 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const data = @json($datas); 
-        paginateTable('shelters-table', data, 5);
-        document.getElementById("searchInput").addEventListener("input", function() {
-            searchTable("searchInput", "shelters-table");
+        paginateTable('shelters-table', data, 5, 'pagination-shelter');
+        document.getElementById("searchInput-shelter").addEventListener("input", function() {
+            searchTable("searchInput-shelter", "shelters-table");
         });
     });
 </script>
  {{-- for searchbox --}}
 <script>
-    document.getElementById("searchInput").addEventListener("input", function() {
-        searchTable("searchInput", "shelters-table");
+    document.getElementById("searchInput-shelter").addEventListener("input", function() {
+        searchTable("searchInput-shelter", "shelters-table");
     });
 </script>
 @endsection

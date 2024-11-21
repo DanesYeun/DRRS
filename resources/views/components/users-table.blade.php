@@ -46,7 +46,6 @@
     </nav>
 </div>
 
-@section('js')
 <script src="{{ asset('js/searchbox-table.js') }}"></script>
 <script src="{{ asset('js/pagination.js') }}"></script>
  {{-- for pagination --}}
@@ -65,4 +64,3 @@
         searchTable("searchInput", "users-table");
     });
 </script>
-@endsection

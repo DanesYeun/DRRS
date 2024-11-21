@@ -1,4 +1,4 @@
-function paginateTable(tableID, data, rowsPerPage) {
+function paginateTable(tableID, data, rowsPerPage, paginationContainerID = null) {
     const table = document.getElementById(tableID);
     const tbody = table.querySelector("tbody");
     const rows = tbody.getElementsByTagName("tr");
@@ -10,7 +10,7 @@ function paginateTable(tableID, data, rowsPerPage) {
     if (totalRows === 0) return;
 
     // Initialize pagination controls
-    const paginationContainer = document.getElementById('pagination');
+    const paginationContainer = paginationContainerID ? document.getElementById(paginationContainerID) : document.getElementById('pagination');
     paginationContainer.innerHTML = '';
 
     // Create "Previous" button
