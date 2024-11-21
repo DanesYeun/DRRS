@@ -8,8 +8,9 @@ use App\Models\PatientCareReport;
 use Illuminate\Http\Request;
 use App\Models\ResponseRecord;
 use App\Models\IncidentReport;
-use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\PDF;
+use Carbon\Carbon;
+use App\Exports\MonthlyReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ResponseRecordController extends Controller
 {
@@ -110,23 +111,6 @@ class ResponseRecordController extends Controller
         return $pdf->download("response_record_{$id}.pdf");
     }
 
-    //generate  monthly incident report.
-    public function generateMonthlyReport(Request $request)
-    {
-        $request->validate([
-            'month' => 'required|date_format:Y-m',
-        ]);
-
-        $month = $request->month;
-        $records = ResponseRecord::whereYear('date', substr($month, 0, 4))
-                                   ->whereMonth('date', substr($month, 5, 2))
-                                   ->get();
-
-        $pdf = app('dompdf.wrapper')->loadView('response_records.monthly_report', compact('records', 'month'));
-
-        return $pdf->download("monthly_incident_report_{$month}.pdf");
-    }
-
     public function patient_care_response_create($id)
     {
         $locations = [
@@ -176,4 +160,49 @@ class ResponseRecordController extends Controller
 
         return view('pages.responseRecords.add_incident', compact('data', 'locations', 'cases', 'genders'));
     }
+
+    //generate monthly - THIRD PARTY PACKAGE
+    public function generateMonthlyReport(Request $request)
+    {
+        $selectedMonth = $request->query('month');
+
+        if (!$selectedMonth) {
+            return redirect()->back()->with('error', 'Please select a valid month.');
+        }
+
+        [$year, $month] = explode('-', $selectedMonth);
+
+        $reports = ResponseRecord::with(['gender', 'case'])
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get()
+            ->map(function ($report) {
+                return [
+                    $report->responseID,
+                    $report->date,
+                    $report->time,
+                    $report->incidentFrom,
+                    $report->takenTo,
+                    $report->callerOrReporter,
+                    $report->patientName,
+                    $report->patientAge,
+                    $report->gender->description ?? '',
+                    $report->patientAddress,
+                    $report->case->description ?? '',
+                    $report->responders,
+                    $report->actionTaken,
+                    $report->remarks,
+                ];
+            })
+            ->toArray();
+
+        if (empty($reports)) {
+            return redirect()->back()->with('error', 'No data found for the specified month.');
+        }
+
+        $fileName = "Monthly_Report_{$year}_{$month}.xlsx";
+
+        return Excel::download(new MonthlyReportExport($reports), $fileName);
+    }
+
 }

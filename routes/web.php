@@ -97,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/response-records/{id}/edit', 'edit')->name('response_records.edit');
             Route::post('/response-records/{id}', 'update')->name('response_records.update');
             Route::get('/response-records/{id}/download', 'download')->name('response_records.download');
-            Route::post('/response-records/monthly-report', 'generateMonthlyReport')->name('response_records.monthly_report');
+            Route::get('/response-records/monthly-report', 'generateMonthlyReport')->name('response_records.monthly_report');
             Route::get('/incident/{case}/{id}/response/create', 'incident_response_create')->name('response_records.incident.create');
             Route::get('/patient-care/{id}/response/create', 'patient_care_response_create')->name('response_records.patient_care.create');
         });
