@@ -1,12 +1,12 @@
 // Fallback Geolocation using IP API
 function fallbackGeolocation() {
-    fetch('https://ip-api.com/json/')
+    fetch('http://ip-api.com/json/')
         .then(response => response.json())
         .then(data => {
             
             document.getElementById('latitude').value = data.lat;
             document.getElementById('longitude').value = data.lon;
-            alert("Fallback location used.");
+          
         })
         .catch(err => {
             alert("Fallback geolocation failed.");
@@ -57,5 +57,6 @@ function getUserCoordinates() {
 
 document.getElementById('locate-button').addEventListener('click', function(event) {
     event.preventDefault(); 
-    getUserCoordinates();    
+    //getUserCoordinates();
+    fallbackGeolocation();    
 });
