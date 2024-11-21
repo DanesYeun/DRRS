@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hazard;
 use App\Models\Shelter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class HazardMapController extends Controller
@@ -74,7 +75,7 @@ class HazardMapController extends Controller
         $hazard = Hazard::findOrFail($id);
         $hazard->update($request->all());
 
-        return redirect()->route('hazard_map.shelter');
+        return redirect()->route('hazard_map.shelter')->with('success', 'Shelter updated successfuly!');;
     }
 
     public function updateHazardStatus(Request $request, $id)
@@ -113,24 +114,35 @@ class HazardMapController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'shelterName' => 'nullable|string',
-            'shelterCoordinates' => 'nullable|string'
+            'shelterCoordinates' => 'nullable|string',
+            'shelterImagePath' => 'nullable|image|max:10240',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
+            dd($request->all(), $request->file('shelterImagePath'));
             return redirect()->back()->with('error', 'Oh no! An error occured.');
         }
 
         $shelter = Shelter::findOrFail($id);
 
-        if (!$shelter)
-        {
+        if (!$shelter) {
             return redirect()->back()->with('error', 'Shelter not found!');
         }
 
-        $shelter->update($request->all());
+        $updateData = $request->only(['shelterName', 'shelterCoordinates']);
 
-        return redirect()->route('hazard_map.shelter')->with('success', 'Shelter was updated!');
+        if ($request->hasFile('shelterImagePath')) {
+            if ($shelter->shelterImagePath) {
+                Storage::disk('public')->delete($shelter->shelterImagePath); //delete old image
+            }
+
+            // save new image
+            $updateData['shelterImagePath'] = $request->file('shelterImagePath')->store('shelter_photos', 'public');
+        }
+
+        $shelter->update($updateData); 
+
+        return redirect()->route('hazard_map.shelter')->with('success', 'Shelter updated successfuly!');
     }
 
     public function shelterStore(Request $request)

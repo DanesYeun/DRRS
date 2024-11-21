@@ -5,23 +5,22 @@
 
         <div class="d-flex flex-row justify-content-between">
             <h3 class="text-start mx-2 text-primary">Donation Form</h3>
-            @if(session('error'))
-                <x-alert response="error" color="danger"/>
-            @elseif(session('success'))
-                <x-alert response="success" color="success"/>
-            @endif
             <a class="btn btn-danger col-4 col-md-2 mb-3 " href="{{  route('landingPage') }}">
                 <i class="bi bi-backspace-fill p-2"></i>
                 Back
             </a>
         </div>
 
+        @if(session('error'))
+            <x-alert response="error" color="danger"/>
+        @elseif(session('success'))
+            <x-alert response="success" color="success"/>
+        @endif
+
         <div class="mx-2 mb-3 p-2">
             <form method="post" action="{{ route('store.donation') }}" class="needs-validation" novalidate>
                 @csrf
-                <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">
-
-                
+                <div class="border container bg-white rounded row mx-2 px-3 pt-5 pb-2">             
                     <x-input name="fullname" label="Complete Name" type="text" value="{{$donation['fullname']}}" readOnly="true"/>
                     <x-input name="contactno" label="Contact Number" value="{{$donation['contactno']}}" type="number" readOnly="true"/>
                     <x-input name="donationMode" label="Donation Mode" value="{{$donation['donationModeDesc']}}" type="text" readOnly="true"/>
