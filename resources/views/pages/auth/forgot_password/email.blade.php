@@ -8,8 +8,11 @@
     </div>
     <div class="col-12 col-md-6 p-md-5 my-5 py-5">
         <div class="border rounded bg-white shadow p-3 mx-md-5">          
-            <x-alert response="error" color="danger"/>
-            <x-alert response="success" color="success"/>
+            @if(session('error'))
+                <x-alert response="error" color="danger"/>
+            @elseif(session('success'))
+                <x-alert response="success" color="success"/>
+            @endif
             
             <form action="{{ route('password.email') }}" method="POST">
                 @csrf

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class ForgotPasswordController extends Controller
 {
@@ -24,12 +25,16 @@ class ForgotPasswordController extends Controller
     public function forgotPassword(Request $request)
     {
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,emailaddress',
         ]);
 
+        if ($validator->fails()) {
+            return back()->with('error', implode('<br>', $validator->errors()->all()));
+        }
+
         $token = Str::random(64);
-        
+
         // store token in the password_resets table
         DB::table('password_reset_tokens')->insert([
             'email' => $request->email,
