@@ -1,7 +1,11 @@
 @props(['label', 'datas' => null])
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
-        <h5 class="p-1 text-secondary">{{ $label }}</h5>
+        {{-- <h5 class="p-1 text-secondary">{{ $label }}</h5> --}}
+        <div class="d-flex align-items-center gap-2">
+            <input type="month" id="reportMonth" class="form-control w-50" placeholder="Select month">
+            <a href="#" class="btn btn-primary" id="generateReportLink">Generate Report</a>
+        </div>
         <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
     <table id="responses-table" class="table table-hover table-borderless">
@@ -57,6 +61,21 @@
 <script>
     document.getElementById("searchInput").addEventListener("input", function() {
         searchTable("searchInput", "responses-table");
+    });
+</script>
+
+<script>
+    document.getElementById('generateReportLink').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const month = document.getElementById('reportMonth').value;
+        if (!month) {
+            alert('Please select a month first.');
+            return;
+        }
+
+        const url = `response-records/monthly-report?month=${month}`;
+        window.location.href = url; 
     });
 </script>
 @endsection
