@@ -130,7 +130,7 @@ class IncidentReportController extends Controller
 
             }
 
-            return redirect()->route('landingPage')->with('success', 'Successfully sent incident report!');
+            return redirect()->route('landingPage')->with('success', 'Incident report has been sent!');
             // return redirect()->back()->with('success', 'Successfully sent incident report!');
 
         }catch(\Exception $e){

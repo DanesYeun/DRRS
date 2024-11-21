@@ -44,4 +44,5 @@
 @endsection
 
 @section('js')
+    <script src="{{ asset('js/formValidation.js') }}"></script>
 @endsection

@@ -102,8 +102,11 @@
                                 <x-input id="latitude" name="latitude" label="Latitude" type="text"  mdSize="5" readOnly="true"/>
                                 <x-input id="longitude" name="longitude" label="Longitude" type="text"  mdSize="5" readOnly="true"/>
                                 <!-- Button to  get coordinates -->
-                                <div class="col-md-2">
-                                    <button id="locate-button" class="btn btn-primary">Get My Location</button>
+                                <div class="col-12 col-md-2 mb-3">
+                                    <button id="locate-button" class="btn btn-primary w-100">
+                                        <i class="bi bi-pin-map-fill p-2 d-md-none d-md-inline"></i>
+                                        Get My Location
+                                    </button>
                                 </div>
                                 
                             </div>

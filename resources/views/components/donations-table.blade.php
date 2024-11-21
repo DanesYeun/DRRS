@@ -1,5 +1,10 @@
 @props(['label', 'datas' => null, 'type'])
 <div class="container mt-2 table-container"> 
+    <div class="mb-1 d-flex justify-content-between">
+        <h5 class="p-1 text-secondary">{{ $label }}</h5>
+        <!-- <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">   -->
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover table-borderless">
             <thead class="rounded-top">
@@ -49,7 +54,7 @@
                                     @csrf
                                 </form>
                             @endif
-                            <a class="btn btn-sm btn-warning text-white" href="{{ route('print.donation', ['type' => $type, 'id' => $data['donationID']]) }}">
+                            <a class="btn btn-sm btn-warning text-white my-2" href="{{ route('print.donation', ['type' => $type, 'id' => $data['donationID']]) }}">
                                 <i class="bi bi-printer"></i>
                             </a>
                         </td>
@@ -64,3 +69,4 @@
         <ul class="pagination justify-content-end" id="pagination"></ul>
     </nav>
 </div>
+
