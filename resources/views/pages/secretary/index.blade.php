@@ -3,11 +3,14 @@
 @section('content')
     <div class="d-flex flex-column m-md-2">
         <h3 class="text-start mx-2 text-primary">Donation Records</h3>
-        @if(session('error'))
-            <x-alert response="error" color="danger"/>
-        @elseif(session('success'))
-            <x-alert response="success" color="success"/>
-        @endif
+        <div id="alert-container">
+            @if(session('error'))
+                <x-alert response="error" color="danger"/>
+            @elseif(session('success'))
+                <x-alert response="success" color="success"/>
+            @endif
+        </div>
+        
         <x-select name="donation_type" label="Donation Type" :options="$type" sizeMd="3" required="true" onchange="toggleFields(this.value)"/> 
 
         <!-- Cash Fields -->
@@ -49,5 +52,45 @@
         // On change of select
         incidentTypeSelect.addEventListener('change', toggleFields);
     });
+ </script>
+ <script>
+    function submitPickupForm(donationID, type) {
+        
+        let _token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        $.ajax({
+            url:  `{{ url('/pickup/donation')}}`,
+            type: "POST",
+            data: {
+                _token: _token,
+                id: donationID,
+                type: type
+            },
+            success: function(response) {
+                console.log(response.message);
+                if (response.success) {
+                    showAlert('success', response.message);
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000); 
+                } else {
+                    showAlert('error', response.message);
+                }
+            }
+        });
+        
+    }
+
+    function showAlert(type, message) {
+        let alertClass = type === 'success' ? 'alert-success' : 'alert-danger'; 
+        let alertElement = `
+            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+
+        // Fix: Use #alert-container instead of .alert-container
+        document.querySelector('#alert-container').innerHTML = alertElement;
+    }
  </script>
 @endsection
