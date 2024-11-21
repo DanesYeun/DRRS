@@ -9,6 +9,7 @@
                 <span class="d-none d-sm-inline">Back</span>
             </a>
         </div>
+        <x-alert response="success" color="success"/>
         <div class="mx-2 mb-3 p-2">
             <x-hazards-table label="Hazard History" :datas="$hazards"/>
             <hr>
