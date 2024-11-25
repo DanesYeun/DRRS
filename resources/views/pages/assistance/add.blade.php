@@ -34,7 +34,7 @@
                     <div class="mb-4"></div>
                     <h6 class="text-start mx-2 text-primary">HEAD OF THE FAMILY</h6>
                     <x-input name="first_name" label="First Name" type="text" mdSize="3" required="true"/>
-                    <x-input name="middle_name" label="Middle Name" type="text" mdSize="3" required="true"/>
+                    <x-input name="middle_name" label="Middle Name" type="text" mdSize="3"/>
                     <x-input name="last_name" label="Last Name" type="text" mdSize="3" required="true"/>
                     <x-input name="suffix" label="Name Ext. (Jr.,Sr.)" type="text" mdSize="3"/>
 
