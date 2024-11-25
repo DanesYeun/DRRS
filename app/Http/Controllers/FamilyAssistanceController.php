@@ -30,7 +30,7 @@ class FamilyAssistanceController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string|max:50',
-                'middle_name' => 'required|string|max:50',
+                'middle_name' => 'nullable|string|max:50',
                 'last_name' => 'required|string|max:50',
                 'suffix' => 'nullable|string|max:20',
                 'birthdate' => 'required|date',

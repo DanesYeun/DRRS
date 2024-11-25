@@ -24,7 +24,7 @@
                 <div class="border bg-white rounded row mx-2 px-3 pt-5 pb-2">
                     <h3 class="text-primary text-start mb-3">Donation Form</h3>
                     <x-input name="fullname" label="Complete Name" type="text" required="true"/>
-                    <x-input name="contactno" label="Contact Number" type="number"/>
+                    <x-input name="contactno" label="Contact Number" type="tel" pattern="^(09|\+639)\d{9}$" minLength="7" maxLength="15"/>
                     <x-select name="donationMode" label="Donation Mode" :options="$donation_mode" required="true"/> 
 
 
@@ -59,7 +59,7 @@
 @endsection
 
 @section('js')
-
+<script src="{{ asset('js/formValidation.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const incidentTypeSelect = document.getElementById('donation_type');
