@@ -11,13 +11,12 @@
             <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'response_records') ? 'bg-light' : ''}}" href="{{ route('response_records.index') }}">         
                 <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'response_records') ? 'bi-credit-card-2-front-fill' : 'bi-credit-card-2-front' }} fs-5 p-2"></i>
             </a>
-
-            <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'incident_report') || Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bg-light' : '' }}" href="{{ route('incident_report.show_all') }}">         
-                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
-            </a>
         @endif
 
         @if(Auth::check() && in_array(Auth::user()->role, [1, 2]))
+            <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'incident_report') || Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bg-light' : '' }}" href="{{ route('incident_report.show_all') }}">         
+                <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
+            </a>
             <a class="nav-link p-2 rounded {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bg-light' : '' }}" href="{{ route('patient_care.index') }}">         
                 <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bi-clipboard2-pulse-fill' : 'bi-clipboard2-pulse' }} fs-5 p-2"></i>
             </a>

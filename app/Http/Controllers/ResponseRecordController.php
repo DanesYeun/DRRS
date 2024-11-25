@@ -23,14 +23,10 @@ class ResponseRecordController extends Controller
   
     public function create()
     {
-        $locations = [
-            ['id' => 1, 'name' => 'location 1'],
-            ['id' => 2, 'name' => 'location 2'],
-        ];
         $cases = map_options(Cases::class, 'id', 'description');
         $genders = map_options(Gender::class, 'id', 'description');
 
-        return view('pages.responseRecords.add', compact('locations', 'cases', 'genders'));
+        return view('pages.responseRecords.add', compact( 'cases', 'genders'));
     }
 
     public function store(Request $request)
@@ -40,7 +36,7 @@ class ResponseRecordController extends Controller
                 'date' => 'required|date',
                 'time' => 'nullable|string|max:50',
                 'incidentFrom' => 'required|string|max:50',
-                'takenTo' => 'nullable|string|max:50',
+                'takenTo' => 'required|string|max:50',
                 'callerOrReporter' => 'nullable|string|max:50',
                 'patientName' => 'required|string|max:50',
                 'patientAge' => 'nullable|integer',
@@ -66,14 +62,10 @@ class ResponseRecordController extends Controller
     {
         $record = ResponseRecord::findOrFail($id);
 
-        $locations = [
-            ['id' => 1, 'name' => 'location 1'],
-            ['id' => 2, 'name' => 'location 2'],
-        ];
         $cases = map_options(Cases::class, 'id', 'description');
         $genders = map_options(Gender::class, 'id', 'description');
 
-        return view('pages.responseRecords.edit', compact('record', 'locations', 'cases', 'genders'));
+        return view('pages.responseRecords.edit', compact('record', 'cases', 'genders'));
     }
 
     //update record

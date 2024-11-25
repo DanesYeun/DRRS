@@ -319,19 +319,19 @@ class PatientCareReportController extends Controller
     }
 
     public function download($id)
-{
-    $patientCareReport = PatientCareReport::findOrFail($id);
+    {
+        $patientCareReport = PatientCareReport::findOrFail($id);
 
-    $dompdf = new Dompdf();
+        $dompdf = new Dompdf();
 
-    $html = view('pages.patientCareReports.patient-care-report-pdf', compact('patientCareReport'))->render();
+        $html = view('pages.patientCareReports.patient-care-report-pdf', compact('patientCareReport'))->render();
 
-    $dompdf->loadHtml($html);
+        $dompdf->loadHtml($html);
 
-    $dompdf->setPaper('A4', 'portrait');
+        $dompdf->setPaper('A4', 'portrait');
 
-    $dompdf->render();
+        $dompdf->render();
 
-    return $dompdf->stream('patient_care_report.pdf', ['Attachment' => false]);
-}
+        return $dompdf->stream('patient_care_report.pdf', ['Attachment' => false]);
+    }
 }

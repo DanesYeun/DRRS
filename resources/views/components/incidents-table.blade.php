@@ -31,14 +31,15 @@
                                 <i class="bi bi-pencil-square"></i>
                                 <span class="d-none d-sm-inline">View</span>
                             </a>
-                            <a class="btn btn-sm btn-danger text-white my-2" href="" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $data->reportID }}').submit();">
-                                <i class="bi bi-exclamation-circle"></i>
-                                <span class="d-none d-sm-inline">Delete</span>
-                            </a>
-
-                            <form id="delete-form-{{ $data->reportID }}" action="{{ route('incident_report.delete', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}" method="POST" style="display: none;">
-                                @csrf
-                            </form> 
+                            @if(Auth::check() && Auth::user()->role == 1)
+                                <a class="btn btn-sm btn-danger text-white my-2" href="" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $data->reportID }}').submit();">
+                                    <i class="bi bi-exclamation-circle"></i>
+                                    <span class="d-none d-sm-inline">Delete</span>
+                                </a>
+                                <form id="delete-form-{{ $data->reportID }}" action="{{ route('incident_report.delete', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form> 
+                            @endif     
                         </td>
                     </tr>
                 @endforeach

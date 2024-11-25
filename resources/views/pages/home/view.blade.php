@@ -4,7 +4,7 @@
     @if ($hazardAlert)
         <div class="mt-4 alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-diamond-fill"></i>
-            <span>Warning! {{ $latestHazard->hazardName }} occured last {{ $latestHazard->updated_at->diffForHumans() }}</span> 
+            <span>Warning! {{ $latestHazard->hazardName }} occured {{ $latestHazard->updated_at->diffForHumans() }}</span> 
         </div>
     @endif
 

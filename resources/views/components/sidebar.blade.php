@@ -7,6 +7,7 @@
                 Home
             </a>
         </li>
+
         @if(Auth::check() && Auth::user()->role == 1)
             <li class="nav-item py-1">
                 <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'users') ? 'bg-light' : ''}}" href="{{ route('users') }}">         
@@ -21,15 +22,15 @@
                     Response Records
                 </a>
             </li>
+        @endif
 
+        @if(Auth::check() && in_array(Auth::user()->role, [1, 2]))
             <li class="nav-item py-1">
                 <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'incident_report') || Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bg-light' : '' }}" href="{{ route('incident_report.show_all') }}">         
                     <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'incident_report') ? 'bi bi-file-text-fill' : 'bi bi-file-text' }} fs-5 p-2"></i>
                     Incident Reports
                 </a>
             </li>
-        @endif
-        @if(Auth::check() && in_array(Auth::user()->role, [1, 2]))
             <li class="nav-item py-1">
                 <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bg-light' : '' }}" href="{{ route('patient_care.index') }}">         
                     <i class="bi {{ Str::startsWith(Route::currentRouteName(), 'patient_care') ? 'bi-clipboard2-pulse-fill' : 'bi-clipboard2-pulse' }} fs-5 p-2"></i>
@@ -44,6 +45,7 @@
                 </a>
             </li>
         @endif
+
         @if(Auth::check() && in_array(Auth::user()->role, [3]))
             <li class="nav-item py-1">
                 <a class="nav-link rounded {{ Str::startsWith(Route::currentRouteName(), 'family.assistance') || Str::startsWith(Route::currentRouteName(), 'family.assistance') ? 'bg-light' : '' }}" href="{{ route('family.assistance.records') }}">         
@@ -58,6 +60,7 @@
                 </a>
             </li>
         @endif
+        
         <li class="nav-item py-1">
             <a class="nav-link text-danger" href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">         
                 <i class="bi bi-door-closed fs-5 p-2"></i> 

@@ -16,9 +16,9 @@
                     <h4 class="py-2 text-primary text-start">Response Details</h4>
                     <x-input name="date" label="Date" type="date" value="{{ $record->date }}"/>
                     <x-input name="time" label="Time" type="time" value="{{ $record->time }}"/>
-
-                    <x-select name="incidentFrom" label="Incident From" :options="$locations" required="true" value="{{ $record->incidentFrom }}"/>
-                    <x-select name="takenTo" label="Taken To" :options="$locations" required="true" value="{{ $record->takenTo }}"/>
+                    
+                    <x-input name="incidentFrom" label="Incident From" type="text" value="{{ $record->incidentFrom }}"/>
+                    <x-input name="takenTo" label="Taken To" type="text" value="{{ $record->takenTo }}"/>
 
                     <x-input name="callerOrReporter" label="Reporter" type="text" value="{{ $record->callerOrReporter }}"/>
                     <x-input name="patientName" label="Patient" type="text" value="{{ $record->patientName }}"/>
