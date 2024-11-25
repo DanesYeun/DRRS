@@ -33,8 +33,8 @@
                                     <x-input name="contactNumber" label="Contact Number" type="number" mdSize="6"/>
                                             
                                     <x-input name="incidentPlace" label="Place of Incident" type="text" mdSize="6" required="true"/>
-                                    <x-input name="incidentDate" label="Date of Incident" type="date" mdSize="4" required="true"/>
-                                    <x-input name="time" label="Time of Incident" type="time" mdSize="2" required="true"/>
+                                    <x-input name="incidentDate" label="Date of Incident" type="date" mdSize="4" required="true" value="{{ now()->toDateString() }}" />
+                                    <x-input name="time" label="Time of Incident" type="time" mdSize="2" required="true" value="{{ now()->format('H:i')}}" />
 
                                     <x-select name="case" label="Case" :options="$cases" required="true"/>
                                     <div class="d-none d-sm-inline col-6"></div>

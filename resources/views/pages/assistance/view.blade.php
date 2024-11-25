@@ -101,7 +101,7 @@
                     </table>
                     
                     <div class="d-flex justify-content-end">   
-                        <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i>  Print Report
+                        <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i>  Print Form
                         </button>
                     </div> 
                 </div>

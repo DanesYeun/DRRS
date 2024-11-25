@@ -1,4 +1,16 @@
 @props(['label', 'datas' => null])
+<!-- toast notification -->
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" id="myToast">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi bi-exclamation-circle-fill p-2"></i>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+<!-- Wala na nako gi component -->
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
         {{-- <h5 class="p-1 text-secondary">{{ $label }}</h5> --}}
@@ -69,7 +81,12 @@
 
         const month = document.getElementById('reportMonth').value;
         if (!month) {
-            alert('Please select a month first.');
+            const toastContainer = document.querySelector('.toast-container');
+            const toastBody = toastContainer.querySelector('.toast-body');
+            toastBody.innerHTML = '<i class="bi bi-check-circle-fill p-2"></i>Please select a month first.';
+            
+            const toast = new bootstrap.Toast(document.getElementById('myToast'));
+            toast.show();
             return;
         }
 
