@@ -42,9 +42,7 @@ class DonationController extends Controller
             if(is_null($request->amount)){
     
                 $validator = Validator::make($request->all(), [
-                    'category' => 'required|integer',
-                    'itemName' => 'required|string',
-                    'quantity' => 'nullable|integer'
+                    'definition' => 'required|string',
                 ]);
     
                 if ($validator->fails()) {
@@ -55,9 +53,7 @@ class DonationController extends Controller
                     'fullname' => $request->fullname, 
                     'contactno' => $request->contactno, 
                     'donationMode' => $request->donationMode, 
-                    'category' => $request->category, 
-                    'itemName' => $request->itemName, 
-                    'quantity' => $request->quantity, 
+                    'definition' => $request->definition, 
                     'isPickUp' => 0
                 ]);
     
@@ -83,7 +79,6 @@ class DonationController extends Controller
         
         try {
             $donation_mode = map_options_raw('donation_mode', 'id', 'description');
-            $categories = map_options_raw('donation_category', 'id', 'description');
 
             $type = [
                 ['id' => 1, 'name' => 'Cash'],
@@ -94,7 +89,7 @@ class DonationController extends Controller
             $inkindDonations = InKindDonation::get_data();
 
             // dd($inkindDonations, $cashDonations);
-            return view('pages.secretary.index', compact('type', 'donation_mode', 'categories', 'cashDonations', 'inkindDonations'));
+            return view('pages.secretary.index', compact('type', 'donation_mode', 'cashDonations', 'inkindDonations'));
 
         }catch(\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -125,8 +120,9 @@ class DonationController extends Controller
             // return redirect()->route('donations')->with('success', 'Donation pickup successfully confirmed.');
             return response()->json([
                 'success' => true,
-                'message' => 'Donation pickup successfully confirmed.'
+                'message' => 'Donation Received!'
             ]);
+            
         } catch(\Exception $e) {
             // return back()->with('error', $e->getMessage());
 

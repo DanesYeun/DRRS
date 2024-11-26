@@ -18,7 +18,7 @@ class DisasterIR extends Model
         'photoPathFile',
         'description',
         'disasterTypeID',
-        'coordinates'
+        // 'coordinates'
     ];
 
     public function incidentReports()

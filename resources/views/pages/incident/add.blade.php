@@ -23,7 +23,13 @@
                 <div class="border bg-white rounded row mx-2 px-3 pt-5 pb-2">
                     <h3 class="text-start text-primary mb-3">Incident Report</h3>
                     <x-select name="incident_type" label="Type of Incident" :options="$cases" required="true" onchange="toggleFields(this.value)"/> 
-
+                    <x-input name="place" label="Place of Incident" type="text"/>
+                    <x-input name="date" label="Date" type="date" value="{{ \Carbon\Carbon::now()->toDateString() }}"/>
+                    <x-input name="time" label="Time" type="time" value="{{ \Carbon\Carbon::now()->format('H:i')}}"/>
+                    <x-input name="landmark" label="Landmark" type="text"/>
+                    <x-input name="number_casualties" label="Number of Casualties" type="number" dNone="true"/>
+                    <x-input name="reporter_name" label="Reporter FullName" type="text"/>
+                    <x-input name="reporter_contactno" label="Reporter Contact Number" type="number" pattern="^(09|\+639)\d{9}$" minLength="7" maxLength="15"/>
                     <div class="mb-4"></div>
 
                     <!-- Obstetrics Fields -->
@@ -39,56 +45,17 @@
                  
                     <!-- Medical Fields -->
                     <div id="2-fields" class="incident-fields d-none">
-                        <div id="medical-container" class="patient-container">
-                            <div class="row patient-row">
-                                <x-input name="medical[0][full_name]" label="Patient Full Name" type="text" mdSize="4"/>
-                                <x-input name="medical[0][heart_rate]" label="Heart Rate (BPM)" type="number" mdSize="3"/>
-                                <x-single-checkbox label="Shortness of Breath" name="medical[0][shortness_breath]" mdSize="2"/> 
-                                <x-single-checkbox label="Paleness" name="medical[0][paleness]" mdSize="2"/> 
-                                <div class="col-md-1 d-flex justify-content-center p-0">
-                                    <button type="button" class="btn btn-danger btn-sm p-1 remove-patient-btn" style="width: 30px; height: 30px;">
-                                        <i class="bi bi-x-lg fs-7"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-success mt-2 mb-2 add-patient-btn" data-container-id="medical-container" data-type="medical">Add Patient</button>
+                        <div id="medical-container"></div>
                     </div>
 
                     <!-- Injury/Trauma Fields -->
                     <div id="3-fields" class="incident-fields d-none">
-                        <div id="injury-trauma-container" class="patient-container">
-                            <div class="row patient-row">
-                                <x-input name="injury_trauma[0][full_name]" label="Patient Full Name" type="text" mdSize="4"/>
-                                <x-input name="injury_trauma[0][heart_rate]" label="Heart Rate (BPM)" type="number" mdSize="3"/>
-                                <x-single-checkbox label="Shortness of Breath" name="injury_trauma[0][shortness_breath]" mdSize="2"/> 
-                                <x-single-checkbox label="Paleness" name="injury_trauma[0][paleness]" mdSize="2"/> 
-                                <div class="col-md-1 d-flex justify-content-center p-0">
-                                    <button type="button" class="btn btn-danger btn-sm p-1 remove-patient-btn" style="width: 30px; height: 30px;">
-                                        <i class="bi bi-x-lg fs-7"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-success mt-2 mb-2 add-patient-btn" data-container-id="injury-trauma-container" data-type="injury_trauma">Add Patient</button>
+                        <div id="injury-trauma-container"></div>
                     </div>
 
                     <!-- Cardia Fields -->
                     <div id="4-fields" class="incident-fields d-none">
-                        <div id="cardia-container" class="patient-container">
-                            <div class="row patient-row">
-                                <x-input name="cardia[0][full_name]" label="Patient Full Name" type="text" mdSize="4"/>
-                                <x-input name="cardia[0][heart_rate]" label="Heart Rate (BPM)" type="number" mdSize="3"/>
-                                <x-single-checkbox label="Shortness of Breath" name="cardia[0][shortness_breath]" mdSize="2"/> 
-                                <x-single-checkbox label="Paleness" name="cardia[0][paleness]" mdSize="2"/> 
-                                <div class="col-md-1 d-flex justify-content-center p-0">
-                                    <button type="button" class="btn btn-danger btn-sm p-1 remove-patient-btn" style="width: 30px; height: 30px;">
-                                        <i class="bi bi-x-lg fs-7"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-success mt-2 mb-2 add-patient-btn" data-container-id="cardia-container" data-type="cardia">Add Patient</button>
+                        <div id="cardia-container"></div>
                     </div>
 
                     <div id="5-fields" class="incident-fields d-none">
@@ -98,7 +65,7 @@
                                 <x-input name="disaster_image" label="Photo" type="file" accept="image/*"/>
                                 <x-input name="description" label="Description" type="text" mdSize="12"/>
                                  
-                                <!-- Hidden inputs to store coordinates -->
+                                {{--
                                 <x-input id="latitude" name="latitude" label="Latitude" type="text"  mdSize="5" readOnly="true"/>
                                 <x-input id="longitude" name="longitude" label="Longitude" type="text"  mdSize="5" readOnly="true"/>
                                 <!-- Button to  get coordinates -->
@@ -107,21 +74,11 @@
                                         <i class="bi bi-pin-map-fill p-2 d-md-none d-md-inline"></i>
                                         Get My Location
                                     </button>
-                                </div>
+                                </div> --}}
                                 
                             </div>
                         </div>
                     </div>
-
-                    <hr/>
-
-                    <x-input name="date" label="Date" type="date" value="{{ now()->toDateString() }}"/>
-                    <x-input name="time" label="Time" type="time" value="{{ now()->format('H:i') }}"/>
-                    <x-input name="place" label="Place of Incident" type="text"/>
-                    <x-input name="landmark" label="Landmark" type="text"/>
-                    <x-input name="number_casualties" label="Number of Casualties" type="number"/>
-                    <x-input name="reporter_name" label="Reporter FullName" type="text"/>
-                    <x-input name="reporter_contactno" label="Reporter Contact Number" type="number"/>
 
                     <div class="d-flex justify-content-end">
                         <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i> Send Report</button>
@@ -135,7 +92,5 @@
 @section('js')
 
 <script src="{{ asset('js/incident-btn.js') }}"></script>
-
 <script src="{{ asset('js/incident-geo-api.js') }}"></script>
-
 @endsection

@@ -14,19 +14,16 @@ class InKindDonation extends Model
 
     protected $fillable = [
         'fullname',
-        'category',
-        'itemName',
-        'quantity',
         'contactno',
         'donationMode',
+        'definition',
         'isPickUp'
     ];
 
     public static function  get_data($id = null){
 
         $query = InKindDonation::leftJoin('donation_mode', 'inkind_donations.donationMode', '=', 'donation_mode.id')
-                ->leftJoin('donation_category', 'inkind_donations.category', '=', 'donation_category.id')
-                ->select('inkind_donations.*', 'donation_mode.description as donationModeDesc', 'donation_category.description as categoryDesc');
+                ->select('inkind_donations.*', 'donation_mode.description as donationModeDesc');
         
         if (!is_null($id)) {
             $query->where('inkind_donations.donationID', $id);

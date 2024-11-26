@@ -16,9 +16,7 @@
                         <th scope="col" class="p-3 bg-primary text-white">Amount</th>
                     @endif
                     @if($type == 2)
-                        <th scope="col" class="p-3 bg-primary text-white">Category</th>
-                        <th scope="col" class="p-3 bg-primary text-white">Item Name</th>
-                        <th scope="col" class="p-3 bg-primary text-white">Quantity</th>
+                        <th scope="col" class="p-3 bg-primary text-white">Definition</th>
                     @endif
                     <th scope="col" class="p-3 bg-primary text-white">Mode</th>
                     <th scope="col" class="p-3 bg-primary text-white">Status</th>
@@ -37,9 +35,7 @@
                             <td class="p-3">{{ $data['amount'] }}</td>
                         @endif
                         @if($type == 2)
-                            <td class="p-3">{{ $data['categoryDesc'] }}</td>
-                            <td class="p-3">{{ $data['itemName'] }}</td>
-                            <td class="p-3">{{ $data['quantity'] }}</td>
+                            <td class="p-3">{{ $data['definition'] }}</td>
                         @endif
                         <td class="p-3">{{ $data['donationModeDesc'] }}</td>
                         <td class="p-3">{{ $data['isPickUp'] == 0 ? 'Pending' : 'Received' }}</td>
