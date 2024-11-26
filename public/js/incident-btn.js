@@ -1,12 +1,54 @@
+function generatePatientFields(casualtiesCount, container, containerType) {
+    console.log(`Generating fields for ${casualtiesCount} casualties in container: ${containerType}...`);
+
+    if (!isNaN(casualtiesCount) && casualtiesCount > 0) {
+        container.innerHTML = ''; // Clear existing rows
+
+        for (let i = 0; i < casualtiesCount; i++) {
+            const patientFields = `
+                <div class="row patient-row">
+                    <div class="col-12 col-md-4 mb-2">
+                        <input type="text" class="form-control" name="${containerType}[${i}][full_name]" id="${containerType}_${i}_full_name">
+                        <small for="${containerType}_${i}_full_name" class="form-label text-primary">Patient Name</small>
+                    </div>
+                    <div class="col-12 col-md-3 mb-2">
+                        <input type="number" class="form-control" name="${containerType}[${i}][heart_rate]" id="${containerType}_${i}_heart_rate">
+                        <small for="${containerType}_${i}_heart_rate" class="form-label text-primary">Heart Rate (BPM)</small>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <input type="checkbox" class="form-check-input" id="${containerType}_${i}_shortness_breath" name="${containerType}[${i}][shortness_breath]">
+                        <small for="${containerType}_${i}_shortness_breath" class="form-check-label text-primary">Shortness of Breath</small>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <input type="checkbox" class="form-check-input" id="${containerType}_${i}_paleness" name="${containerType}[${i}][paleness]">
+                        <small for="${containerType}_${i}_paleness" class="form-check-label text-primary">Paleness</small>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', patientFields);
+        }
+    } else {
+        console.error('Invalid casualties count or missing incident type.');
+    }
+}
+
+// Adjust the input listener to pass container types
 document.addEventListener('DOMContentLoaded', function () {
     const incidentTypeSelect = document.getElementById('incident_type');
     const incidentFields = document.querySelectorAll('.incident-fields');
+    const numberCasualtiesInput = document.getElementById('number_casualties');
+    const medicalContainer = document.getElementById('medical-container');
+    const injuryTraumaContainer = document.getElementById('injury-trauma-container');
+    const cardiaContainer = document.getElementById('cardia-container');
 
-    // Function to show/hide fields based on selected incident type
     function toggleFields(selectedType) {
-        // Hide all fields
+        if (selectedType === "1") {
+            numberCasualtiesInput.closest('div').classList.add('d-none');
+        } else {
+            numberCasualtiesInput.closest('div').classList.remove('d-none');
+        }
+
         incidentFields.forEach(field => field.classList.add('d-none'));
-        // Show the selected field
         if (selectedType) {
             const selectedField = document.getElementById(`${selectedType}-fields`);
             if (selectedField) {
@@ -15,80 +57,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Initialize field visibility based on the current value of incident_type
     toggleFields(incidentTypeSelect.value);
 
-    // Bind onchange event to the incident type select
     incidentTypeSelect.addEventListener('change', function () {
         toggleFields(this.value);
     });
 
-    // Add event listeners for adding/removing rows for patient fields
-document.querySelectorAll('.add-patient-btn').forEach(button => {
-    button.addEventListener('click', (e) => {
-        const containerId = e.target.dataset.containerId;
-        const container = document.getElementById(containerId);
+    numberCasualtiesInput.addEventListener('input', function () {
+        const casualtiesCount = parseInt(this.value, 10) || 0;
 
-        const type = e.target.dataset.type;
+        console.log(`Number of casualties: ${casualtiesCount}`);
 
-        const patientRows = container.querySelectorAll('.patient-row');
-        const newIndex = patientRows.length; // Get the next index
-
-        // Clone the first row and update the field names
-        const firstRow = container.querySelector('.patient-row');
-        const clonedRow = firstRow.cloneNode(true);
-
-        // Update the input names for the new row
-        clonedRow.querySelectorAll('input').forEach(input => {
-            input.name = input.name.replace(/\[\d+\]/, `[${newIndex}]`);
-
-            // If the input is a checkbox, uncheck it
-            if (input.type === 'checkbox') {
-                input.checked = false;  // Uncheck the checkbox
-            }
-        });
-
-        // Clear the input fields in the cloned row
-        clonedRow.querySelectorAll('input').forEach(input => {
-            input.value = '';
-            
-     
-            if (input.type === 'checkbox') {
-                input.checked = false; 
-            }
-        });
-
-        container.appendChild(clonedRow);
-
-       
-        updateDeleteButtonState(container);
-        });
-    });
-
-      document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-patient-btn') || 
-            e.target.closest('.remove-patient-btn')) {
-            const rowToRemove = e.target.closest('.patient-row'); 
-            const container = rowToRemove.parentNode; 
-
-            // Remove the row
-            container.removeChild(rowToRemove);
-
-            // Update delete button states
-            updateDeleteButtonState(container);
-        }
-    });
-
-
-    function updateDeleteButtonState(container) {
-    const rows = container.querySelectorAll('.patient-row');
-    rows.forEach(row => {
-        const deleteButton = row.querySelector('.remove-patient-btn');
-        if (rows.length > 1) {
-        deleteButton.removeAttribute('disabled'); 
+        if (casualtiesCount > 0) {
+            generatePatientFields(casualtiesCount, medicalContainer, 'medical');
+            generatePatientFields(casualtiesCount, injuryTraumaContainer, 'injury_trauma');
+            generatePatientFields(casualtiesCount, cardiaContainer, 'cardia');
         } else {
-        deleteButton.setAttribute('disabled', 'disabled'); 
+            medicalContainer.innerHTML = '';
+            injuryTraumaContainer.innerHTML = '';
+            cardiaContainer.innerHTML = '';
         }
     });
-    }
 });

@@ -56,18 +56,18 @@
                     @elseif($incidentReport->typeOfIncident == 5)
                         
                         <x-input name="disasterType" type="input" label="Disaster Type" value="{{ $incidentReport->disaster->disasterType->description }}" readOnly/>
-                        <x-input name="coordinates" type="input" label="Location (Lat. & Lang.)" value="{{ implode(', ', json_decode($incidentReport->disaster->coordinates, true)) }}" readOnly/>
-                        <x-input name="description" type="input" label="Description" value="{{ $incidentReport->disaster->description }}" mdSize="12" readOnly/>
+                        <x-input name="description" type="input" label="Description" value="{{ $incidentReport->disaster->description }}" readOnly/>
                     @endif
-
-                    <div class="mb-4"></div>
-                    <x-input name="date" label="Date" type="date" value="{{ $incidentReport->date }}" readOnly/>
-                    <x-input name="time" label="Time" type="time" value="{{ $incidentReport->time }}" readOnly/>
+                    
                     <x-input name="incidentPlace" type="input" label="Place of Incident" value="{{ $incidentReport->incidentPlace }}" readOnly/>
                     <x-input name="landmark" type="input" label="Landmark" value="{{ $incidentReport->landmark }}" readOnly/>
-                    <x-input name="numberOfCasualties" type="input"  label="Number of Casualties" value="{{ $incidentReport->numberOfCasualties }}" readOnly/>
+                    <x-input name="date" label="Date" type="date" value="{{ $incidentReport->date }}" readOnly/>
+                    <x-input name="time" label="Time" type="time" value="{{ $incidentReport->time }}" readOnly/>
                     <x-input name="reporterFullName" type="input" label="Reporter Name" value="{{ $incidentReport->reporterFullName }}" readOnly/>
                     <x-input name="reporterContactNumber" type="input" label="Reporter Contact Number" value="{{ $incidentReport->reporterContactNumber }}" readOnly/>
+                    @if($incidentReport->typeOfIncident != 1)
+                        <x-input name="numberOfCasualties" type="input"  label="Number of Casualties" value="{{ $incidentReport->numberOfCasualties }}" readOnly/>
+                    @endif
 
                     @if($incidentReport->typeOfIncident == 5)
                         <div class="col-12 mb-3">

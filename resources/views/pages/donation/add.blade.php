@@ -27,24 +27,20 @@
                     <x-input name="contactno" label="Contact Number" type="tel" pattern="^(09|\+639)\d{9}$" minLength="7" maxLength="15"/>
                     <x-select name="donationMode" label="Donation Mode" :options="$donation_mode" required="true"/> 
 
-
-                    <x-select name="donation_type" label="Donation Type" :options="$type" required="true" onchange="toggleFields(this.value)"/> 
+                    <x-select name="donation_type" label="Donation Type" :options="$type" required="true" onchange="toggleField(this.value)"/>
 
                     <!-- Cash Fields -->
-                    <div id="1-fields" class="donation-fields d-none">
-                        <div class="row">
-                            <x-input name="amount" label="Amount" type="number" />
-                        </div>
-                    </div>
+                    <x-input id="amount" name="amount" label="Amount" type="number" dNone="true" />
                  
                     <!-- Inkind Fields -->
-                    <div id="2-fields" class="donation-fields d-none">
+                    <x-input id="definition" name="definition" label="Define your Donation" type="text" dNone="true" />
+                    {{-- <div id="2-fields" class="donation-fields d-none">
                         <div class="row">
                             <x-select name="category" label="Category" :options="$categories"/>
                             <x-input name="itemName" label="Item Name" type="text" />
                             <x-input name="quantity" label="Quantity" type="number" />
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="d-flex justify-content-end">   
                         <button id="submit-btn" class="btn btn-success">
@@ -62,25 +58,29 @@
 <script src="{{ asset('js/formValidation.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const incidentTypeSelect = document.getElementById('donation_type');
-        const incidentFields = document.querySelectorAll('.donation-fields');
- 
-        // Function to show/hide fields based on selected incident type
-        function toggleFields() {
-            incidentFields.forEach(field => field.classList.add('d-none')); // Hide all fields
-            const selectedType = incidentTypeSelect.value;
-            if (selectedType) {
-                const selectedField = document.getElementById(`${selectedType}-fields`);
-                if (selectedField) selectedField.classList.remove('d-none'); // Show selected field
+        const donationTypeSelect = document.getElementById('donation_type');
+        const amountField = document.getElementById('amount');
+        const definitionField = document.getElementById('definition');
+
+        function toggleField(selectedType) {
+            
+            if (selectedType === "1") {
+                amountField.closest('div').classList.remove('d-none'); 
+                definitionField.closest('div').classList.add('d-none'); 
+            } else if(selectedType === "2") {
+                amountField.closest('div').classList.add('d-none'); 
+                definitionField.closest('div').classList.remove('d-none');
             }
         }
- 
+
         // Initial load
-        toggleFields();
- 
+        toggleField(donationTypeSelect.value);
+
         // On change of select
-        incidentTypeSelect.addEventListener('change', toggleFields);
+        donationTypeSelect.addEventListener('change', function () {
+            toggleField(this.value);
+        });
     });
- </script>
+</script>
  
 @endsection

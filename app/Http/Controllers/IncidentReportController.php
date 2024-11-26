@@ -10,8 +10,6 @@ use App\Models\MedicalIR;
 use App\Models\InjuryTraumaIR;
 use App\Models\CardiaIR;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class IncidentReportController extends Controller
@@ -100,7 +98,8 @@ class IncidentReportController extends Controller
                 }
                
             }else if($case == 5){
-
+                // dd($request->disaster_type);
+                $path = null;
                 if ($request->hasFile('disaster_image') && $request->file('disaster_image')->isValid()){
 
                     $request->validate([
@@ -118,14 +117,14 @@ class IncidentReportController extends Controller
                   
                 }
 
-                $coordinates = [$request->latitude, $request->longitude];
+                // $coordinates = [$request->latitude, $request->longitude];
                 
                 DisasterIR::create([
                     'reportID' => $incidentReport->reportID, 
                     'photoPathFile' => $path,  
                     'description' => $request->description ,
                     'disasterTypeID' => $request->disaster_type,
-                    'coordinates' => json_encode($coordinates),
+                    // 'coordinates' => json_encode($coordinates),
                 ]);
 
             }

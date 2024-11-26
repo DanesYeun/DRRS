@@ -11,10 +11,11 @@
     'maxLength' => null,
     'min' => null, 
     'max' => null,
-    'pattern' => null 
+    'pattern' => null,
+    'dNone' => false
 ])
 
-<div class="col-12 col-md-{{ $mdSize }} mb-2">
+<div class="col-12 col-md-{{ $mdSize }} mb-2 {{ $dNone ? 'd-none' : '' }}">
     <input 
         type="{{ $type }}" 
         class="form-control" 
