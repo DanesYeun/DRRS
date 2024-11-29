@@ -24,6 +24,25 @@
     </div>
 
     <div class="d-flex flex-column flex-md-row m-md-2 py-2">
+        <div class="col-12 px-3 row m-0 d-flex justify-content-center">
+            <h3 class="text-primary col-12">Track Incident Report Status</h3>    
+            <div class="w-50 col-12">
+                <form class="row m-0 gap-1" action="#">
+                    <div class="col-md-7 col-12">
+                        <input class="form-control" type="text" name="searchIncident">
+                    </div>
+                    <div class="col-md-4 col-12 d-flex">
+                        <button class="btn btn-outline-primary flex-fill" type=submit">
+                            <i class="bi bi-search"></i>
+                            Find Incident
+                        </button>
+                    </div>
+                </form>   
+            </div>        
+        </div>
+    </div>
+
+    <div class="d-flex flex-column flex-md-row m-md-2 py-2">
         <div class="col-12 col-md-6 text-start px-3">
             <h3 class="text-primary">Donate</h3>
             <p class="">               
