@@ -65,9 +65,12 @@
                                 <x-input name="disaster_image" label="Photo" type="file" accept="image/*"/>
                                 <x-input name="description" label="Description" type="text" mdSize="12"/>
                                  
+
+                                <input id="latitude" name="latitude" label="Latitude" type="text" mdSize="5" readOnly="true" hidden />
+                                <input id="longitude" name="longitude" label="Longitude" type="text" mdSize="5" readOnly="true" hidden />
+                                
                                 {{--
-                                <x-input id="latitude" name="latitude" label="Latitude" type="text"  mdSize="5" readOnly="true"/>
-                                <x-input id="longitude" name="longitude" label="Longitude" type="text"  mdSize="5" readOnly="true"/>
+                                
                                 <!-- Button to  get coordinates -->
                                 <div class="col-12 col-md-2 mb-3">
                                     <button id="locate-button" class="btn btn-primary w-100">

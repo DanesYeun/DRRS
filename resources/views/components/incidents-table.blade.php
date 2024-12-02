@@ -1,7 +1,10 @@
 @props(['label', 'datas' => null])
 <div class="container mt-2 table-container">   
     <div class="mb-1 d-flex justify-content-between">
-        <h5 class="p-1">{{ $label }}</h5>
+        <div class="d-flex align-items-center gap-2">
+            <input type="month" id="reportMonth" class="form-control w-50" placeholder="Select month">
+            <a href="#" class="btn btn-primary" id="generateReportLink">Generate Report</a>
+        </div>
         <input type="text" id="searchInput" class="form-control w-25" placeholder="Search...">  
     </div>
     <div class="table-responsive">
@@ -12,6 +15,7 @@
                     <th scope="col" class="p-3 bg-primary text-white">Reporter Name</th>
                     <th scope="col" class="p-3 bg-primary text-white d-none d-sm-table-cell">Reporter Contact No.</th>
                     <th scope="col" class="p-3 bg-primary text-white">Case</th>
+                    <th scope="col" class="p-3 bg-primary text-white">Reference Code</th>
                     <th scope="col" class="p-3 bg-primary text-white">Status</th>
                     <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
                 </tr>
@@ -25,6 +29,7 @@
                         <td class="p-3">{{ $data->reporterFullName }}</td>
                         <td class="p-3 d-none d-sm-table-cell">{{ $data->reporterContactNumber }}</td>
                         <td class="p-3">{{ $data->incidentCase->description }}</td>
+                        <td class="p-3">{{ $data->referenceCode }}</td>
                         <td class="p-3">{{ $data->isConfirmed == 1 ? 'Confirmed' : 'Pending' }}</td>
                         <td class="p-3 rounded-end">
                             <a class="btn btn-sm btn-secondary text-white" href="{{ route('incident_report.show', ['case' => $data->incidentCase->id, 'id' => $data->reportID]) }}">
@@ -80,6 +85,25 @@
         document.getElementById("searchInput").addEventListener("input", function() {
             searchTable("searchInput", "assistance-table");
         });
+    });
+</script>
+
+<script>
+    document.getElementById('generateReportLink').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const month = document.getElementById('reportMonth').value;
+        if (!month) {
+            const toastContainer = document.querySelector('.toast-container');
+            const toastBody = toastContainer.querySelector('.toast-body');
+            toastBody.innerHTML = '<i class="bi bi-check-circle-fill p-2"></i>Please select a month first.';
+            
+            const toast = new bootstrap.Toast(document.getElementById('myToast'));
+            toast.show();
+            return;
+        }
+        const url = `incident-reports/monthly-report?month=${month}`;
+        window.location.href = url; 
     });
 </script>
 @endsection

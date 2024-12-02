@@ -154,4 +154,62 @@ class FamilyAssistanceController extends Controller
         // download the generated PDF
         return $pdf->download('assistance.pdf');
     }
+
+    public function view_update($id){
+
+        $data = FamilyAssistance::get_data($id)[0];
+        $family_member = FamilyMember::get_data($id);
+
+        $genders = map_options(Gender::class, 'id', 'description');
+        $civil_status = map_options(CivilStatus::class, 'id', 'description');
+        $shelter_damage = map_options(ShelterDamageClassification::class, 'id', 'description');
+        $house_ownership = map_options(HouseOwnership::class, 'id', 'description');
+
+        // dd($data);
+        return view('pages.assistance.edit', compact('data', 'family_member', 'genders', 'civil_status', 'shelter_damage', 'house_ownership'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $fam_assistance = FamilyAssistance::find($id);
+
+        $fam_assistance->update([
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'suffix' => $request->suffix,
+            'birthdate' => $request->birthdate,
+            'age' => $request->age,
+            'birthplace' => $request->birthplace,
+            'gender' => $request->gender, 
+            'permanent_address' => $request->permanent_address,
+            'civil_status' => $request->civil_status,  
+            'religion' => $request->religion,
+            'occupation' => $request->occupation,
+            'primary_contact_no' => $request->primary_contact_no,  
+            'alternate_contact_no' => $request->alternate_contact_no, 
+            'mother_maiden_name' => $request->mother_maiden_name,
+            'monthly_family_net_income' => $request->monthly_family_net_income,
+            'id_card_presented' => $request->id_card_presented,
+            'id_card_number' => $request->id_card_number,
+            'ethnicity' => $request->ethnicity,
+            'region' => $request->region,
+            'province' => $request->province,
+            'district' => $request->district,
+            'city_municipality' => $request->city_municipality,
+            'barangay' => $request->barangay,
+            'evacuation_center' => $request->evacuation_center,
+            'total_older_person' => $request->total_older_person ?? 0,
+            'total_preg_women' => $request->total_preg_women ?? 0,
+            'total_lactating_women' => $request->total_lactating_women ?? 0,
+            'total_PWD' => $request->total_PWD ?? 0,
+            'house_ownership' => $request->house_ownership,
+            'shelter_damage' => $request->shelter_damage,
+            'is4PsBenef' => !is_null($request->is4PsBenef) ? 1 : 0,
+            'isIP' => !is_null($request->isIP) ? 1 : 0,
+        ]);
+
+        return redirect()->back()->with('success', 'Family Assistance Form updated successfully!');
+    }
 }

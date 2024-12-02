@@ -1,4 +1,4 @@
-function initializeHazardMap(hazardData, shelterData, mapContainerId) {
+function initializeHazardMap(hazardData, shelterData, incidentData, mapContainerId) {
     var map = L.map(mapContainerId).setView([10.728, 123.826], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -9,6 +9,7 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
 
     var hazardLayers = [];
     var shelterLayers = [];
+    var incidentLayers = [];
     
     // store original names
     var originalPopups = new Map();
@@ -16,6 +17,7 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
     function clearAllPopups() {
         hazardLayers.forEach(layer => layer.closePopup());
         shelterLayers.forEach(layer => layer.closePopup());
+        incidentLayers.forEach(layer => layer.closePopup());
     }
 
     function createPopupAndOpen(layer, content) {
@@ -183,10 +185,56 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
         }
     });
 
+    incidentData.forEach(function (incident) {
+        try {
+            
+            var coordinatesString = incident;
+            var redMarkerIcon = L.divIcon({
+                className: 'custom-div-icon', 
+                html: `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 4.97 5 11 7 13 2-2 7-8.03 7-13 0-3.87-3.13-7-7-7z"></path>
+                        <circle cx="12" cy="9" r="2.5"></circle>
+                    </svg>
+                `,
+                iconSize: [30, 50],
+                iconAnchor: [15, 50],
+                popupAnchor: [0, -50]
+            });
+            
+            if (coordinatesString.startsWith('"') && coordinatesString.endsWith('"')) {
+                coordinatesString = coordinatesString.slice(1, -1);
+            }
+        
+            var coordinates = JSON.parse(coordinatesString);
+
+            if (Array.isArray(coordinates) && coordinates.length === 2) {
+                var incidentMarker = L.marker([coordinates[0], coordinates[1]], { icon: redMarkerIcon }).addTo(map);
+                var originalPopup = L.popup({
+                    autoClose: false,
+                    closeOnClick: false
+                })
+                .setContent(`
+                    <div class="text-center">
+                        <h6>Accdent Prone Area</h6>
+                    </div>
+                `);
+                
+                incidentMarker.bindPopup(originalPopup);
+                originalPopups.set(incidentMarker, originalPopup);
+                markersToOpen.push(incidentMarker);
+                incidentLayers.push(incidentMarker);
+            }
+        } catch (e) {
+            console.error('Error parsing coordinates for accidents', e);
+        }
+    });
+
     function showAll() {
         clearAllPopups();
         hazardLayers.forEach(layer => layer.addTo(map));
         shelterLayers.forEach(layer => layer.addTo(map));
+        incidentLayers.forEach(layer => layer.addTo(map));
         restoreOriginalPopups();
     }
 
@@ -194,12 +242,22 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
         clearAllPopups();
         hazardLayers.forEach(layer => layer.addTo(map));
         shelterLayers.forEach(layer => map.removeLayer(layer));
+        incidentLayers.forEach(layer => map.removeLayer(layer));
         restoreOriginalPopups();
     }
 
     function showShelters() {
         clearAllPopups();
         shelterLayers.forEach(layer => layer.addTo(map));
+        hazardLayers.forEach(layer => map.removeLayer(layer));
+        incidentLayers.forEach(layer => map.removeLayer(layer));
+        restoreOriginalPopups();
+    }
+
+    function showIncidents() {
+        clearAllPopups();
+        incidentLayers.forEach(layer => layer.addTo(map));
+        shelterLayers.forEach(layer => map.removeLayer(layer));
         hazardLayers.forEach(layer => map.removeLayer(layer));
         restoreOriginalPopups();
     }
@@ -211,6 +269,7 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
                 <button id="show-all" class="btn btn-secondary">Show All</button>
                 <button id="show-hazards" class="btn btn-secondary">Hazards</button>
                 <button id="show-shelters" class="btn btn-secondary">Shelters</button>
+                <button id="show-incidents" class="btn btn-secondary">Accidents</button>
             `;
             L.DomEvent.on(div, 'click', function (e) {
                 L.DomEvent.stopPropagation(e);
@@ -226,4 +285,5 @@ function initializeHazardMap(hazardData, shelterData, mapContainerId) {
     document.getElementById('show-all').addEventListener('click', showAll);
     document.getElementById('show-hazards').addEventListener('click', showHazards);
     document.getElementById('show-shelters').addEventListener('click', showShelters);
+    document.getElementById('show-incidents').addEventListener('click', showIncidents);
 }

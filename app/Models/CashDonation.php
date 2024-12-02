@@ -23,7 +23,8 @@ class CashDonation extends Model
 
     public static function get_data($id = null){
         $query =  CashDonation::leftJoin('donation_mode', 'cash_donations.donationMode', '=', 'donation_mode.id')
-                        ->select('cash_donations.*', 'donation_mode.description as donationModeDesc');
+                        ->select('cash_donations.*', 'donation_mode.description as donationModeDesc')
+                        ->orderBy('cash_donations.created_at', 'desc');
 
         if (!is_null($id)) {
             $query->where('cash_donations.donationID', $id);

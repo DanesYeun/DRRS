@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="d-flex flex-column m-md-2">
-        {{-- <h3 class="text-start mx-2 text-primary">Incident Reports</h3> --}}
+        <h3 class="text-start mx-2 text-primary">Incident Reports</h3>
         @if(session('error'))
             <x-alert response="error" color="danger"/>
         @elseif(session('success'))

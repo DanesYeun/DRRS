@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\InKindDonation;
 use App\Models\CashDonation;
 use App\Models\DonationMode;
+use App\Models\ECashDonation;
 use App\Models\DonationCategory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
 
 class DonationController extends Controller
 {
@@ -32,43 +33,75 @@ class DonationController extends Controller
                 'fullname' => 'required|string|max:255',
                 'contactno' => 'required|string|regex:/^[0-9]{10,11}$/',
                 'donationMode' => 'required|integer', 
-                'donation_type' => 'required|integer',
             ]);
     
             if ($validator->fails()) {
                 return back()->with('error', implode('<br>', $validator->errors()->all()));
             }
-    
-            if(is_null($request->amount)){
-    
+
+            if($request->donationMode == 3){
+                // dd($request->proof_of_donation);
                 $validator = Validator::make($request->all(), [
-                    'definition' => 'required|string',
+                    'proof_of_donation' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', 
                 ]);
-    
+
                 if ($validator->fails()) {
                     return back()->with('error', implode('<br>', $validator->errors()->all()));
                 }
-    
-                InKindDonation::create([
+
+                $file = $request->file('proof_of_donation');
+                $extension = $file->getClientOriginalExtension();
+                $formattedDateTime = Carbon::now()->format('Y-m-d_H-i-s');
+
+                // customized file name using date and donor_name
+                $fileName = $formattedDateTime . '_' . $request->fullname . '.' . $extension;
+
+                $path = $file->storeAs('donation', $fileName, 'public');
+
+                ECashDonation::create([
                     'fullname' => $request->fullname, 
                     'contactno' => $request->contactno, 
                     'donationMode' => $request->donationMode, 
-                    'definition' => $request->definition, 
+                    'proof_of_donation' => $path,
                     'isPickUp' => 0
                 ]);
+
+            }else{
+
+                $validator = Validator::make($request->all(), [
+                    'donation_type' => 'required|integer',
+                ]);
+
+                if($request->donation_type == 2){
     
-                return redirect()->route('create.donation')->with('success', 'Successfully sent assistance request!');
-            }
+                    $validator = Validator::make($request->all(), [
+                        'definition' => 'required|string',
+                    ]);
+        
+                    if ($validator->fails()) {
+                        return back()->with('error', implode('<br>', $validator->errors()->all()));
+                    }
+        
+                    InKindDonation::create([
+                        'fullname' => $request->fullname, 
+                        'contactno' => $request->contactno, 
+                        'donationMode' => $request->donationMode, 
+                        'definition' => $request->definition, 
+                        'isPickUp' => 0
+                    ]);
+        
+                }else{
+                    CashDonation::create([
+                        'fullname' => $request->fullname, 
+                        'contactno' => $request->contactno, 
+                        'donationMode' => $request->donationMode, 
+                        'amount' => $request->amount, 
+                        'isPickUp' => 0 
+                    ]);
+                }
+            }            
     
-            CashDonation::create([
-                'fullname' => $request->fullname, 
-                'contactno' => $request->contactno, 
-                'donationMode' => $request->donationMode, 
-                'amount' => $request->amount, 
-                'isPickUp' => 0 
-            ]);
-    
-            return redirect()->route('create.donation')->with('success', 'Successfully sent assistance request!');
+            return redirect()->route('create.donation')->with('success', 'Your donation has been successfully submitted. Thank you for your kind contribution and support!');
 
         }catch(\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -82,14 +115,17 @@ class DonationController extends Controller
 
             $type = [
                 ['id' => 1, 'name' => 'Cash'],
-                ['id' => 2, 'name' => 'In-kind']
+                ['id' => 2, 'name' => 'In-kind'],
+                ['id' => 3, 'name' => 'E-cash']
             ];
 
             $cashDonations = CashDonation::get_data();
             $inkindDonations = InKindDonation::get_data();
+            $ecashDonations = ECashDonation::get_data();
+            // dd($ecashDonations);
 
             // dd($inkindDonations, $cashDonations);
-            return view('pages.secretary.index', compact('type', 'donation_mode', 'cashDonations', 'inkindDonations'));
+            return view('pages.secretary.index', compact('type', 'donation_mode', 'cashDonations', 'inkindDonations', 'ecashDonations'));
 
         }catch(\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -111,7 +147,13 @@ class DonationController extends Controller
             $type = $request->type;
             $id = $request->id;
 
-            $data = $type == 1 ?  CashDonation::find($id) : InKindDonation::find($id);
+            $models = [
+                1 => CashDonation::class,
+                2 => InKindDonation::class,
+                3 => ECashDonation::class,
+            ];
+            
+            $data = isset($models[$type]) ? $models[$type]::find($id) : null;
 
             $data->update([
                 'isPickUp' => 1
@@ -134,7 +176,15 @@ class DonationController extends Controller
     }
 
     public function print_donation_report($type, $id){
-        $data = $type == 1 ? CashDonation::get_data($id) : InKindDonation::get_data($id);
+        
+        $models = [
+            1 => CashDonation::class,
+            2 => InKindDonation::class,
+            3 => ECashDonation::class,
+        ];
+    
+        $data = isset($models[$type]) ? $models[$type]::get_data($id) : [];
+
         $datas = $data[0];
 
         $pdf = app('dompdf.wrapper')->loadView('pages.donation.donation_report', compact('datas', 'type'))

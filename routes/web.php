@@ -43,6 +43,7 @@ Route::controller(ForgotPasswordController::class)->group(function () {
 Route::controller(IncidentReportController::class)->group(function () {
     Route::get('/incident-report', 'create')->name('incident_report.create');
     Route::post('/incident-report', 'store')->name('incident_report.store');
+    Route::get('/incident-find-report', 'findReport')->name('incident_report.find');
 });
 
 // Family Assistance
@@ -56,6 +57,7 @@ Route::controller(DonationController::class)->group(function () {
     Route::get('/donor-form', 'create')->name('create.donation');
     Route::post('/donor-form', 'store')->name('store.donation');
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/incident-report/{case}/{id}', 'showReport')->name('incident_report.show');
             Route::get('/incident-report/{id}', 'confirmReport')->name('incident_report.confirm');
             Route::post('/incident-reports/{case}/{id}', 'delete')->name('incident_report.delete');
+            Route::get('/incident-reports/monthly-report', 'generateMonthlyReport')->name('incident_report.monthly_report');
         });
 
         // Patient Care
@@ -139,6 +142,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/family-assistance-records', 'index')->name('family.assistance.records');
             Route::get('/family-assistance-record/{id}', 'view')->name('family.assistance.record');
             Route::post('/family-assistance-print-record', 'print_record')->name('family.assistance.print');
+            Route::get('/family-assistance/update/{id}', 'view_update')->name('family.assistance.view.update');
+            Route::post('/family-assistance/update/{id}', 'update')->name('family.assistance.update');
         });
 
         // Donations

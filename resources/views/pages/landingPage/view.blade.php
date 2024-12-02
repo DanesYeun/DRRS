@@ -27,12 +27,12 @@
         <div class="col-12 px-3 row m-0 d-flex justify-content-center">
             <h3 class="text-primary col-12">Track Incident Report Status</h3>    
             <div class="w-50 col-12">
-                <form class="row m-0 gap-1" action="#">
+                <form id="incidentSearchForm" class="row m-0 gap-1">
                     <div class="col-md-7 col-12">
-                        <input class="form-control" type="text" name="searchIncident">
+                        <input class="form-control" type="text" name="searchIncident" placeholder="Enter reference code">
                     </div>
                     <div class="col-md-4 col-12 d-flex">
-                        <button class="btn btn-outline-primary flex-fill" type=submit">
+                        <button class="btn btn-outline-primary flex-fill" type="submit">
                             <i class="bi bi-search"></i>
                             Find Incident
                         </button>
@@ -55,6 +55,22 @@
             </a>
         </div>
     </div>
+
+    {{-- modal --}}
+    <div id="searchResultModal" class="modal fade" tabindex="-1" aria-labelledby="searchResultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-3 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="searchResultModalLabel">Incident Report Status</h5>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="statusMessage" class="text-center fs-5">Searching...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 @endsection
 
 @section('js')
@@ -77,8 +93,47 @@
             // pass json data 
             var hazardData = @json($hazards); 
             var shelterData = @json($shelters);
+            var incidentData = @json($incidents);
             
-            initializeHazardMap(hazardData, shelterData, 'hazard-map');
+            initializeHazardMap(hazardData, shelterData, incidentData, 'hazard-map');
         });
     </script>  
+
+    <script>
+        document.getElementById('incidentSearchForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent form from submitting normally
+
+            const searchIncident = document.querySelector('input[name="searchIncident"]').value;
+
+            // Ensure input is not empty
+            if (!searchIncident.trim()) {
+                alert('Please enter a reference code.');
+                return;
+            }
+
+            // Perform AJAX request
+            $.ajax({
+                url: "{{ route('incident_report.find') }}",
+                method: "GET",
+                data: {
+                    searchIncident: searchIncident
+                },
+                success: function (response) {
+
+                    const statusMessage = document.getElementById('statusMessage');
+
+                    statusMessage.textContent = response.message;
+                
+                    const modal = new bootstrap.Modal(document.getElementById('searchResultModal'));
+                    modal.show();
+                },
+                error: function (xhr) {
+                    console.error(xhr);
+                    alert('An error occurred while searching for the incident. Please try again.');
+                }
+            });
+        });
+    </script>
+
+    
 @endsection

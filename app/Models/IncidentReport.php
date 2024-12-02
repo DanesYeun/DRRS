@@ -22,9 +22,11 @@ class IncidentReport extends Model
         'numberOfCasualties',
         'reporterFullName',
         'reporterContactNumber',
+        'referenceCode',
         'date',
         'time',
-        'isConfirmed'
+        'isConfirmed',
+        'coordinates'
     ];
 
     public function incidentCase()

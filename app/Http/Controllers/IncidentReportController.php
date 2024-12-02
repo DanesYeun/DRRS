@@ -11,13 +11,15 @@ use App\Models\InjuryTraumaIR;
 use App\Models\CardiaIR;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use App\Services\TwilioService;
 
 class IncidentReportController extends Controller
 {
 
     public function showAllReports()
     {
-        $incidentReports = IncidentReport::with('incidentCase')->get();
+        $incidentReports = IncidentReport::with('incidentCase')->orderBy('date', 'desc')->get();
 
         return view('pages.incident.view', compact('incidentReports'));
     }
@@ -35,6 +37,9 @@ class IncidentReportController extends Controller
         try{
             $case = $request->incident_type;
 
+            $coordinates = "[$request->latitude,$request->longitude]";
+            $referenceCode = Str::random(8);
+            
             $incidentReport = IncidentReport::create([
                 'typeOfIncident' => $case,
                 'incidentPlace' => $request->place,
@@ -42,9 +47,11 @@ class IncidentReportController extends Controller
                 'numberOfCasualties'=> $request->number_casualties,
                 'reporterFullName' =>$request->reporter_name,
                 'reporterContactNumber'=> $request->reporter_contactno,
+                'referenceCode' => $referenceCode,
                 'date' => $request->date,
                 'time' => $request->time,
-                'isConfirmed' => 0
+                'isConfirmed' => 0,
+                'coordinates' => $case == 3 ? $coordinates : null
             ]);
 
             if($case == 1){
@@ -129,13 +136,34 @@ class IncidentReportController extends Controller
 
             }
 
-            return redirect()->route('landingPage')->with('success', 'Incident report has been sent!');
-            // return redirect()->back()->with('success', 'Successfully sent incident report!');
+            $sms_incident_type = IncidentCase::where('id', $case)->pluck('description')[0];
+            $sms_incident_location = $request->place;
+            $sms_reported_by = $request->reporter_name;
+            $sms_incident_time = $request->time;
+
+            $this->sendSms($sms_incident_type, $sms_incident_location, $sms_reported_by, $sms_incident_time);
+
+            return redirect()->route('landingPage')->with('success', 'Keep this code for report monitoring. Reference Code:    ' . $referenceCode . "");
 
         }catch(\Exception $e){
             \Log::error('Error: '. $e->getMessage());
-            return redirect()->back()->with('error', 'Oh no! An error occured.');
+            return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    private function sendSms($sms_incident_type, $sms_incident_location, $sms_reported_by, $sms_incident_time)
+    {
+        $twilioService = app(TwilioService::class);
+
+        $phoneNumbers = explode(',', env('SMSNUMBERS'));
+        
+        $message = "New Incident Report - Type: " . $sms_incident_type . ", By: " . $sms_reported_by;
+
+        foreach ($phoneNumbers as $to) {
+            $response = $twilioService->sendSms($to, $message);
+        }
+
+        return response()->json(['status' => 'OK']);
     }
 
     // Deleteincident report
@@ -233,4 +261,151 @@ class IncidentReportController extends Controller
         }
 
     }
+
+    //   generate  monthly incident report, BUILT-IN
+    public function generateMonthlyReport(Request $request)
+    {
+        $selectedMonth = $request->query('month');
+
+        if (!$selectedMonth) {
+            return redirect()->back()->with('error', 'Please select a valid month.');
+        }
+
+        [$year, $month] = explode('-', $selectedMonth);
+
+        $reports = IncidentReport::with(['incidentCase', 'obstetrics','medical', 'injury_trauma', 'cardia', 'disaster'])
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get()->toArray();
+        // dd($reports);
+        if(empty($reports)){
+            return redirect()->back()->with('error', 'No data found for the specified month.');
+        }
+
+        // Convert the date to a Carbon instance
+        foreach ($reports as $report) {
+            $report['date'] = Carbon::parse($report['date']);
+        }
+
+        $csvData = $this->convertToCsv($reports);
+
+        $fileName = "reports_{$year}_{$month}.csv";
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        return response()->make($csvData, 200, $headers);
+    }
+
+    private function convertToCsv($data)
+    {
+        $tempFile = tmpfile();
+
+
+        if (!empty($data)) {
+
+            fputcsv($tempFile, [
+                'ID', 'Date', 'Time', 'Incident Place', 'Landmark', 'Number of Casualties', 'Reporter Name', 'Reporter ContactNo', 'Incident Type',
+                'Patient Name', 'OB Age', 'OB Month/s Pregnant', 'OB Number of Births', 'OB Parental Care Location', //obstetrics
+                'Heart Rate', 'Shortness of Breath', 'Paleness', 'Disaster Description'
+            ]);
+        
+            foreach ($data as $row) {
+
+                $groups = ['medical', 'injury_trauma', 'cardia'];
+                $hasRows = false;
+        
+                foreach ($groups as $group) {
+                    if (isset($row[$group]) && is_array($row[$group])) {
+                        foreach ($row[$group] as $entry) {
+                            $hasRows = true;
+                            fputcsv($tempFile, [
+                                $row['reportID'],
+                                $row['date'],
+                                $row['time'],
+                                $row['incidentPlace'],
+                                $row['landmark'],
+                                $row['numberOfCasualties'],
+                                $row['reporterFullName'],
+                                $row['reporterContactNumber'],
+                                $row['incident_case']['description'],
+                                $entry['fullName'] ?? '',
+                                $row['obstetrics']['age'] ?? '',
+                                $row['obstetrics']['monthsPregnant'] ?? '',
+                                $row['obstetrics']['numberOfBirths'] ?? '',
+                                $row['obstetrics']['prenatalCareLocation'] ?? '',
+                                $entry['heartRate'] ?? '',
+                                $entry['shortnessOfBreath'] == 1 ? '/' : '',
+                                $entry['paleness'] == 1 ? '/' : '',
+                                $row['disaster']['description'] ?? '' 
+                            ]);
+                        }
+                    }
+                }
+        
+                // single row 
+                if (!$hasRows) {
+                    fputcsv($tempFile, [
+                        $row['reportID'],
+                        $row['date'],
+                        $row['time'],
+                        $row['incidentPlace'],
+                        $row['landmark'],
+                        $row['numberOfCasualties'],
+                        $row['reporterFullName'],
+                        $row['reporterContactNumber'],
+                        $row['incident_case']['description'],
+                        $row['obstetrics']['fullName'] ?? '',
+                        $row['obstetrics']['age'] ?? '',
+                        $row['obstetrics']['monthsPregnant'] ?? '',
+                        $row['obstetrics']['numberOfBirths'] ?? '',
+                        $row['obstetrics']['prenatalCareLocation'] ?? '',
+                        '','','',
+                        $row['disaster']['description'] ?? '' 
+                    ]);
+                }
+            }
+        }
+        
+
+
+        rewind($tempFile);
+        $csvData = stream_get_contents($tempFile);
+        fclose($tempFile);
+
+        return $csvData;
+    }
+
+    public function findReport(Request $request) {
+
+        $request->validate([
+            'searchIncident' => 'required|string'
+        ]);
+
+        $status = IncidentReport::where('referenceCode', $request->searchIncident)
+                                ->pluck('isConfirmed')
+                                ->first();
+        // return [$status];
+        // Check if a record was found
+        if ($status !== null) {
+            return response()->json(['message' => $status == 1 ? 'The incident report has been confirmed.' : 'The incident report is still pending.']);
+        }
+
+        return response()->json(['message' => 'No incident found with the provided reference code.']);
+        
+        // Check the status value and return the corresponding message
+        // if ($status === 1) {
+        //     return response()->json(['message' => 'The report has been verified and confirmed.']);
+        // } elseif ($status === 0) {
+        //     return response()->json(['message' => 'The report is pending.']);
+        // } else {
+        //     return response()->json(['message' => 'Report not found or status is unknown.']);
+        // }
+    }
+    
 }
