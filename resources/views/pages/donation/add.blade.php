@@ -18,29 +18,25 @@
         @endif
 
         <div class="mx-2 mb-3 p-2">
-            <form method="post" action="{{ route('store.donation') }}" class="needs-validation" novalidate>
+            <form method="post" action="{{ route('store.donation') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                 @csrf
                 
                 <div class="border bg-white rounded row mx-2 px-3 pt-5 pb-2">
                     <h3 class="text-primary text-start mb-3">Donation Form</h3>
                     <x-input name="fullname" label="Complete Name" type="text" required="true"/>
                     <x-input name="contactno" label="Contact Number" type="tel" pattern="^(09|\+639)\d{9}$" minLength="7" maxLength="15"/>
-                    <x-select name="donationMode" label="Donation Mode" :options="$donation_mode" required="true"/> 
+                    <x-select name="donationMode" id="donation_mode" label="Donation Mode" :options="$donation_mode" onchange="toggleDonationField(this.value)" required="true"/> 
 
-                    <x-select name="donation_type" label="Donation Type" :options="$type" required="true" onchange="toggleField(this.value)"/>
+                    <x-select name="donation_type" label="Donation Type" :options="$type"  onchange="toggleField(this.value)" dNone="false"/>
 
                     <!-- Cash Fields -->
                     <x-input id="amount" name="amount" label="Amount" type="number" dNone="true" />
                  
                     <!-- Inkind Fields -->
                     <x-input id="definition" name="definition" label="Define your Donation" type="text" dNone="true" />
-                    {{-- <div id="2-fields" class="donation-fields d-none">
-                        <div class="row">
-                            <x-select name="category" label="Category" :options="$categories"/>
-                            <x-input name="itemName" label="Item Name" type="text" />
-                            <x-input name="quantity" label="Quantity" type="number" />
-                        </div>
-                    </div> --}}
+
+                    <!-- Proof of Donation Field (Image Upload) -->
+                    <x-input id="proof_of_donation" name="proof_of_donation" label="Proof of Donation" type="file" accept="image/*" dNone="true"/>
 
                     <div class="d-flex justify-content-end">   
                         <button id="submit-btn" class="btn btn-success">
@@ -79,6 +75,37 @@
         // On change of select
         donationTypeSelect.addEventListener('change', function () {
             toggleField(this.value);
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const donationModeSelect = document.getElementById('donationMode');
+        const donationTypeSelect = document.getElementById('donation_type');
+        const proofOfDonation = document.getElementById('proof_of_donation');
+        const amountField = document.getElementById('amount');
+        const definitionField = document.getElementById('definition');
+
+        function toggleDonationField(selectedType) {
+            
+            if (selectedType === "3") {
+                proofOfDonation.closest('div').classList.remove('d-none'); 
+                donationTypeSelect.closest('div').classList.add('d-none'); 
+                amountField.closest('div').classList.add('d-none'); 
+                definitionField.closest('div').classList.add('d-none'); 
+            }else{
+                proofOfDonation.closest('div').classList.add('d-none'); 
+                donationTypeSelect.closest('div').classList.remove('d-none');
+            }
+        }
+
+        // Initial load
+        toggleDonationField(donationModeSelect.value);
+
+        // On change of select
+        donationModeSelect.addEventListener('change', function () {
+            toggleDonationField(this.value);
         });
     });
 </script>

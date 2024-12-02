@@ -23,7 +23,8 @@ class InKindDonation extends Model
     public static function  get_data($id = null){
 
         $query = InKindDonation::leftJoin('donation_mode', 'inkind_donations.donationMode', '=', 'donation_mode.id')
-                ->select('inkind_donations.*', 'donation_mode.description as donationModeDesc');
+                ->select('inkind_donations.*', 'donation_mode.description as donationModeDesc')
+                ->orderBy('inkind_donations.created_at', 'desc');
         
         if (!is_null($id)) {
             $query->where('inkind_donations.donationID', $id);

@@ -26,6 +26,13 @@
                 <x-donations-table label="Inkind Donations" :datas="$inkindDonations" :type="2"/>
             </div>  
         </div>
+
+         <!-- Ecash Fields -->
+         <div id="3-fields" class="donation-fields d-none">
+            <div class="row m-0">
+                <x-donations-table label="E-cash Donations" :datas="$ecashDonations" :type="3"/>
+            </div>  
+        </div>
     </div>
 @endsection
 

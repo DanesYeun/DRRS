@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hazard;
 use App\Models\Shelter;
+use App\Models\IncidentReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -14,8 +15,9 @@ class HazardMapController extends Controller
     {
         $hazards = Hazard::where('hazardStatus', 1)->get();
         $shelters = Shelter::all();
+        $incidents = IncidentReport::where('isConfirmed', 1)->where('typeOfIncident', 3)->whereNotNull('coordinates')->pluck('coordinates');
 
-        return view('pages.hazardMap.view', compact('hazards', 'shelters'));
+        return view('pages.hazardMap.view', compact('hazards', 'shelters', 'incidents'));
     }
 
     public function create()

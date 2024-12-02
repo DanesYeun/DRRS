@@ -18,13 +18,17 @@
                     @if($type == 2)
                         <th scope="col" class="p-3 bg-primary text-white">Definition</th>
                     @endif
+                    @if($type == 3)
+                        <th scope="col" class="p-3 bg-primary text-white">Proof of Donation</th>
+                    @endif
                     <th scope="col" class="p-3 bg-primary text-white">Mode</th>
                     <th scope="col" class="p-3 bg-primary text-white">Status</th>
                     <th scope="col" class="p-3 rounded-end bg-primary text-white">Actions</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                @foreach($datas as $data)
+                {{-- @foreach($datas as $data) --}}
+                @foreach($datas as $index => $data)
                     <tr>
                         <td class="p-3 rounded-start">
                             {{ \Carbon\Carbon::parse($data['created_at'])->format('M d, Y') }}
@@ -37,6 +41,32 @@
                         @if($type == 2)
                             <td class="p-3">{{ $data['definition'] }}</td>
                         @endif
+                        
+                        @if($type == 3)
+                            <td class="p-3">
+                                {{$data['proof_of_donation']}}
+                                &nbsp;
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewImageModal{{ $index }}">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+
+                            <!-- Image Modal -->
+                            <div class="modal fade" id="viewImageModal{{ $index }}" tabindex="-1" aria-labelledby="viewImageModalLabel{{ $index }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewImageModalLabel{{ $index }}">Proof of Donation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <img src="{{ asset('storage/' . $data['proof_of_donation']) }}" class="img-fluid" alt="Proof of Donation">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         <td class="p-3">{{ $data['donationModeDesc'] }}</td>
                         <td class="p-3">{{ $data['isPickUp'] == 0 ? 'Pending' : 'Received' }}</td>
                         <td class="p-3 rounded-end">

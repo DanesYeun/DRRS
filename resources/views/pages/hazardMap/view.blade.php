@@ -33,8 +33,9 @@
             // pass json data 
             var hazardData = @json($hazards); 
             var shelterData = @json($shelters);
+            var incidentData = @json($incidents);
             
-            initializeHazardMap(hazardData, shelterData, 'hazard-map');
+            initializeHazardMap(hazardData, shelterData, incidentData, 'hazard-map');
         });
     </script>
 @endsection

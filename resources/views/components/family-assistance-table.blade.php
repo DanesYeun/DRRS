@@ -29,6 +29,9 @@
                             <a class="btn btn-sm btn-warning text-white" href="{{ route('family.assistance.record', ['id' => $data['id']]) }}">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
+                            <a class="btn btn-sm btn-success text-white" href="{{ route('family.assistance.view.update', ['id' => $data['id']]) }}">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

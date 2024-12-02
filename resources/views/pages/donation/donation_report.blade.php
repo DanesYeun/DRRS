@@ -51,6 +51,21 @@
                 <td><strong>Quantity: </strong>{{ $datas['quantity'] }}</td>
                 <td><strong>Mode: </strong>{{ $datas['donationModeDesc'] }}</td>
             </tr>
+        @elseif($type == 3)
+            <tr>
+                <td colspan="2" style="border: 1px solid #000; text-align: center;">
+                    <strong>Proof of Donation:</strong>
+                    @if(!empty($datas['proof_of_donation']))
+                        <div style="margin-top: 10px;">
+                            <img src="{{ public_path('storage/' . $datas['proof_of_donation']) }}" 
+                                 alt="Proof of Donation" 
+                                 style="max-width: 300px; max-height: 300px; border: 1px solid #ddd; padding: 5px;">
+                        </div>
+                    @else
+                        <div style="margin-top: 10px;">No proof of donation provided.</div>
+                    @endif
+                </td>
+            </tr>
         @endif
         <tr>
             <td colspan="2"><strong>Date: </strong>{{ \Carbon\Carbon::parse($datas['created_at'])->format('F j, Y') }}</td>

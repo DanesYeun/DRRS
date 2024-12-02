@@ -11,7 +11,7 @@
         @endif
         <x-responses-table label="Response History" :datas="$responseRecords"/>
 
-        <a href="{{ route('response_records.create') }}" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i> Create Response Record</a>
+        {{-- <a href="{{ route('response_records.create') }}" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i> Create Response Record</a> --}}
     </div>
 @endsection
 

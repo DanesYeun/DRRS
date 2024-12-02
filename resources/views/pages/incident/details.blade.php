@@ -68,6 +68,7 @@
                     @if($incidentReport->typeOfIncident != 1)
                         <x-input name="numberOfCasualties" type="input"  label="Number of Casualties" value="{{ $incidentReport->numberOfCasualties }}" readOnly/>
                     @endif
+                    <x-input name="referenceCode" type="input" label="Reference Code" value="{{ $incidentReport->referenceCode }}" readOnly/>
 
                     @if($incidentReport->typeOfIncident == 5)
                         <div class="col-12 mb-3">

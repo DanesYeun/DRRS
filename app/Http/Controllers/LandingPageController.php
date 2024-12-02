@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hazard;
+use App\Models\IncidentReport;
 use App\Models\Shelter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -20,6 +21,7 @@ class LandingPageController extends Controller
 
         $hazards = Hazard::where('hazardStatus', 1)->get();
         $shelters = Shelter::all();
+        $incidents = IncidentReport::where('isConfirmed', 1)->where('typeOfIncident', 3)->whereNotNull('coordinates')->pluck('coordinates');
 
         $latestHazard = Hazard::latest()->first();
 
@@ -34,6 +36,6 @@ class LandingPageController extends Controller
             }
         }
 
-        return view('pages.landingPage.view', compact('hazards', 'shelters', 'latestHazard', 'hazardAlert'));
+        return view('pages.landingPage.view', compact('hazards', 'shelters', 'latestHazard', 'hazardAlert','incidents'));
     }
 }
