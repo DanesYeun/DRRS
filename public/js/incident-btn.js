@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const medicalContainer = document.getElementById('medical-container');
     const injuryTraumaContainer = document.getElementById('injury-trauma-container');
     const cardiaContainer = document.getElementById('cardia-container');
+    const disasterContainer = document.getElementById('disaster-container');
 
     function toggleFields(selectedType) {
         if (selectedType === "1") {
@@ -72,10 +73,12 @@ document.addEventListener('DOMContentLoaded', function () {
             generatePatientFields(casualtiesCount, medicalContainer, 'medical');
             generatePatientFields(casualtiesCount, injuryTraumaContainer, 'injury_trauma');
             generatePatientFields(casualtiesCount, cardiaContainer, 'cardia');
+            generatePatientFields(casualtiesCount, disasterContainer, 'disaster');
         } else {
             medicalContainer.innerHTML = '';
             injuryTraumaContainer.innerHTML = '';
             cardiaContainer.innerHTML = '';
+            disasterContainer.innerHTML = '';
         }
     });
 });

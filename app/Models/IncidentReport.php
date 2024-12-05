@@ -59,6 +59,12 @@ class IncidentReport extends Model
         return $this->belongsTo(DisasterIr::class, 'reportID', 'reportID');
     }
 
+    public function disaster_patients()
+    {
+        return $this->hasMany(DisasterIRPatients::class, 'reportID', 'reportID');
+    }
+
+
     
 
     public function deleteObstetrics()

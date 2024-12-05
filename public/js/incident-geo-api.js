@@ -1,6 +1,17 @@
-window.addEventListener('DOMContentLoaded', function() {
-    getUserCoordinates(); 
+document.addEventListener('DOMContentLoaded', function () {
+
+    // document.getElementById('exactLocationBtn').addEventListener('click', getUserCoordinates);
+    document.getElementById('exactLocationBtn').addEventListener('click', function () {
+        getUserCoordinates();
+        alert('Your current location has been automatically pinned.');
+    });
+
+    const mapModal = document.getElementById('mapModal');
+    mapModal.addEventListener('shown.bs.modal', function () {
+        initializeHazardMapPin('map', 'latitude', 'longitude');
+    });
 });
+
 
 function fallbackGeolocation() {
     fetch('http://ip-api.com/json/')
@@ -41,4 +52,33 @@ function getUserCoordinates() {
      
         alert("Geolocation is not supported by this browser.");
     }
+}
+
+// Function to initialize the map
+function initializeHazardMapPin(mapContainerId, latInputId, lngInputId) {
+    const map = L.map(mapContainerId).setView([10.728, 123.826], 16);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    let marker = null;
+
+    // Add marker on map click
+    map.on('click', function (e) {
+        const latLng = e.latlng;
+
+        // Remove existing marker
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        // Place new marker
+        marker = L.marker(latLng).addTo(map);
+
+        // Update hidden inputs
+        document.getElementById(latInputId).value = latLng.lat.toFixed(5);
+        document.getElementById(lngInputId).value = latLng.lng.toFixed(5);
+
+        // Bind a popup with the coordinates
+        marker.bindPopup(`Coordinates: ${latLng.lat.toFixed(5)}, ${latLng.lng.toFixed(5)}`).openPopup();
+    });
 }

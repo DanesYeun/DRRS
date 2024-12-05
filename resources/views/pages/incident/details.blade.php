@@ -54,7 +54,14 @@
                         @endforeach
 
                     @elseif($incidentReport->typeOfIncident == 5)
-                        
+                        @foreach($incidentReport->disaster_patients as $data)
+                            <x-input name="patientName" type="input" label="Patient Name" value="{{ $data['fullName']}}" mdSize="4" readOnly />
+                            <x-input name="heartRate" type="input" label="Heart Rate (BPM)" value="{{ $data['heartRate'] }}" mdSize="4" readOnly/>
+                            <x-single-checkbox label="Shortness of Breath" name="shortnessOfBreath" mdSize="2" :checked="$data['shortnessOfBreath'] == 1" />
+                            <x-single-checkbox label="Paleness" name="paleness" mdSize="2" :checked="$data['paleness'] == 1" />
+                        @endforeach
+
+
                         <x-input name="disasterType" type="input" label="Disaster Type" value="{{ $incidentReport->disaster->disasterType->description }}" readOnly/>
                         <x-input name="description" type="input" label="Description" value="{{ $incidentReport->disaster->description }}" readOnly/>
                     @endif

@@ -216,7 +216,7 @@ function initializeHazardMap(hazardData, shelterData, incidentData, mapContainer
                 })
                 .setContent(`
                     <div class="text-center">
-                        <h6>Accdent Prone Area</h6>
+                        <h6>Accident Prone Area</h6>
                     </div>
                 `);
                 
