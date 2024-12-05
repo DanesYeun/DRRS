@@ -8,6 +8,7 @@ use App\Models\DisasterIR;
 use App\Models\ObstetricsIR;
 use App\Models\MedicalIR;
 use App\Models\InjuryTraumaIR;
+use App\Models\DisasterIRPatients;
 use App\Models\CardiaIR;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -105,7 +106,7 @@ class IncidentReportController extends Controller
                 }
                
             }else if($case == 5){
-                // dd($request->disaster_type);
+
                 $path = null;
                 if ($request->hasFile('disaster_image') && $request->file('disaster_image')->isValid()){
 
@@ -123,16 +124,25 @@ class IncidentReportController extends Controller
                     $path = $file->storeAs('incident', $fileName, 'public');
                   
                 }
-
-                // $coordinates = [$request->latitude, $request->longitude];
                 
                 DisasterIR::create([
                     'reportID' => $incidentReport->reportID, 
                     'photoPathFile' => $path,  
                     'description' => $request->description ,
                     'disasterTypeID' => $request->disaster_type,
-                    // 'coordinates' => json_encode($coordinates),
                 ]);
+
+                $disasterData = $request->disaster;
+                foreach($disasterData as $data){
+
+                    DisasterIRPatients::create([
+                        'reportID' => $incidentReport->reportID, 
+                        'fullName' => $data['full_name'],  
+                        'shortnessOfBreath' => array_key_exists('shortness_breath', $data) ? 1 : 0 ,
+                        'paleness' => array_key_exists('paleness', $data) ? 1 : 0,
+                        'heartRate' => $data['heart_rate'],
+                    ]);
+                }
 
             }
 
@@ -229,8 +239,7 @@ class IncidentReportController extends Controller
             
             }else if($type == 5){
 
-                $incidentReport = IncidentReport::with(['disaster.disasterType'])->where('reportID', $id)->first();
- 
+                $incidentReport = IncidentReport::with(['disaster.disasterType', 'disaster_patients'])->where('reportID', $id)->first();
             }else{
                 return back()->with('error', 'No data found');
             }
@@ -273,7 +282,7 @@ class IncidentReportController extends Controller
 
         [$year, $month] = explode('-', $selectedMonth);
 
-        $reports = IncidentReport::with(['incidentCase', 'obstetrics','medical', 'injury_trauma', 'cardia', 'disaster'])
+        $reports = IncidentReport::with(['incidentCase', 'obstetrics','medical', 'injury_trauma', 'cardia', 'disaster', 'disaster_patients'])
             ->whereYear('date', $year)
             ->whereMonth('date', $month)
             ->get()->toArray();
@@ -316,8 +325,7 @@ class IncidentReportController extends Controller
             ]);
         
             foreach ($data as $row) {
-
-                $groups = ['medical', 'injury_trauma', 'cardia'];
+                $groups = ['medical', 'injury_trauma', 'cardia', 'disaster_patients'];
                 $hasRows = false;
         
                 foreach ($groups as $group) {
@@ -340,8 +348,8 @@ class IncidentReportController extends Controller
                                 $row['obstetrics']['numberOfBirths'] ?? '',
                                 $row['obstetrics']['prenatalCareLocation'] ?? '',
                                 $entry['heartRate'] ?? '',
-                                $entry['shortnessOfBreath'] == 1 ? '/' : '',
-                                $entry['paleness'] == 1 ? '/' : '',
+                                isset($entry['shortnessOfBreath']) && $entry['shortnessOfBreath'] == 1 ? '/' : '',
+                                isset($entry['paleness']) && $entry['paleness'] == 1 ? '/' : '',
                                 $row['disaster']['description'] ?? '' 
                             ]);
                         }

@@ -51,6 +51,47 @@
                     <!-- Injury/Trauma Fields -->
                     <div id="3-fields" class="incident-fields d-none">
                         <div id="injury-trauma-container"></div>
+
+                          <!-- Incident Location Section -->
+                        {{-- <div class="form-group">
+                            <h5>Select Incident Location</h5>
+                            <p>Are you at the exact location of the incident?</p>
+                            <div class="d-flex justify-content-around mb-3">
+                                <button type="button" class="btn btn-success" id="exactLocationBtn">Use My Current Location</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mapModal">
+                                    Pin Location on Map
+                                </button>
+                            </div>
+                        </div> --}}
+
+                        <div class="form-group">
+                            <h5 class="mb-3 mt-3">Incident Location</h5>
+                            <p class="text-muted">Are you at the exact location of the incident?</p>
+                            <div class="d-flex justify-content-center gap-3 mb-4">
+                                <!-- Use Current Location (Yes) Button -->
+                                <button 
+                                    type="button" 
+                                    class="btn btn-success px-4 py-2" 
+                                    id="exactLocationBtn" 
+                                    title="Automatically use your current GPS location"
+                                    aria-label="Use My Current Location">
+                                    <i class="bi bi-geo-alt-fill me-1"></i> Yes
+                                </button>
+                        
+                                <!-- Pin Location (No) Button -->
+                                <button 
+                                    type="button" 
+                                    class="btn btn-danger px-4 py-2" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#mapModal" 
+                                    title="Manually select the location on the map"
+                                    aria-label="Pin Location on Map">
+                                    <i class="bi bi-map-fill me-1"></i> No
+                                </button>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
 
                     <!-- Cardia Fields -->
@@ -59,29 +100,41 @@
                     </div>
 
                     <div id="5-fields" class="incident-fields d-none">
-                        <div id="disaster-container" class="patient-container">
-                            <div class="row patient-row">
-                                <x-select name="disaster_type" label="Type of Disaster" :options="$disaster_types" required="true"/>
-                                <x-input name="disaster_image" label="Photo" type="file" accept="image/*"/>
-                                <x-input name="description" label="Description" type="text" mdSize="12"/>
-                                 
 
-                                <input id="latitude" name="latitude" label="Latitude" type="text" mdSize="5" readOnly="true" hidden />
-                                <input id="longitude" name="longitude" label="Longitude" type="text" mdSize="5" readOnly="true" hidden />
-                                
-                                {{--
-                                
-                                <!-- Button to  get coordinates -->
-                                <div class="col-12 col-md-2 mb-3">
-                                    <button id="locate-button" class="btn btn-primary w-100">
-                                        <i class="bi bi-pin-map-fill p-2 d-md-none d-md-inline"></i>
-                                        Get My Location
-                                    </button>
-                                </div> --}}
-                                
+                        <div class="row patient-row">
+                            <x-select name="disaster_type" label="Type of Disaster" :options="$disaster_types" required="true"/>
+                            <x-input name="disaster_image" label="Photo" type="file" accept="image/*"/>
+                            <x-input name="description" label="Description" type="text" mdSize="12"/>
+                             
+
+                            <input id="latitude" name="latitude" label="Latitude" type="text" mdSize="5" readOnly="true" hidden />
+                            <input id="longitude" name="longitude" label="Longitude" type="text" mdSize="5" readOnly="true" hidden />
+                            
+                        </div>
+                        
+                        <div id="disaster-container" class="patient-container">
+                            
+                        </div>
+                    </div>
+
+                    <!-- Modal for Map -->
+                    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="mapModalLabel">Pin Location</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="map" style="width: 100%; height: 400px; border: 1px solid #ddd;"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
 
                     <div class="d-flex justify-content-end">
                         <button id="submit-btn" class="btn btn-success mx-2"><i class="bi bi-file-earmark-plus-fill p-2"></i> Send Report</button>
@@ -92,8 +145,11 @@
     </div>
 @endsection
 
-@section('js')
+    @section('js')
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 
-<script src="{{ asset('js/incident-btn.js') }}"></script>
-<script src="{{ asset('js/incident-geo-api.js') }}"></script>
-@endsection
+    <script src="{{ asset('js/incident-btn.js') }}"></script>
+    <script src="{{ asset('js/incident-geo-api.js') }}"></script>
+    @endsection
