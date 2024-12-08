@@ -2,6 +2,7 @@
 
 @section('content')
     <x-toast />
+    <div id="nearAlert"></div>
     @if ($hazardAlert)
         <div class="mt-4 alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-diamond-fill"></i>
@@ -87,6 +88,7 @@
     <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 
     <script src="{{ asset('js/hazard-map.js') }}"></script>
+    <script src="{{ asset('js/get-location.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {          
