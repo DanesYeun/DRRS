@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Services\TwilioService;
+use Illuminate\Support\Facades\Validator;
 
 class IncidentReportController extends Controller
 {
@@ -36,6 +37,15 @@ class IncidentReportController extends Controller
     public function store(Request $request){
 
         try{
+
+            $validator = Validator::make($request->all(), [
+                'reporter_contactno' => 'required|numeric|digits_between:7,15',
+            ]);
+
+            if ($validator->fails()) {
+                return back()->with('error', implode('<br>', $validator->errors()->all()));
+            }
+
             $case = $request->incident_type;
 
             $coordinates = "[$request->latitude,$request->longitude]";

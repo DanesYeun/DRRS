@@ -63,6 +63,7 @@ class DonationController extends Controller
                     'contactno' => $request->contactno, 
                     'donationMode' => $request->donationMode, 
                     'proof_of_donation' => $path,
+                    'amount' => $request->amount,
                     'isPickUp' => 0
                 ]);
 
@@ -76,17 +77,28 @@ class DonationController extends Controller
     
                     $validator = Validator::make($request->all(), [
                         'definition' => 'required|string',
+                        'proof_of_donation' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', 
                     ]);
         
                     if ($validator->fails()) {
                         return back()->with('error', implode('<br>', $validator->errors()->all()));
                     }
+
+                    $file = $request->file('proof_of_donation');
+                    $extension = $file->getClientOriginalExtension();
+                    $formattedDateTime = Carbon::now()->format('Y-m-d_H-i-s');
+
+                    // customized file name using date and donor_name
+                    $fileName = $formattedDateTime . '_' . $request->fullname . '.' . $extension;
+
+                    $path = $file->storeAs('donation', $fileName, 'public');
         
                     InKindDonation::create([
                         'fullname' => $request->fullname, 
                         'contactno' => $request->contactno, 
                         'donationMode' => $request->donationMode, 
                         'definition' => $request->definition, 
+                        'proof_of_donation' => $path,
                         'isPickUp' => 0
                     ]);
         

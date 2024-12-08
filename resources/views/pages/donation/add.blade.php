@@ -57,14 +57,17 @@
         const donationTypeSelect = document.getElementById('donation_type');
         const amountField = document.getElementById('amount');
         const definitionField = document.getElementById('definition');
+        const proofOfDonation = document.getElementById('proof_of_donation');
 
         function toggleField(selectedType) {
             
             if (selectedType === "1") {
                 amountField.closest('div').classList.remove('d-none'); 
                 definitionField.closest('div').classList.add('d-none'); 
+                proofOfDonation.closest('div').classList.add('d-none'); 
             } else if(selectedType === "2") {
                 amountField.closest('div').classList.add('d-none'); 
+                proofOfDonation.closest('div').classList.remove('d-none'); 
                 definitionField.closest('div').classList.remove('d-none');
             }
         }
@@ -92,11 +95,12 @@
             if (selectedType === "3") {
                 proofOfDonation.closest('div').classList.remove('d-none'); 
                 donationTypeSelect.closest('div').classList.add('d-none'); 
-                amountField.closest('div').classList.add('d-none'); 
+                amountField.closest('div').classList.remove('d-none'); 
                 definitionField.closest('div').classList.add('d-none'); 
             }else{
                 proofOfDonation.closest('div').classList.add('d-none'); 
                 donationTypeSelect.closest('div').classList.remove('d-none');
+                amountField.closest('div').classList.add('d-none'); 
             }
         }
 
