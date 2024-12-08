@@ -44,12 +44,25 @@
             </tr>
         @elseif($type == 2)
             <tr>
-                <td><strong>Category: </strong>{{ $datas['categoryDesc'] }}</td>
-                <td><strong>Item Name: </strong>{{ $datas['itemName'] }}</td>
+                <td colspan="2" style="border: 1px solid #000; text-align: center;">
+                    <strong>Proof of Donation:</strong>
+                    @if(!empty($datas['proof_of_donation']))
+                        <div style="margin-top: 10px;">
+                            <img src="{{ public_path('storage/' . $datas['proof_of_donation']) }}" 
+                                alt="Proof of Donation" 
+                                style="max-width: 300px; max-height: 300px; border: 1px solid #ddd; padding: 5px;">
+                        </div>
+                    @else
+                        <div style="margin-top: 10px;">No proof of donation provided.</div>
+                    @endif
+                </td>
             </tr>
             <tr>
-                <td><strong>Quantity: </strong>{{ $datas['quantity'] }}</td>
+                <td colspan="2"><strong>Definition: </strong>{{ $datas['definition'] }}</td>
+            </tr>
+            <tr>
                 <td><strong>Mode: </strong>{{ $datas['donationModeDesc'] }}</td>
+                <td><strong>Date: </strong>{{ \Carbon\Carbon::parse($datas['created_at'])->format('F j, Y') }}</td>
             </tr>
         @elseif($type == 3)
             <tr>
@@ -66,10 +79,16 @@
                     @endif
                 </td>
             </tr>
+            <tr>
+                <td><strong>Donated Amount: </strong>{{ $datas['amount'] }}</td>
+                <td><strong>Date: </strong>{{ \Carbon\Carbon::parse($datas['created_at'])->format('F j, Y') }}</td>
+            </tr>
         @endif
-        <tr>
-            <td colspan="2"><strong>Date: </strong>{{ \Carbon\Carbon::parse($datas['created_at'])->format('F j, Y') }}</td>
-        </tr>
+        @if($type == 1)
+            <tr>
+                <td colspan="2"><strong>Date: </strong>{{ \Carbon\Carbon::parse($datas['created_at'])->format('F j, Y') }}</td>
+            </tr>
+        @endif
     </table>
 </body>
 </html>

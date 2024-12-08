@@ -17,6 +17,7 @@ class InKindDonation extends Model
         'contactno',
         'donationMode',
         'definition',
+        'proof_of_donation',
         'isPickUp'
     ];
 

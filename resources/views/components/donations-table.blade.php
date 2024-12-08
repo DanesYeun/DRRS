@@ -12,13 +12,13 @@
                     <th scope="col" class="p-3 rounded-start bg-primary text-white">Date</th>
                     <th scope="col" class="p-3 bg-primary text-white">Name</th>
                     <th scope="col" class="p-3 bg-primary text-white">ContactNo</th>
-                    @if($type == 1)
+                    @if($type == 1 || $type == 3)
                         <th scope="col" class="p-3 bg-primary text-white">Amount</th>
                     @endif
                     @if($type == 2)
                         <th scope="col" class="p-3 bg-primary text-white">Definition</th>
                     @endif
-                    @if($type == 3)
+                    @if($type == 3 || $type == 2)
                         <th scope="col" class="p-3 bg-primary text-white">Proof of Donation</th>
                     @endif
                     <th scope="col" class="p-3 bg-primary text-white">Mode</th>
@@ -35,14 +35,14 @@
                         </td>
                         <td class="p-3">{{ $data['fullname'] }}</td>
                         <td class="p-3">{{ $data['contactno'] }}</td>
-                        @if($type == 1)
+                        @if($type == 1 || $type == 3)
                             <td class="p-3">{{ $data['amount'] }}</td>
                         @endif
                         @if($type == 2)
                             <td class="p-3">{{ $data['definition'] }}</td>
                         @endif
                         
-                        @if($type == 3)
+                        @if($type == 3 || $type == 2)
                             <td class="p-3">
                                 {{$data['proof_of_donation']}}
                                 &nbsp;
