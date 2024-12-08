@@ -18,8 +18,8 @@
                     <x-input name="date" label="Date" type="date" value="{{ date('Y-m-d', strtotime(isset($data->date))) ?? '' }}"/>
                     <x-input name="time" label="Time" type="time" value="{{ date('H:i', strtotime(isset($data->time))) ?? ''}}"/>
 
-                    <x-select name="incidentFrom" label="Incident From" :options="$locations" required="true"/>
-                    <x-select name="takenTo" label="Taken To" :options="$locations" required="true"/>
+                    <x-input name="incidentFrom" label="Incident From" type="text" required="true"/>
+                    <x-input name="takenTo" label="Taken To" type="text" required="true"/>
 
                     <x-input name="callerOrReporter" label="Reporter" type="text" value="{{ $data->reporterFullName ?? '' }}"/>
                     <x-input name="patientName" label="Patient" type="text" value="{{ $data->obstetrics->fullName ?? '' }}"/>
