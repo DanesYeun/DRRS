@@ -287,8 +287,42 @@ function initializeHazardMap(hazardData, shelterData, incidentData, mapContainer
     document.getElementById('show-shelters').addEventListener('click', showShelters);
     document.getElementById('show-incidents').addEventListener('click', showIncidents);
 
+    function findNearbyHazards(userCoordinates, hazardData) {
+        const MAX_DISTANCE = 1000; // 1 km in meters
+        let nearbyHazards = [];
+    
+        hazardData.forEach(function (hazard) {
+            try {
+                let hazardCoordinatesString = hazard.coordinates;
+    
+                if (hazardCoordinatesString.startsWith('"') && hazardCoordinatesString.endsWith('"')) {
+                    hazardCoordinatesString = hazardCoordinatesString.slice(1, -1);
+                }
+    
+                let hazardCoordinates = JSON.parse(hazardCoordinatesString);
+    
+                if (Array.isArray(hazardCoordinates) && hazardCoordinates.length > 0 && Array.isArray(hazardCoordinates[0])) {
+                    let hazardLat = hazardCoordinates[0][0];
+                    let hazardLon = hazardCoordinates[0][1];
+    
+                    const distance = calculateDistance([userCoordinates[0], userCoordinates[1]], [hazardLat, hazardLon]);
+    
+                    if (distance <= MAX_DISTANCE) {
+                        nearbyHazards.push({
+                            hazard: hazard,
+                            distance: (distance / 1000).toFixed(2) // Convert meters to km
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Error processing hazard:', hazard.hazardName, e);
+            }
+        });
+    
+        return nearbyHazards.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+    }
+    
     function getUserLocationAndCheckHazards() {
-        // Get the user's location using IP geolocation service
         fetch('http://ip-api.com/json/')
             .then(response => response.json())
             .then(data => {
@@ -296,44 +330,19 @@ function initializeHazardMap(hazardData, shelterData, incidentData, mapContainer
                 const userLon = data.lon;
                 console.log('User location:', userLat, userLon);
     
-                let nearbyHazards = [];  // To store hazards within 1 km
-                let alertMessage = ''; // Message to show in #nearAlert
-    
-                // Iterate through the hazards to check distance from the user
-                hazardData.forEach(function (hazard) {
-                    try {
-                        var coordinatesString = hazard.coordinates;
-                        if (coordinatesString.startsWith('"') && coordinatesString.endsWith('"')) {
-                            coordinatesString = coordinatesString.slice(1, -1);
-                        }
-    
-                        var coordinates = JSON.parse(coordinatesString);
-    
-                        if (Array.isArray(coordinates) && coordinates.length > 0 && Array.isArray(coordinates[0])) {
-                            // Calculate the distance between the user's location and the hazard's centroid
-                            var centroidLat = coordinates[0][0]; // Simple centroid calculation (first point)
-                            var centroidLon = coordinates[0][1];
-    
-                            var distance = calculateDistance([userLat, userLon], [centroidLat, centroidLon]);
-    
-                            // If the distance is less than or equal to 1 km, add to nearbyHazards
-                            if (distance <= 1000) {
-                                nearbyHazards.push(hazard);
-                                alertMessage += `<p><strong>${hazard.hazardName}</strong> is near you!</p>`;
-                            }
-                        }
-                    } catch (e) {
-                        console.error('Error parsing coordinates for hazard:', hazard.hazardName, e);
-                    }
-                });
+                const userCoordinates = [userLat, userLon];
+                const nearbyHazards = findNearbyHazards(userCoordinates, hazardData);
     
                 if (nearbyHazards.length > 0) {
+                    let hazardNames = nearbyHazards.map(h => h.hazard.hazardName).join(', ');
                     document.getElementById('nearAlert').innerHTML = `
                     <div class="mt-4 alert alert-warning alert-dismissible fade show" role="alert">
                         <i class="bi bi-exclamation-triangle-fill p-2"></i>
                         <span>Hazard Alert: ${hazardNames} has been detected within 1 km of your location. Please remain vigilant and take necessary precautions. Stay safe!</span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>`;
+                } else {
+                    console.log("No nearby hazards detected.");
                 }
             })
             .catch(error => {
@@ -341,6 +350,9 @@ function initializeHazardMap(hazardData, shelterData, incidentData, mapContainer
             });
     }
     
-    // Call the function to check hazards near the user
+    function calculateDistance(point1, point2) {
+        return L.latLng(point1[0], point1[1]).distanceTo(L.latLng(point2[0], point2[1]));
+    }
+    
     getUserLocationAndCheckHazards();
 }
