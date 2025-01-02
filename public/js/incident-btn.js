@@ -41,12 +41,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const injuryTraumaContainer = document.getElementById('injury-trauma-container');
     const cardiaContainer = document.getElementById('cardia-container');
     const disasterContainer = document.getElementById('disaster-container');
+    const otherContainer = document.getElementById('other-container')
+    const specifyIncidentField = document.getElementById('specify_incident');
 
     function toggleFields(selectedType) {
         if (selectedType === "1") {
             numberCasualtiesInput.closest('div').classList.add('d-none');
-        } else {
+            specifyIncidentField.closest('div').classList.add('d-none');
+        } else if (selectedType === "6") {
+            specifyIncidentField.closest('div').classList.remove('d-none');
+        }else {
             numberCasualtiesInput.closest('div').classList.remove('d-none');
+            specifyIncidentField.closest('div').classList.add('d-none');
         }
 
         incidentFields.forEach(field => field.classList.add('d-none'));
@@ -74,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
             generatePatientFields(casualtiesCount, injuryTraumaContainer, 'injury_trauma');
             generatePatientFields(casualtiesCount, cardiaContainer, 'cardia');
             generatePatientFields(casualtiesCount, disasterContainer, 'disaster');
+            generatePatientFields(casualtiesCount, otherContainer, 'other')
         } else {
             medicalContainer.innerHTML = '';
             injuryTraumaContainer.innerHTML = '';

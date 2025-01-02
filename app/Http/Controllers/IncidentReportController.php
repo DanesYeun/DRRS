@@ -10,6 +10,7 @@ use App\Models\MedicalIR;
 use App\Models\InjuryTraumaIR;
 use App\Models\DisasterIRPatients;
 use App\Models\CardiaIR;
+use App\Models\OtherIR;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -53,6 +54,7 @@ class IncidentReportController extends Controller
             
             $incidentReport = IncidentReport::create([
                 'typeOfIncident' => $case,
+                'specificIncident' => $request->specify_incident ?? null,
                 'incidentPlace' => $request->place,
                 'landmark' => $request->landmark,
                 'numberOfCasualties'=> $request->number_casualties,
@@ -154,6 +156,18 @@ class IncidentReportController extends Controller
                     ]);
                 }
 
+            }else if($case == 6){
+
+                $otherData = $request->other;
+                foreach($otherData as $data){
+                    OtherIR::create([
+                        'reportID' => $incidentReport->reportID, 
+                        'fullName' => $data['full_name'],  
+                        'shortnessOfBreath' => array_key_exists('shortness_breath', $data) ? 1 : 0 ,
+                        'paleness' => array_key_exists('paleness', $data) ? 1 : 0,
+                        'heartRate' => $data['heart_rate'],
+                    ]);
+                }
             }
 
             $sms_incident_type = IncidentCase::where('id', $case)->pluck('description')[0];
@@ -211,7 +225,10 @@ class IncidentReportController extends Controller
             }else if($type == 5){
 
                 $incidentReport->deleteDisaster()->where('reportID', $id)->delete();
-
+            }else if($type == 6){
+    
+                $incidentReport->deleteOther()->where('reportID', $id)->delete();
+                
             }else{
                 return back()->with('error', 'No data found');
             }
@@ -250,6 +267,10 @@ class IncidentReportController extends Controller
             }else if($type == 5){
 
                 $incidentReport = IncidentReport::with(['disaster.disasterType', 'disaster_patients'])->where('reportID', $id)->first();
+            
+            }else if($type == 6){
+    
+                    $incidentReport = IncidentReport::with('other')->where('reportID', $id)->get()[0];
             }else{
                 return back()->with('error', 'No data found');
             }
