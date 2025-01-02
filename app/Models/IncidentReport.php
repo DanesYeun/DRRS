@@ -17,6 +17,7 @@ class IncidentReport extends Model
 
     protected $fillable = [
         'typeOfIncident',
+        'specificIncident',
         'incidentPlace',
         'landmark',
         'numberOfCasualties',
@@ -54,6 +55,11 @@ class IncidentReport extends Model
         return $this->hasMany(CardiaIR::class, 'reportID', 'reportID');
     }
 
+    public function other()
+    {
+        return $this->hasMany(OtherIR::class, 'reportID', 'reportID');
+    }
+
     public function disaster()
     {
         return $this->belongsTo(DisasterIr::class, 'reportID', 'reportID');
@@ -85,6 +91,11 @@ class IncidentReport extends Model
     public function deleteCardia()
     {
         return $this->hasOne(CardiaIR::class, 'reportID', 'reportID');
+    }
+
+    public function deleteOther()
+    {
+        return $this->hasOne(OtherIR::class, 'reportID', 'reportID');
     }
 
     public function deleteDisaster()

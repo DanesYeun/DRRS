@@ -23,6 +23,7 @@
                 <div class="border bg-white rounded row mx-2 px-3 pt-5 pb-2">
                     <h3 class="text-start text-primary mb-3">Incident Report</h3>
                     <x-select name="incident_type" label="Type of Incident" :options="$cases" required="true" onchange="toggleFields(this.value)"/> 
+                    <x-input id="specify_incident" name="specify_incident" label="Specify Incident" type="text" dNone="true"/>
                     <x-input name="place" label="Place of Incident" type="text"/>
                     <x-input name="date" label="Date" type="date" value="{{ \Carbon\Carbon::now()->toDateString() }}"/>
                     <x-input name="time" label="Time" type="time" value="{{ \Carbon\Carbon::now()->format('H:i')}}"/>
@@ -115,6 +116,11 @@
                         <div id="disaster-container" class="patient-container">
                             
                         </div>
+                    </div>
+
+                    <!-- Other Fields -->
+                    <div id="6-fields" class="incident-fields d-none">
+                        <div id="other-container"></div>
                     </div>
 
                     <!-- Modal for Map -->
