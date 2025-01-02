@@ -2,6 +2,7 @@
 
 @section('content')
     <x-toast />
+    <div id="nearAlert"></div>
     @if ($hazardAlert)
         <div class="mt-4 alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-diamond-fill"></i>
