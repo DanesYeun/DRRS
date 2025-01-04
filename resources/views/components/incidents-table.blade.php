@@ -28,7 +28,7 @@
                         </td>
                         <td class="p-3">{{ $data->reporterFullName }}</td>
                         <td class="p-3 d-none d-sm-table-cell">{{ $data->reporterContactNumber }}</td>
-                        <td class="p-3">{{ $data->incidentCase->description }}</td>
+                        <td class="p-3">{{ $data->typeOfIncident == 6 ?  strtoupper($data->specificIncident) : $data->incidentCase->description }}</td>
                         <td class="p-3">{{ $data->referenceCode }}</td>
                         <td class="p-3">{{ $data->isConfirmed == 1 ? 'Confirmed' : 'Pending' }}</td>
                         <td class="p-3 rounded-end">
